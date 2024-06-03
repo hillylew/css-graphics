@@ -152,9 +152,9 @@
 // Define the pandemic arrow
 svg.append("line")
   .attr("x1", x(new Date(2019, 0, 1)))
-  .attr("y1", y(maxYValue) + 5) // Starting from the top of the chart
+  .attr("y1", y(maxYValue) + 5) =
   .attr("x2", x(new Date(2019, 0, 1)))
-  .attr("y2", y(maxYValue) + 20) // Ending below the top of the chart
+  .attr("y2", y(maxYValue) + 20) 
   .attr("stroke", "red")
   .attr("stroke-width", 2)
   .attr("marker-end", "url(#arrow)");
@@ -162,7 +162,7 @@ svg.append("line")
 // Define the text label for the pandemic arrow
 svg.append("text")
   .attr("x", x(new Date(2019, 0, 1)))
-  .attr("y", y(maxYValue)) // Positioned just below the top of the chart
+  .attr("y", y(maxYValue)) 
   .attr("text-anchor", "middle")
   .style("fill", "red")
   .style("font-size", "12px")

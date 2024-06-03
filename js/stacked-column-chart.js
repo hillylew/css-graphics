@@ -40,7 +40,7 @@
 
         // Calculate the total BGD for the y-axis domain
         const totalBGD = d3.sum(data, d => d.BGD);
-        const maxYValue = Math.ceil(totalBGD / 50) * 50; // Round up to the nearest multiple of 50
+        const maxYValue = Math.ceil(totalBGD / 50) * 50;
         y.domain([0, maxYValue]);
 
         // Create a group for the y-axis

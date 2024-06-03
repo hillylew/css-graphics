@@ -77,7 +77,7 @@
     .enter()
     .append("path")
     .attr("d", path)
-    .attr("fill", (d) => d.properties.color || "#fff") // Default fill color
+    .attr("fill", (d) => d.properties.color || "#fff") 
     .attr("stroke", "#000")
     .attr("stroke-width", 0.5)
     .on("mouseover", function (event, d) {

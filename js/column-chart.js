@@ -44,14 +44,14 @@
       // Add Y axis
       const y = d3
         .scaleLinear()
-        .domain([0, 60]) // Set the maximum y-axis value to 60%
+        .domain([0, 60]) 
         .nice()
         .range([height, 0]);
   
       svg
         .append("g")
         .style("font-size", "12px")
-        .call(d3.axisLeft(y).tickFormat((d) => `${d}%`).ticks(6)); // Adjust ticks to have 6 increments
+        .call(d3.axisLeft(y).tickFormat((d) => `${d}%`).ticks(6)); 
   
       // Another scale for subgroup position
       const xSubgroup = d3
@@ -109,8 +109,6 @@
       // Tooltip hide function
       var hideGroupTooltip = function () {
         tooltip.style("opacity", 0);
-        // Optionally reset the bar opacities
-        // d3.selectAll(".bar-group rect").style("opacity", 0.8);
       };
   
       // Grouped bar chart code
@@ -150,26 +148,26 @@
         .append("g")
         .attr("font-family", "sans-serif")
         .attr("font-size", 12)
-        .attr("text-anchor", "start") // Changed from "end" to "start"
+        .attr("text-anchor", "start") 
         .selectAll("g")
         .data(subgroups.slice())
         .enter()
         .append("g")
-        .attr("transform", (d, i) => `translate(0,${i * 20})`); // Adjusted the position to the top right
+        .attr("transform", (d, i) => `translate(0,${i * 20})`); 
   
       legend
         .append("rect")
-        .attr("x", width - 150) // Position the rect closer to the right edge
+        .attr("x", width - 150) 
         .attr("width", 19)
         .attr("height", 19)
         .attr("fill", color);
   
       legend
         .append("text")
-        .attr("x", width - 120) // Position the text to the right of the rect
+        .attr("x", width - 120) 
         .attr("y", 10)
         .style("font-size", "12px")
-        .attr("dy", "0.35em") // Adjust vertical alignment if necessary
+        .attr("dy", "0.35em") 
         .text((d) => d);
     });
   })();
