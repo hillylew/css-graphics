@@ -1,0 +1,79 @@
+.CaptionedChart {
+  font-family: sans-serif;
+  width: 900px;
+  height: 600px;
+}
+
+.HeaderHTML {
+  padding: 20px 0px 0px 30px;
+  min-height: 50px;
+}
+
+.HeaderHTML h1 {
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1.2;
+  overflow-y: visible;
+}
+
+.chart {
+    cursor: pointer; 
+}
+
+
+/* Tooltip */
+
+.tooltip {
+  pointer-events: none;
+  position: absolute;
+  width: auto;
+  height: auto;
+  background: white;
+  border-radius: 8px;
+  font-family: sans-serif;
+}
+
+.tooltip-title {
+  background-color: #f1eded;
+  border-radius: 5px 5px 0 0;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 8px 12px;
+}
+
+.tooltip-content {
+  background-color: white;
+  border-radius: 0 0 5px 5px;
+  font-size: 12px;
+  padding: 8px 12px;
+  text-align: left;
+}
+
+.tooltip-total {
+    background-color: #f1eded;
+    border-radius: 0 0 5px 5px;
+    font-size: 12px;
+    padding: 8px 12px;
+    text-align: left;
+}
+
+.tooltip-content .value, .tooltip-total .value {
+    text-align: right;
+}
+
+table.tooltip-content, table.tooltip-total {
+    width: 100%;
+    border-spacing: 0;
+}
+
+.tooltip-content td:first-child, .tooltip-total td:first-child {
+    padding-right: 20px;
+}
+
+.color-legend {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    margin-right: 5px;
+    background-color: inherit;
+}
