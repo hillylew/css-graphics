@@ -152,7 +152,7 @@
 // Define the pandemic arrow
 svg.append("line")
   .attr("x1", x(new Date(2019, 0, 1)))
-  .attr("y1", y(maxYValue) + 5) =
+  .attr("y1", y(maxYValue) + 5) 
   .attr("x2", x(new Date(2019, 0, 1)))
   .attr("y2", y(maxYValue) + 20) 
   .attr("stroke", "red")
