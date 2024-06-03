@@ -151,18 +151,18 @@
 
 // Define the pandemic arrow
 svg.append("line")
-  .attr("x1", x(new Date(2019, 0, 1)))
-  .attr("y1", y(maxYValue) + 5) 
-  .attr("x2", x(new Date(2019, 0, 1)))
-  .attr("y2", y(maxYValue) + 20) 
+  .attr("x1", x(new Date(2019, 11, 1)))
+  .attr("y1", y(maxYValue) + 20) 
+  .attr("x2", x(new Date(2019, 11, 1)))
+  .attr("y2", y(maxYValue) + 80) 
   .attr("stroke", "red")
   .attr("stroke-width", 2)
   .attr("marker-end", "url(#arrow)");
 
 // Define the text label for the pandemic arrow
 svg.append("text")
-  .attr("x", x(new Date(2019, 0, 1)))
-  .attr("y", y(maxYValue)) 
+  .attr("x", x(new Date(2019, 11, 1)))
+  .attr("y", y(maxYValue) + 15) 
   .attr("text-anchor", "middle")
   .style("fill", "red")
   .style("font-size", "12px")
