@@ -35,7 +35,7 @@
     .attr("class", "tooltip");
 
   // Load and process the CSV data
-  d3.csv("graph-1-data.csv").then((data) => {
+  d3.csv("./data/graph-1-data.csv").then((data) => {
     // Parse years and convert string values to numbers
     data.forEach((d) => {
       d.Year = new Date(+d.Year, 0, 1);

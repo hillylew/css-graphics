@@ -1,7 +1,7 @@
 (async () => {
   // Load data from external sources
   const us = await d3.json("https://d3js.org/us-10m.v2.json");
-  const nuclearData = await d3.csv("graph-2-data.csv");
+  const nuclearData = await d3.csv("./data/graph-2-data.csv");
 
   // Maps of state FIPS to color and storage data
   const fipsToData = {};

@@ -36,7 +36,7 @@
         .attr('class', 'tooltip');
 
     // Load CSV data and build chart
-    d3.csv("graph-4-data.csv", d3.autoType).then(function(data) {
+    d3.csv("./data/graph-4-data.csv", d3.autoType).then(function(data) {
 
         // Calculate the total BGD for the y-axis domain
         const totalBGD = d3.sum(data, d => d.BGD);

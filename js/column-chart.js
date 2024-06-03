@@ -17,7 +17,7 @@
     var tooltip = d3.select("#tooltip2");
   
     // Load the CSV data
-    d3.csv("graph-3-data.csv").then(function (data) {
+    d3.csv("./data/graph-3-data.csv").then(function (data) {
       // Process the data
       data.forEach((d) => {
         d.Population = +d.Population;
