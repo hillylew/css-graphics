@@ -81,7 +81,7 @@
     .attr("stroke", "#000")
     .attr("stroke-width", 0.5)
     .on("mouseover", function (event, d) {
-    
+      d3.select(this).style("fill-opacity", 0.7);
       tooltip
         .html(
           `<div class="tooltip-title">${d.properties.name}</div>
@@ -94,6 +94,7 @@
         .style("top", `${d3.pointer(event)[1] - 28}px`);
     })
     .on("mouseout", function () {
+      d3.select(this).style("fill-opacity", 1);
       tooltip
         .style("opacity", 0);
     });
