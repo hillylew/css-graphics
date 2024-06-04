@@ -28,6 +28,11 @@
     .scaleOrdinal()
     .domain(["Bus", "Heavy rail", "Other rail", "Other"])
     .range(["#e41a1c", "#377eb8", "#4daf4a", "#984ea3"]);
+    // .range(["#a6ba3d", "#ec922c", "#006a60", "#f16248"]);
+    // .range(["#32a28d", "#f16248", "#e0e74b", "#c5eaee"]);
+    // .range(["#a6ba3d", "#ec922c", "#e0e74b", "#32a28d"]);
+    // .range(["#f6cce0", "#006a60", "#f16248", "#c5eaee"]);
+
 
   const tooltip = d3
     .select("body")

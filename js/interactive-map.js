@@ -3,10 +3,10 @@
   const us = await d3.json("https://d3js.org/us-10m.v2.json");
   const nuclearData = await d3.csv("./data/graph-2-data.csv");
 
-  // Maps of state FIPS to color and storage data
-  const fipsToData = {};
+  // Maps of state states to color and storage data
+  const statesToData = {};
   nuclearData.forEach((d) => {
-    fipsToData[d.FIPS] = {
+    statesToData[d.States] = {
       color: d.Color,
       storage: d["Spent Fuel in Storage"],
     };
@@ -16,7 +16,7 @@
     .feature(us, us.objects.states)
     .features.filter((d) => d.id !== "02" && d.id !== "15") // Exclude Alaska and Hawaii
     .map((d) => {
-      const data = fipsToData[d.id] || {};
+      const data = statesToData[d.id] || {};
       d.properties = { ...d.properties, ...data };
       return d;
     });

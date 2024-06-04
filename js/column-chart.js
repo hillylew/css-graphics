@@ -65,6 +65,15 @@
         .scaleOrdinal()
         .domain(subgroups)
         .range(["#f16248", "#32a28d"]);
+        // .range(["#a6ba3d", "#f6cce0"]);
+        // .range(["#ec922c", "#c5eaee"]);
+        // .range(["#006a60", "#f16248"]);
+        // .range(["#e0e74b", "#32a28d"]);
+        // .range(["#a6ba3d", "#ec922c"]);
+        // .range(["#c5eaee", "#006a60"]);
+        // .range(["#f6cce0", "#e0e74b"]);
+        // .range(["#a6ba3d", "#006a60"]);
+        // .range(["#f6cce0", "#ec922c"]);
   
       const formatNumber = d3.format(",");
   
