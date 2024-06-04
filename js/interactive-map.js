@@ -4,9 +4,9 @@
   const nuclearData = await d3.csv("./data/graph-2-data.csv");
 
   // Maps of state states to color and storage data
-  const statesToData = {};
+  const fipsToData = {};
   nuclearData.forEach((d) => {
-    statesToData[d.States] = {
+    fipsToData[d.States] = {
       color: d.Color,
       storage: d["Spent Fuel in Storage"],
     };
@@ -16,7 +16,7 @@
     .feature(us, us.objects.states)
     .features.filter((d) => d.id !== "02" && d.id !== "15") // Exclude Alaska and Hawaii
     .map((d) => {
-      const data = statesToData[d.id] || {};
+      const data = fipsToData[d.id] || {};
       d.properties = { ...d.properties, ...data };
       return d;
     });
