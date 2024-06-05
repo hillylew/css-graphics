@@ -1,33 +1,65 @@
 (async () => {
   // Load data from external sources
   const us = await d3.json("https://d3js.org/us-10m.v2.json");
-  const nuclearData = await d3.csv("./data/graph-2-data.csv");
+  const releaseData = await d3.csv("./data/graph-2-data.csv");
 
   // Maps of state states to color and storage data
   const fipsToData = {};
-  nuclearData.forEach((d) => {
-    fipsToData[d.States] = {
-      color: d.Color,
-      storage: d["Spent Fuel in Storage"],
+  releaseData.forEach((d) => {
+    let color;
+    const release = parseFloat(d.amount);
+    if (release > 150) color = "#205b95";
+    else if (release >= 35 && release <= 150) color = "#4585c6";
+    else if (release >= 0.5 && release <= 35) color = "#8ab4e0";
+    else if (release < 0.5) color = "#c0c0c0";
+
+    fipsToData[d.FIPS] = {
+      color: color,
+      release: d.amount,
     };
   });
 
-  const states = topojson
-    .feature(us, us.objects.states)
-    .features.filter((d) => d.id !== "02" && d.id !== "15") // Exclude Alaska and Hawaii
-    .map((d) => {
-      const data = fipsToData[d.id] || {};
-      d.properties = { ...d.properties, ...data };
-      return d;
-    });
 
-  // Dimensions and margins of the graph
-  const margin = { top: 20, right: 150, bottom: 50, left: 40 };
-  const width = 850 - margin.left - margin.right;
-  const height = 500 - margin.top - margin.bottom;
+  console.log("FIPS to Data Map:", fipsToData);
+
+  const states = topojson.feature(us, us.objects.states).features.map((d) => {
+    const data = fipsToData[d.id] || {};
+    d.properties = { ...d.properties, ...data };
+    return d;
+  });
+  
+
+  const aspectRatio = 0.75; // Define an aspect ratio for the chart
+
+  // Get the container and its dimensions
+  const container = document.getElementById("interactive-map");
+  const containerWidth = container.offsetWidth; // Use offsetWidth for full element width
+  const containerHeight = containerWidth * aspectRatio; // Calculate the height based on the width and aspect ratio
+
+  // Calculate the dynamic margins
+  const dynamicMargin = {
+    top: containerHeight * 0.05, // 5% of the container height
+    right: containerWidth * 0.15, // 15% of the container width
+    bottom: containerHeight * 0.1, // 10% of the container height
+    left: containerWidth * 0.08, // 5% of the container width
+  };
+
+  // Calculate the width and height for the inner drawing area
+  const width = containerWidth - dynamicMargin.left - dynamicMargin.right;
+  const height = containerHeight - dynamicMargin.top - dynamicMargin.bottom;
+
+  // Append SVG object
+  const svg = d3
+    .select("#interactive-map")
+    .append("svg")
+    .attr("viewBox", `0 0 ${containerWidth} ${containerHeight}`)
+    .attr("preserveAspectRatio", "xMinYMin meet")
+    .append("g")
+    .attr("transform", `translate(${dynamicMargin.left},${dynamicMargin.top})`);
+
 
   // Define the scale factor for the map
-  const scaleFactor = 0.7;
+  const scaleFactor = width / 850; // Adjust this scaling factor as needed
 
   // Create geoTransform function to scale down the map
   const transform = d3.geoTransform({
@@ -36,15 +68,6 @@
     },
   });
   const path = d3.geoPath().projection(transform);
-
-  // Create SVG object for the map
-  const svg = d3
-    .select("#interactive-map")
-    .append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-    .append("g")
-    .attr("transform", `translate(${margin.left},${margin.top})`);
 
   const tooltip = d3.select("#tooltip1");
 
@@ -77,7 +100,7 @@
     .enter()
     .append("path")
     .attr("d", path)
-    .attr("fill", (d) => d.properties.color || "#fff") 
+    .attr("fill", (d) => d.properties.color || "#fff")
     .attr("stroke", "#000")
     .attr("stroke-width", 0.5)
     .on("mouseover", function (event, d) {
@@ -85,55 +108,67 @@
       tooltip
         .html(
           `<div class="tooltip-title">${d.properties.name}</div>
-           <div class="tooltip-content">
-           Spent fuel in storage: ${formatNumber(d.properties.storage)}
-           </div>`
+          <div class="tooltip-content">
+          Toxic release: ${d.properties.release || 0}
+          </div>`
         )
         .style("opacity", 0.9)
-        .style("left", `${d3.pointer(event)[0] + 10}px`)
-        .style("top", `${d3.pointer(event)[1] - 28}px`);
+        .style("left", `${event.pageX}px`)
+        .style("top", `${event.pageY}px`);
     })
     .on("mouseout", function () {
       d3.select(this).style("fill-opacity", 1);
-      tooltip
-        .style("opacity", 0);
+      tooltip.style("opacity", 0);
     });
 
-  const legendColors = ["#b34730", "#f16248", "#f88e70", "#e0e0e0"];
-  const legendText = ["> 2500 t", "1000-2500 t", "< 1000 t", "0 t"];
+  // Create the legend
+  const legendColors = ["#205b95", "#4585c6", "#8ab4e0", "#c0c0c0"];
+  const legendText = [
+    "> 150",
+    "> 35",
+    "> 0.5",
+    "> 0",
+  ];
 
   const legendData = legendColors.map((color, i) => ({
     color,
     text: legendText[i],
   }));
 
-  const legend = svg.append('g')
-    .attr('class', 'legend')
-    .attr('transform', `translate(20, ${height - legendData.length * 20 - 20})`);
+  // Adjust legend position to the right of the map.
+  const legend = svg
+    .append("g")
+    .attr("class", "legend")
+    .attr("transform", `translate(${width + dynamicMargin.left/2}, ${height / 2})`); // Adjust this line for legend positioning
 
-  legend.selectAll('rect')
-    .data(legendData)
-    .enter()
-    .append('rect')
-    .attr('x', 0)
-    .attr('y', (d, i) => i * 20)
-    .attr('width', 18)
-    .attr('height', 18)
-    .style('fill', d => d.color)
-    .attr("stroke", "#000")
-    .attr("stroke-width", 0.5)
-    .on('mouseover', (event, d) => highlightStates(d.color))
-    .on('mouseout', resetHighlight);
+// Calculate the legend rectangle dimensions based on container size
+const legendRectWidth = containerWidth * 0.02; // 2% of container width
+const legendRectHeight = containerHeight * 0.02; // 2% of container height
 
-  legend.selectAll('text')
-    .data(legendData)
-    .enter()
-    .append('text')
-    .attr('x', 24)
-    .attr('y', (d, i) => i * 20 + 9)
-    .attr('dy', '.35em')
-    .text(d => d.text)
-    .style('font-size', '12px')
-    .on('mouseover', (event, d) => highlightStates(d.color))
-    .on('mouseout', resetHighlight);
+legend
+  .selectAll("rect")
+  .data(legendData)
+  .enter()
+  .append("rect")
+  .attr("x", 0)
+  .attr("y", (d, i) => i * (legendRectHeight + 5)) // Add some spacing between rectangles
+  .attr("width", legendRectWidth)
+  .attr("height", legendRectHeight)
+  .style("fill", (d) => d.color)
+  .attr("stroke", "#000")
+  .attr("stroke-width", 0.5)
+  .on("mouseover", (event, d) => highlightStates(d.color))
+  .on("mouseout", resetHighlight);
+
+legend
+  .selectAll("text")
+  .data(legendData)
+  .enter()
+  .append("text")
+  .attr("x", legendRectWidth + 5) // Position text to the right of the rectangle
+  .attr("y", (d, i) => i * (legendRectHeight + 5) + legendRectHeight) // Center text vertically
+  .text((d) => d.text)
+  .attr("class", "chart-labels")
+  .on("mouseover", (event, d) => highlightStates(d.color))
+  .on("mouseout", resetHighlight);
 })();

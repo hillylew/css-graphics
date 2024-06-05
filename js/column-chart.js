@@ -1,17 +1,31 @@
 (function () {
-    // Set the dimensions and margins of the graph
-    const margin = { top: 20, right: 150, bottom: 50, left: 60 },
-      width = 850 - margin.left - margin.right,
-      height = 500 - margin.top - margin.bottom;
-  
-    // Append SVG object
-    const svg = d3
-      .select("#column-chart")
-      .append("svg")
-      .attr("width", width + margin.left + margin.right)
-      .attr("height", height + margin.top + margin.bottom)
-      .append("g")
-      .attr("transform", `translate(${margin.left},${margin.top})`);
+  const aspectRatio = 0.75; // Define an aspect ratio for the chart
+
+  // Get the container and its dimensions
+  const container = document.getElementById("interactive-map");
+  const containerWidth = container.offsetWidth; // Use offsetWidth for full element width
+  const containerHeight = containerWidth * aspectRatio; // Calculate the height based on the width and aspect ratio
+
+  // Calculate the dynamic margins
+  const dynamicMargin = {
+    top: containerHeight * 0.05, // 5% of the container height
+    right: containerWidth * 0.05, // 15% of the container width
+    bottom: containerHeight * 0.15, // 10% of the container height
+    left: containerWidth * 0.08, // 5% of the container width
+  };
+
+  // Calculate the width and height for the inner drawing area
+  const width = containerWidth - dynamicMargin.left - dynamicMargin.right;
+  const height = containerHeight - dynamicMargin.top - dynamicMargin.bottom;
+
+  // Append SVG object
+  const svg = d3
+    .select("#column-chart")
+    .append("svg")
+    .attr("viewBox", `0 0 ${containerWidth} ${containerHeight}`)
+    .attr("preserveAspectRatio", "xMinYMin meet")
+    .append("g")
+    .attr("transform", `translate(${dynamicMargin.left},${dynamicMargin.top})`);
   
     // Define the tooltip
     var tooltip = d3.select("#tooltip2");
@@ -37,8 +51,8 @@
   
       svg
         .append("g")
+        .attr("class", "chart-labels")
         .attr("transform", `translate(0, ${height})`)
-        .style("font-size", "12px")
         .call(d3.axisBottom(x));
   
       // Add Y axis
@@ -50,7 +64,7 @@
   
       svg
         .append("g")
-        .style("font-size", "12px")
+        .attr("class", "chart-labels")
         .call(d3.axisLeft(y).tickFormat((d) => `${d}%`).ticks(6)); 
   
       // Another scale for subgroup position
@@ -65,15 +79,6 @@
         .scaleOrdinal()
         .domain(subgroups)
         .range(["#f16248", "#32a28d"]);
-        // .range(["#a6ba3d", "#f6cce0"]);
-        // .range(["#ec922c", "#c5eaee"]);
-        // .range(["#006a60", "#f16248"]);
-        // .range(["#e0e74b", "#32a28d"]);
-        // .range(["#a6ba3d", "#ec922c"]);
-        // .range(["#c5eaee", "#006a60"]);
-        // .range(["#f6cce0", "#e0e74b"]);
-        // .range(["#a6ba3d", "#006a60"]);
-        // .range(["#f6cce0", "#ec922c"]);
   
       const formatNumber = d3.format(",");
   
@@ -104,15 +109,8 @@
               </tr>
           </table>
       `)
-  
-          .style(
-            "left",
-            `${d3.pointer(event, svg.node())[0] + margin.left}px`
-          )
-          .style(
-            "top",
-            `${d3.pointer(event, svg.node())[1] + margin.top}px`
-          );
+        .style("left", `${event.pageX}px`)
+        .style("top", `${event.pageY}px`);
       };
   
       // Tooltip hide function
@@ -146,10 +144,10 @@
       // Add x-axis label
       svg
         .append("text")
+        .attr("class", "chart-labels")
         .attr("text-anchor", "middle")
         .attr("x", width / 2)
-        .attr("y", height + margin.bottom / 2 + 10)
-        .style("font-size", "12px")
+        .attr("y", height + dynamicMargin.bottom / 2)
         .text("System Size (population served)");
   
       // Legend
@@ -173,9 +171,9 @@
   
       legend
         .append("text")
+        .attr("class", "chart-labels")
         .attr("x", width - 120) 
         .attr("y", 10)
-        .style("font-size", "12px")
         .attr("dy", "0.35em") 
         .text((d) => d);
     });

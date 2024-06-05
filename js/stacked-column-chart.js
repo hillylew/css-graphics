@@ -1,17 +1,27 @@
 (function() {
-    // Set the dimensions and margins of the graph
-    const margin = { top: 20, right: 150, bottom: 50, left: 60 }; 
-    const width = 850 - margin.left - margin.right;
-    const height = 500 - margin.top - margin.bottom;
-  
+    const container = document.getElementById("stacked-column-chart");
+    const containerWidth = container.offsetWidth; // Use offsetWidth for full element width
+    const aspectRatio = 0.7; // Example aspect ratio
+    const containerHeight = containerWidth * aspectRatio; // Calculate the height based on the width and aspect ratio
+
+    // Calculate the dynamic margins
+    const dynamicMargin = {
+        top: containerHeight * 0.05,    // 5% of the container height
+        right: containerWidth * 0.1,  // 15% of the container width
+        bottom: containerHeight * 0.1, // 10% of the container height
+        left: containerWidth * 0.05    // 5% of the container width
+    };
+
+    // Calculate the width and height for the inner drawing area
+    const width = containerWidth - dynamicMargin.left - dynamicMargin.right;
+    const height = containerHeight - dynamicMargin.top - dynamicMargin.bottom;
+
     // Append SVG object
-    const svg = d3
-      .select("#stacked-column-chart")
-      .append("svg")
-      .attr("width", width + margin.left + margin.right)
-      .attr("height", height + margin.top + margin.bottom)
-      .append("g")
-      .attr("transform", `translate(${margin.left},${margin.top})`);
+    const svg = d3.select("#stacked-column-chart").append("svg")
+        .attr('viewBox', `0 0 ${containerWidth} ${containerHeight}`)
+        .attr('preserveAspectRatio', 'xMinYMin meet')
+        .append('g')
+        .attr('transform', `translate(${dynamicMargin.left},${dynamicMargin.top})`);
 
     const colors = ["#08519c", "#3182bd", "#6baed6", "#9ecae1", "#c6dbef", "#eff3ff"];
 
@@ -50,7 +60,7 @@
         yAxisGroup
             .append("text")
             .attr("text-anchor", "middle")
-            .attr("transform", `translate(0, ${-margin.top / 2})`)
+            .attr("transform", `translate(0, ${-dynamicMargin.top / 2})`)
             .style("fill", "#000")
             .style("font-size", "12px")
             .text("BGD");
@@ -99,8 +109,8 @@
                     </table>
                 `)
                 .style('visibility', 'visible')
-                .style('top', (event.pageY - 10) + 'px')
-                .style('left', (event.pageX + 10) + 'px');
+                .style("left", `${event.pageX}px`)
+                .style("top", `${event.pageY}px`);
             })
             .on('mouseleave', function() {
                 // Reset the appearance of the active bar
@@ -128,5 +138,3 @@
         console.error('Error loading the CSV file:', error);
     });
 })();
-
-

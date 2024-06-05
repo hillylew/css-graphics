@@ -1,25 +1,27 @@
 .CaptionedChart {
+  padding: 5px 10px;
   font-family: sans-serif;
-  width: 900px;
-  height: 600px;
+}
+
+.CaptionedChart,
+.chart {
+  width: 360px;
+  height: auto;
 }
 
 .HeaderHTML {
-  padding: 20px 0px 0px 30px;
-  min-height: 50px;
-}
-
-.HeaderHTML h1 {
-  font-size: 20px;
+  padding: 10px 5px;
+  font-size: 10px;
   font-weight: 500;
-  line-height: 1.2;
-  overflow-y: visible;
 }
 
 .chart {
-    cursor: pointer; 
+  cursor: pointer;
 }
 
+.chart-labels {
+  font-size: 7px;
+}
 
 /* Tooltip */
 
@@ -28,52 +30,107 @@
   position: absolute;
   width: auto;
   height: auto;
-  background: white;
-  border-radius: 8px;
-  font-family: sans-serif;
-}
-
-.tooltip-title {
-  background-color: #f1eded;
-  border-radius: 5px 5px 0 0;
-  font-size: 12px;
-  font-weight: bold;
-  padding: 8px 12px;
-}
-
-.tooltip-content {
   background-color: white;
-  border-radius: 0 0 5px 5px;
-  font-size: 12px;
-  padding: 8px 12px;
+  border-radius: 5px;
+  font-family: sans-serif;
+  font-size: 8px;
   text-align: left;
 }
 
+.tooltip-title {
+  font-weight: bold;
+  border-radius: 5px 5px 0 0;
+}
+
 .tooltip-total {
-    background-color: #f1eded;
-    border-radius: 0 0 5px 5px;
-    font-size: 12px;
-    padding: 8px 12px;
-    text-align: left;
+  border-radius: 0 0 5px 5px;
 }
 
-.tooltip-content .value, .tooltip-total .value {
-    text-align: right;
+.tooltip-title,
+.tooltip-total {
+  background-color: #f1eded;
 }
 
-table.tooltip-content, table.tooltip-total {
-    width: 100%;
-    border-spacing: 0;
+.tooltip-title,
+.tooltip-total,
+.tooltip-content {
+  padding: 4px 6px;
 }
 
-.tooltip-content td:first-child, .tooltip-total td:first-child {
-    padding-right: 20px;
+.tooltip-content .value,
+.tooltip-total .value {
+  text-align: right;
+}
+
+table.tooltip-content,
+table.tooltip-total {
+  width: 100%;
+  border-spacing: 0;
+}
+
+.tooltip-content td:first-child,
+.tooltip-total td:first-child {
+  padding-right: 8px;
 }
 
 .color-legend {
-    display: inline-block;
-    width: 10px;
-    height: 10px;
-    margin-right: 5px;
-    background-color: inherit;
+  display: inline-block;
+  background-color: inherit;
+  width: 10px;
+  height: 10px;
+  margin-right: 5px;
+}
+
+@media only screen and (min-width: 768px) {
+  body {
+    background: rgb(234, 234, 169);
+  }
+
+  .CaptionedChart {
+    padding: 10px 20px;
+  }
+
+  .CaptionedChart,
+  .chart {
+    width: 600px;
+  }
+
+  .HeaderHTML {
+    font-size: 18px;
+  }
+
+  .chart-labels {
+    font-size: 10px;
+  }
+
+  .tooltip {
+    font-size: 10px;
+  }
+}
+
+@media only screen and (min-width: 992px) {
+  body {
+    background: rgb(184, 196, 233);
+  }
+
+  .CaptionedChart {
+    padding: 10px 20px;
+  }
+
+  .CaptionedChart,
+  .chart {
+    width: 650px;
+  }
+
+  .HeaderHTML {
+    font-size: 20px;
+  }
+
+  .chart-labels {
+    font-size: 12px;
+  }
+
+  .tooltip {
+    font-size: 12px;
+  }
 }
