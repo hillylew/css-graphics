@@ -1,6 +1,6 @@
 .CaptionedChart {
   padding: 5px 10px;
-  font-family: sans-serif;
+  font-family: "IBM Plex Sans", sans-serif;
 }
 
 .CaptionedChart,
@@ -11,6 +11,7 @@
 
 .HeaderHTML {
   padding: 10px 5px;
+  font-family: "IBM Plex Serif", sans-serif;
   font-size: 10px;
   font-weight: 500;
 }
