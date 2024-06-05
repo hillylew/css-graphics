@@ -85,6 +85,7 @@ table.tooltip-total {
 /* tablet */
 @media only screen and (min-width: 768px) {
   body {
+    /* delete this --> only for debugging media queries*/
     background: rgb(234, 234, 169);
   }
 
@@ -113,6 +114,7 @@ table.tooltip-total {
 /* desktop */
 @media only screen and (min-width: 992px) {
   body {
+     /* delete this --> only for debugging media queries*/
     background: rgb(184, 196, 233);
   }
 
