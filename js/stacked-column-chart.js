@@ -59,10 +59,10 @@
         // Add y-axis label
         yAxisGroup
             .append("text")
+            .attr("class", "chart-labels")
             .attr("text-anchor", "middle")
             .attr("transform", `translate(0, ${-dynamicMargin.top / 2})`)
             .style("fill", "#000")
-            .style("font-size", "12px")
             .text("BGD");
 
         // Calculate BGD cumulative values for the stacked chart
@@ -127,8 +127,7 @@
         svg.selectAll(".category-text")
             .data(data)
             .enter().append("text")
-            .attr("class", "category-text")
-            .style("font-size", "12px")
+            .attr("class", "chart-labels")
             .attr("x", x("Total") + x.bandwidth() + 10)
             .attr("y", d => y(d.startBGD + (d.endBGD - d.startBGD) / 2) + 5)
             .attr("fill", (d, i) => colors[i % colors.length])
