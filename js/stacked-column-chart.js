@@ -7,7 +7,7 @@
     // Calculate the dynamic margins
     const dynamicMargin = {
         top: containerHeight * 0.05,    // 5% of the container height
-        right: containerWidth * 0.1,  // 15% of the container width
+        right: containerWidth * 0.7,  // 15% of the container width
         bottom: containerHeight * 0.1, // 10% of the container height
         left: containerWidth * 0.05    // 5% of the container width
     };
@@ -28,8 +28,8 @@
     // Define scales
     const x = d3.scaleBand()
         .range([0, width])
-        .domain(["Total"])
-        .padding(0.5);
+        .domain(["Total"]);
+        // .padding(0.5);
 
     const y = d3.scaleLinear()
         .range([height, 0]);
@@ -52,6 +52,7 @@
         const totalBGD = d3.sum(data, d => d.BGD);
         const maxYValue = Math.ceil(totalBGD / 50) * 50;
         y.domain([0, maxYValue]);
+        
 
         // Create a group for the y-axis
         const yAxisGroup = svg.append("g").call(d3.axisLeft(y));

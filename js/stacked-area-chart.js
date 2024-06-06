@@ -1,5 +1,6 @@
 (function () {
-  const aspectRatio = 0.70; // Define an aspect ratio for the chart
+  /* ----------------------- Dynamic dimensions ----------------------- */
+  const aspectRatio = 0.7;
 
   // Get the container and its dimensions
   const container = document.getElementById("stacked-area-chart");
@@ -8,10 +9,10 @@
 
   // Calculate the dynamic margins
   const dynamicMargin = {
-    top: containerHeight * 0.05,    // 5% of the container height
-    right: containerWidth * 0.1,  // 10% of the container width
-    bottom: containerHeight * 0.1, // 10% of the container height
-    left: containerWidth * 0.05    // 5% of the container width
+    top: containerHeight * 0.05,
+    right: containerWidth * 0.1,
+    bottom: containerHeight * 0.1,
+    left: containerWidth * 0.05,
   };
 
   // Calculate the width and height for the inner drawing area
@@ -19,22 +20,20 @@
   const height = containerHeight - dynamicMargin.top - dynamicMargin.bottom;
 
   // Append SVG object
-  const svg = d3.select("#stacked-area-chart").append("svg")
-    .attr('viewBox', `0 0 ${containerWidth} ${containerHeight}`)
-    .attr('preserveAspectRatio', 'xMinYMin meet')
-    .append('g')
-    .attr('transform', `translate(${dynamicMargin.left},${dynamicMargin.top})`);
+  const svg = d3
+    .select("#stacked-area-chart")
+    .append("svg")
+    .attr("viewBox", `0 0 ${containerWidth} ${containerHeight}`)
+    .attr("preserveAspectRatio", "xMinYMin meet")
+    .append("g")
+    .attr("transform", `translate(${dynamicMargin.left},${dynamicMargin.top})`);
 
-
-  // X and Y scales
+  /* ----------------------- X and Y Scales ----------------------- */
   const x = d3.scaleTime().range([0, width]);
   const y = d3.scaleLinear().range([height, 0]);
 
-  // Define the axes
   const xAxis = d3.axisBottom(x).tickFormat(d3.timeFormat("%Y"));
-  const yAxis = d3
-    .axisLeft(y)
-    .tickFormat((d) => d / 1000000);
+  const yAxis = d3.axisLeft(y).tickFormat((d) => d / 1000000);
 
   const colorScale = d3
     .scaleOrdinal()
@@ -43,7 +42,7 @@
 
   const tooltip = d3.select("#tooltip1");
 
-  // Load and process the CSV data
+  /* ----------------------- Load and process the CSV data ----------------------- */
   d3.csv("./data/graph-1-data.csv").then((data) => {
     // Parse years and convert string values to numbers
     data.forEach((d) => {
@@ -57,7 +56,7 @@
     const stack = d3.stack().keys(["Bus", "Heavy rail", "Other rail", "Other"]);
     const stackedData = stack(data);
 
-    // Update the scale domains with the processed data
+    /* ----------------------- Update the scale domains with the processed data ----------------------- */
     x.domain(d3.extent(data, (d) => d.Year));
     const maxYValue =
       Math.ceil(
@@ -65,21 +64,8 @@
       ) * 1000000;
     y.domain([0, maxYValue]);
 
-    // Draw the Y-axis
-    const yAxisGroup = svg.append("g").call(yAxis).attr("class", "chart-labels");
-
-    // Append "in millions" label
-    yAxisGroup
-      .append("text")
-      .attr("class", "chart-labels")
-      .attr("text-anchor", "middle")
-      .attr("transform", `translate(0, -${dynamicMargin.top/2})`)
-      .style("fill", "#000")
-      .text("in millions");
-
     // Draw the X-axis
-    // Add 2023 as a Date object
-    const xTickValues = x.ticks().concat(new Date(2023, 0, 1));
+    const xTickValues = x.ticks().concat(new Date(2023, 0, 1)); // Add 2023 as a Date object
     xAxis.tickValues(xTickValues);
 
     const xAxisGroup = svg
@@ -98,6 +84,22 @@
           : "middle";
       });
 
+    // Draw the Y-axis
+    const yAxisGroup = svg
+      .append("g")
+      .call(yAxis)
+      .attr("class", "chart-labels");
+
+    // Append "in millions" label
+    yAxisGroup
+      .append("text")
+      .attr("class", "chart-labels")
+      .attr("text-anchor", "middle")
+      .attr("transform", `translate(0, -${dynamicMargin.top / 2})`)
+      .style("fill", "#000")
+      .text("in millions");
+
+    /* ----------------------- Draw the chart ----------------------- */
     // Define the area generator
     const area = d3
       .area()
@@ -105,14 +107,12 @@
       .y0((d) => y(d[0]))
       .y1((d) => y(d[1]));
 
-    // Draw the areas
     // Define the line generator
     const lineGenerator = d3
       .line()
       .x((d) => x(d.data.Year))
       .y((d) => y(d[1])); // Using the top edge of the area for the line
 
-    // Create a group for each stacked area layer
     const layers = svg
       .selectAll(".layer")
       .data(stackedData)
@@ -122,6 +122,7 @@
     // Add the stacked area paths to each group
     layers
       .append("path")
+      .attr("class", "area-path")
       .attr("d", area)
       .style("fill-opacity", "0.8")
       .style("fill", (d) => colorScale(d.key));
@@ -132,9 +133,9 @@
       .attr("d", lineGenerator)
       .style("fill", "none")
       .style("stroke", (d) => colorScale(d.key))
-      .style("stroke-width", 1);
+      .style("stroke-width", 0.5);
 
-    // Add legend
+    /* ----------------------- Legend & hover effect ----------------------- */
     const legend = svg
       .selectAll(".legend")
       .data(stackedData)
@@ -155,7 +156,31 @@
       .style("text-anchor", "start")
       .style("alignment-baseline", "middle")
       .style("fill", (d) => colorScale(d.key))
-      .text((d) => d.key);
+      .text((d) => d.key)
+      .on("mouseover", (event, d) => {
+        highlightAreaLayer(d.key);
+      })
+      .on("mouseout", () => {
+        resetAreaLayers();
+      });
+
+    // Function to highlight the area layer corresponding to the legend text
+    function highlightAreaLayer(key) {
+      svg.selectAll(".area-path").style("fill-opacity", 0.2);
+
+      const index = colorScale.domain().indexOf(key);
+      if (index !== -1) {
+        d3.select(svg.selectAll(".area-path").nodes()[index]).style(
+          "fill-opacity",
+          0.8
+        );
+      }
+    }
+
+    // Function to reset all area layers to default opacity
+    function resetAreaLayers() {
+      svg.selectAll(".area-path").style("fill-opacity", 0.8);
+    }
 
     // Define the pandemic arrow
     svg
@@ -193,6 +218,7 @@
       .attr("d", "M0,-5L10,0L0,5")
       .style("fill", "red");
 
+    /* ----------------------- Mouseover event ----------------------- */
     function onMouseMove(event) {
       const [xPos, yPos] = d3.pointer(event, this);
       const date = x.invert(xPos);
@@ -208,6 +234,25 @@
 
       const formatNumber = d3.format(",");
       if (hoverData) {
+        /* ----------------------- Highlight the area layer being hovered over ----------------------- */
+        let cumulative = 0;
+        let foundLayer = false;
+    
+        // Look through each layer to find which one we're hovering over
+        stackedData.forEach((layer) => {
+          const y0 = y(cumulative); // Bottom of the layer
+          cumulative += hoverData[layer.key];
+          const y1 = y(cumulative); // Top of the layer
+    
+          // Check if yPos is between top and bottom of the layer
+          if (yPos >= y1 && yPos < y0) {
+            // Highlight the current layer
+            highlightAreaLayer(layer.key);
+            foundLayer = true;
+          }
+        });
+  
+
         tooltip.html(`
               <div class="tooltip-title">${hoverData.Year.getFullYear()}</div>
               <table class="tooltip-content">
@@ -303,6 +348,7 @@
       .on("mousemove", onMouseMove)
       .on("mouseout", () => {
         tooltip.style("opacity", "0");
+        resetAreaLayers()
         mouseG.selectAll("circle").style("opacity", "0");
         mouseG.select(".mouse-line").style("opacity", "0");
       });

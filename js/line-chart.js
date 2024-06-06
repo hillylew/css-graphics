@@ -9,7 +9,7 @@
   // Calculate the dynamic margins
   const dynamicMargin = {
     top: containerHeight * 0.1, // 5% of the container height
-    right: containerWidth * 0.12, // 10% of the container width
+    right: containerWidth * 0.15, // 10% of the container width
     bottom: containerHeight * 0.1, // 10% of the container height
     left: containerWidth * 0.07, // 5% of the container width
   };
@@ -154,47 +154,60 @@
       .style("stroke", (d) => colorScale(d.key))
       .style("stroke-width", 1);
 
-    // Add legend
-    const legend = svg
-      .selectAll(".legend")
-      .data(lineData)
-      .enter()
-      .append("g")
-      .attr("class", "legend")
-      .on("mouseover", (event, d) => {
-        // Highlight the hovered line
-        svg
-          .selectAll(".line-path")
-          .style("opacity", (lineData) => (lineData.key === d.key ? 1 : 0.2))
-          .style("stroke-width", (lineData) =>
-            lineData.key === d.key ? 2 : 1
-          ); // Adjust stroke width on hover
+
+// Add legend
+const legend = svg
+  .selectAll(".legend")
+  .data(lineData)
+  .enter()
+  .append("g")
+  .attr("class", "legend")
+  .on("mouseover", (event, d) => {
+    // Highlight the hovered line
+    svg
+      .selectAll(".line-path")
+      .style("opacity", (lineData) => (lineData.key === d.key ? 1 : 0.2))
+      .style("stroke-width", (lineData) =>
+        lineData.key === d.key ? 2 : 1
+      ); // Adjust stroke width on hover
+  })
+  .on("mouseout", () => {
+    // Reset style for all lines on mouseout
+    svg
+      .selectAll(".line-path")
+      .style("opacity", 1)
+      .style("stroke-width", 1); // Reset stroke width
+  });
+
+// Append legend text
+legend.each(function (series, index) {
+  const lastDatum = series.values[series.values.length - 1]; // Get the last data point
+  const legendItem = d3.select(this);
+  const legendNames = {
+    "22 Panel System Residential PV": ["Residential PV"],
+    "200 kW Commercial PV": ["Commercial PV"],
+    "100 MW Utility-Scale PV, Fixed Tilt": ["Fixed Tilt", "Utility-Scale PV"],
+    "100 MW Utility-Scale PV, One Axis Tracker": ["One Axis Tracker", "Utility-Scale PV"],
+  };
+
+  const lines = legendNames[series.key];
+  
+  lines.forEach((line, i) => {
+    legendItem
+      .append("text")
+      .datum(lastDatum)
+      .attr("transform", function (d) {
+        return `translate(${width},${y(d.value) + i * 12})`; // Adjust these values as needed for correct positioning
       })
-      .on("mouseout", () => {
-        // Reset style for all lines on mouseout
-        svg
-          .selectAll(".line-path")
-          .style("opacity", 1)
-          .style("stroke-width", 1); // Reset stroke width
-      });
+      .attr("class", "chart-labels")
+      .attr("x", 5) // This sets the distance of the text from the end of the line
+      .attr("dy", ".35em") // This aligns the text vertically
+      .style("fill", colorScale(series.key))
+      .text(line);
+  });
+});
 
-    // Append legend text
-    legend.each(function (series, index) {
-      const lastDatum = series.values[series.values.length - 1]; // Get the last data point
-      const legendItem = d3.select(this);
 
-      legendItem
-        .append("text")
-        .datum(lastDatum)
-        .attr("transform", function (d) {
-          return `translate(${width},${y(d.value)})`; // Adjust these values as needed for correct positioning
-        })
-        .attr("class", "chart-labels")
-        .attr("x", 5) // This sets the distance of the text from the end of the line
-        .attr("dy", ".35em") // This aligns the text vertically
-        .style("fill", colorScale(series.key))
-        .text(series.key);
-    });
 
     function onMouseMove(event) {
       const [xPos, yPos] = d3.pointer(event, this);
@@ -232,20 +245,20 @@
                   </tr>
                   <tr>
                       <td><span class="color-legend" style="background-color: ${colorScale(
-                        "100 MW Utility-Scale PV, Fixed Tilt"
-                      )};"></span>100 MW Utility-Scale PV, Fixed Tilt</td>
-                      <td class="value">$${formatNumber(
-                        hoverData["100 MW Utility-Scale PV, Fixed Tilt"]
-                      )}</td>
-                  </tr>
-                  <tr>
-                      <td><span class="color-legend" style="background-color: ${colorScale(
                         "100 MW Utility-Scale PV, One Axis Tracker"
                       )};"></span>100 MW Utility-Scale PV, One Axis Tracker</td>
                       <td class="value">$${formatNumber(
                         hoverData["100 MW Utility-Scale PV, One Axis Tracker"]
                       )}</td>
                   </tr>
+                  <tr>
+                  <td><span class="color-legend" style="background-color: ${colorScale(
+                    "100 MW Utility-Scale PV, Fixed Tilt"
+                  )};"></span>100 MW Utility-Scale PV, Fixed Tilt</td>
+                  <td class="value">$${formatNumber(
+                    hoverData["100 MW Utility-Scale PV, Fixed Tilt"]
+                  )}</td>
+              </tr>
               </table>
             `);
 
