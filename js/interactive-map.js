@@ -69,7 +69,7 @@
   });
   const path = d3.geoPath().projection(transform);
 
-  const tooltip = d3.select("#tooltip1");
+  const tooltip = d3.select("#tooltip2");
 
   // Highlight states based on the color
   const highlightStates = (color) => {

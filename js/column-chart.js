@@ -28,7 +28,7 @@
     .attr("transform", `translate(${dynamicMargin.left},${dynamicMargin.top})`);
   
     // Define the tooltip
-    var tooltip = d3.select("#tooltip2");
+    var tooltip = d3.select("#tooltip3");
   
     // Load the CSV data
     d3.csv("./data/graph-3-data.csv").then(function (data) {
@@ -85,7 +85,7 @@
       // Tooltip show function
       var showGroupTooltip = function (event, d) {
         tooltip
-          .style("opacity", 1)
+          .style("opacity", 0.9)
           .html(`
           <div class="tooltip-title">${d["System Size"]}</div>
           <table class="tooltip-content">

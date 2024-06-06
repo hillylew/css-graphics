@@ -41,7 +41,7 @@
     .domain(["Bus", "Heavy rail", "Other rail", "Other"])
     .range(["#e41a1c", "#377eb8", "#4daf4a", "#984ea3"]);
 
-  const tooltip = d3.select("body").append("div").attr("class", "tooltip");
+  const tooltip = d3.select("#tooltip1");
 
   // Load and process the CSV data
   d3.csv("./data/graph-1-data.csv").then((data) => {
@@ -202,9 +202,9 @@
 
       // Position tooltip
       tooltip
-        .style("top", `${yPos + dynamicMargin.top}px`)
-        .style("left", `${xPos + dynamicMargin.left}px`)
-        .style("visibility", "visible");
+        .style("opacity", 0.9)
+        .style("left", `${event.pageX}px`)
+        .style("top", `${event.pageY}px`);
 
       const formatNumber = d3.format(",");
       if (hoverData) {
@@ -296,13 +296,13 @@
     svg
       .append("rect")
       .attr("class", "listening-rect")
-      .attr("width", width + dynamicMargin.left)
+      .attr("width", width + dynamicMargin.left / 4)
       .attr("height", height)
       .attr("fill", "none")
       .attr("pointer-events", "all")
       .on("mousemove", onMouseMove)
       .on("mouseout", () => {
-        tooltip.style("visibility", "hidden");
+        tooltip.style("opacity", "0");
         mouseG.selectAll("circle").style("opacity", "0");
         mouseG.select(".mouse-line").style("opacity", "0");
       });

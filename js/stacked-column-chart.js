@@ -41,9 +41,9 @@
         .selectAll("text").remove(); // Remove x-axis labels
 
     svg.selectAll(".tick line").remove(); // Remove x-axis ticks
+    
 
-    const tooltip = d3.select('body').append('div')
-        .attr('class', 'tooltip');
+    const tooltip = d3.select('#tooltip4');
 
     // Load CSV data and build chart
     d3.csv("./data/graph-4-data.csv", d3.autoType).then(function(data) {
@@ -108,7 +108,7 @@
                         </tr>
                     </table>
                 `)
-                .style('visibility', 'visible')
+                .style('opacity', '0.9')
                 .style("left", `${event.pageX}px`)
                 .style("top", `${event.pageY}px`);
             })
@@ -120,7 +120,7 @@
                 svg.selectAll(".bar").style("opacity", 1);
 
                 // Hide the tooltip
-                tooltip.style('visibility', 'hidden');
+                tooltip.style('opacity', '0');
             });
 
         // Add category labels next to each segment
