@@ -5,15 +5,19 @@ CSS Graphics Examples
     - https://css.umich.edu/publications/factsheets/built-environment/us-cities-factsheet
     - Graph 3: PUBLIC TRANSPORTATION RIDERSHIP, 2022
     - --> Stacked area chart
-2. Nuclear Energy 
+2. Photovoltaic Energy
+    - https://css.umich.edu/publications/factsheets/energy/photovoltaic-energy-factsheet
+    - Graph 6: Median Installed Price, Residential, Commercial, and Utility Scale PV Systems
+    - --> Line chart
+3. Nuclear Energy 
     - https://css.umich.edu/publications/factsheets/energy/nuclear-energy-factsheet
     - Graph 6: SPENT COMMERCIAL NUCLEAR FUEL, METRIC TONS
     - --> Interactive map
-3. U.S. Water Supply and Distribution 
+4. U.S. Water Supply and Distribution 
     - https://css.umich.edu/publications/factsheets/water/us-water-supply-and-distribution-factsheet
     - Graph 3: SIZE CATEGORIES OF COMMUNITY WATER SYSTEMS
     - --> Column chart
-4. U.S. Water Supply and Distribution 
+5. U.S. Water Supply and Distribution 
     - https://css.umich.edu/publications/factsheets/water/us-water-supply-and-distribution-factsheet
     - Graph 1: ESTIMATED USES OF WATER, 2015
     - --> Stacked column chart
