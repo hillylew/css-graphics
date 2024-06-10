@@ -35,7 +35,7 @@
     const xAxis = d3.axisBottom(x).tickFormat(d3.timeFormat("%Y"));
 
     // const yAxis = d3.axisLeft(y).tickFormat(d3.format("$"));
-    const yAxis = d3.axisLeft(y).tickFormat(d3.format("$")); 
+    const yAxis = d3.axisLeft(y).tickFormat(d3.format("$")).ticks(4); // CHECK THIS 
   
     const tooltip = d3.select("#tooltip6");
   

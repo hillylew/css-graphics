@@ -28,6 +28,9 @@
       left: containerWidth * 0.07, // 10% of the container width
     };
 
+    const width = containerWidth - dynamicMargin.left - dynamicMargin.right;
+    const height = containerHeight - dynamicMargin.top - dynamicMargin.bottom;
+
     const svg = d3.select("#pv-diagram").append("svg")
     .attr("width", containerWidth)
     .attr("height", containerWidth * aspectRatio)
@@ -158,6 +161,24 @@
         arrayRows * totalPanelHeight + (arrayRows - 1) * arraySpacing, arraySpacing, moduleBorderThickness, "array");
   
     svg.attr("width", containerWidth).attr("height", containerWidth * aspectRatio);
+
+
+    // svg.append("text")
+    // .attr("x", containerWidth / 2) // Horizontal position - center of the container width
+    // .attr("y", containerHeight - dynamicMargin.bottom / 2) // Vertical position - near the bottom of the container margin
+    // .attr("text-anchor", "middle") // Center the text horizontally
+    // .attr("font-size", "14px") // Set the font size
+    // .attr("fill", "#555") // Set the text color
+    // .text("Most commercial panels have efficiencies from 17% to 20%");
+
+    // Add x-axis label
+    svg
+    .append("text")
+    .attr("text-anchor", "middle")
+    .attr("font-size", "18px")   // NEED TO BE DYNAMIC
+    .attr("x", containerWidth / 2)
+    .attr("y", height + dynamicMargin.bottom / 4)
+    .text("Most commercial panels have efficiencies from 17% to 20%");
 })();
 
   
