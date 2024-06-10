@@ -1,9 +1,9 @@
-PV Technology,Cell Conversion Efficiency,Module Conversion Efficiency
-Crystalline single crystalline silicon (Si),27.6%,24.9%
-Crystalline Multicrystalline Si,23.3%,20.4%
-Crystalline Multi-junction Gallium arsenide (GaAs),47.6%,38.9%
-Thin film Cadmium telluride (CdTe),22.6%,19.5%
-Thin film CIGS,23.6%,19.9%
-Emerging Perovskite/Si tandem,33.9%,-
-Emerging Perovskite,26.1%,19.2%
-Emerging Organic,19.2%,14.5%
+Category,Subcategory,Cell Conversion Efficiency
+Crystalline,Single Crystalline Silicon (Si),27.6%
+Crystalline,Multicrystalline Si,23.3%
+Crystalline,Multi-junction Gallium Arsenide (GaAs),47.6%
+Thin Film,Cadmium Telluride (CdTe),22.6%
+Thin Film,CIGS,23.6%
+Emerging,Perovskite/Si Tandem,33.9%
+Emerging,Perovskite,26.1%
+Emerging,Organic,19.2%

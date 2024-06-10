@@ -77,7 +77,7 @@
       .call(yAxis)
       .attr("class", "chart-labels");
 
-    // Append "in millions" label
+    // Append y-axis label
     yAxisGroup
       .append("text")
       .attr("class", "chart-labels")
@@ -154,60 +154,63 @@
       .style("stroke", (d) => colorScale(d.key))
       .style("stroke-width", 1);
 
-
-// Add legend
-const legend = svg
-  .selectAll(".legend")
-  .data(lineData)
-  .enter()
-  .append("g")
-  .attr("class", "legend")
-  .on("mouseover", (event, d) => {
-    // Highlight the hovered line
-    svg
-      .selectAll(".line-path")
-      .style("opacity", (lineData) => (lineData.key === d.key ? 1 : 0.2))
-      .style("stroke-width", (lineData) =>
-        lineData.key === d.key ? 2 : 1
-      ); // Adjust stroke width on hover
-  })
-  .on("mouseout", () => {
-    // Reset style for all lines on mouseout
-    svg
-      .selectAll(".line-path")
-      .style("opacity", 1)
-      .style("stroke-width", 1); // Reset stroke width
-  });
-
-// Append legend text
-legend.each(function (series, index) {
-  const lastDatum = series.values[series.values.length - 1]; // Get the last data point
-  const legendItem = d3.select(this);
-  const legendNames = {
-    "22 Panel System Residential PV": ["Residential PV"],
-    "200 kW Commercial PV": ["Commercial PV"],
-    "100 MW Utility-Scale PV, Fixed Tilt": ["Fixed Tilt", "Utility-Scale PV"],
-    "100 MW Utility-Scale PV, One Axis Tracker": ["One Axis Tracker", "Utility-Scale PV"],
-  };
-
-  const lines = legendNames[series.key];
-  
-  lines.forEach((line, i) => {
-    legendItem
-      .append("text")
-      .datum(lastDatum)
-      .attr("transform", function (d) {
-        return `translate(${width},${y(d.value) + i * 12})`; // Adjust these values as needed for correct positioning
+    // Add legend
+    const legend = svg
+      .selectAll(".legend")
+      .data(lineData)
+      .enter()
+      .append("g")
+      .attr("class", "legend")
+      .on("mouseover", (event, d) => {
+        // Highlight the hovered line
+        svg
+          .selectAll(".line-path")
+          .style("opacity", (lineData) => (lineData.key === d.key ? 1 : 0.2))
+          .style("stroke-width", (lineData) =>
+            lineData.key === d.key ? 2 : 1
+          ); // Adjust stroke width on hover
       })
-      .attr("class", "chart-labels")
-      .attr("x", 5) // This sets the distance of the text from the end of the line
-      .attr("dy", ".35em") // This aligns the text vertically
-      .style("fill", colorScale(series.key))
-      .text(line);
-  });
-});
+      .on("mouseout", () => {
+        // Reset style for all lines on mouseout
+        svg
+          .selectAll(".line-path")
+          .style("opacity", 1)
+          .style("stroke-width", 1); // Reset stroke width
+      });
 
+    // Append legend text
+    legend.each(function (series, index) {
+      const lastDatum = series.values[series.values.length - 1]; // Get the last data point
+      const legendItem = d3.select(this);
+      const legendNames = {
+        "22 Panel System Residential PV": ["Residential PV"],
+        "200 kW Commercial PV": ["Commercial PV"],
+        "100 MW Utility-Scale PV, Fixed Tilt": [
+          "Fixed Tilt",
+          "Utility-Scale PV",
+        ],
+        "100 MW Utility-Scale PV, One Axis Tracker": [
+          "One Axis Tracker",
+          "Utility-Scale PV",
+        ],
+      };
 
+      const lines = legendNames[series.key];
+
+      lines.forEach((line, i) => {
+        legendItem
+          .append("text")
+          .datum(lastDatum)
+          .attr("transform", function (d) {
+            return `translate(${width},${y(d.value) + i * 12})`; // Adjust these values as needed for correct positioning
+          })
+          .attr("class", "chart-labels")
+          .attr("x", 5) // This sets the distance of the text from the end of the line
+          .attr("dy", ".35em") // This aligns the text vertically
+          .style("fill", colorScale(series.key))
+          .text(line);
+      });
+    });
 
     function onMouseMove(event) {
       const [xPos, yPos] = d3.pointer(event, this);
@@ -219,7 +222,7 @@ legend.each(function (series, index) {
       // Position tooltip
       tooltip
         .style("opacity", 0.9)
-        .style("left", `${event.pageX}px`)
+        .style("left", `${event.pageX + dynamicMargin.left / 4}px`)
         .style("top", `${event.pageY}px`);
 
       const formatNumber = d3.format(",");

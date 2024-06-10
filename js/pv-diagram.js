@@ -1,63 +1,101 @@
-document.addEventListener('DOMContentLoaded', function() {
-    const aspectRatio = 0.7; // Define an aspect ratio for the chart
+(function () {
 
-    // Get the container and its dimensions
-    const container = document.getElementById('pv-diagram');
+    const aspectRatio = 0.7;
+    const cellWidth = 10, cellHeight = 10, cellSpacing = 0.5, cellToBorderGap = 2;
+    const moduleRows = 10, moduleColumns = 6, moduleSpacing = 10, moduleBorderThickness = 4;
+    const panelRows = 2, panelColumns = 3;
+    const arrayRows = 1, arrayColumns = 2, arraySpacing = 25;
+    const cutSize = 2;
+  
+    // const container = document.getElementById("pv-diagram");
+    // const containerWidth = container.offsetWidth;
+    // const dynamicMargin = {
+    //     top: containerWidth * aspectRatio * 0.1,
+    //     right: containerWidth * 0.02,
+    //     bottom: containerWidth * aspectRatio * 0.5,
+    //     left: containerWidth * 0.05
+    // };
+
+    const container = document.getElementById("pv-diagram");
     const containerWidth = container.offsetWidth; // Use offsetWidth for full element width
     const containerHeight = containerWidth * aspectRatio; // Calculate the height based on the width and aspect ratio
-
+  
     // Calculate the dynamic margins
     const dynamicMargin = {
-        top: containerHeight * 0.1, // 10% of the container height
-        right: containerWidth * 0.02, // 2% of the container width
-        bottom: containerHeight * 0.5, // 50% of the container height
-        left: containerWidth * 0.02 // 2% of the container width
+      top: containerHeight * 0.1, // 10% of the container height
+      right: containerWidth * 0.1, // 10% of the container width
+      bottom: containerHeight * 0.1, // 10% of the container height
+      left: containerWidth * 0.07, // 10% of the container width
     };
 
-    // Calculate the width and height for the inner drawing area
-    const width = containerWidth - dynamicMargin.left - dynamicMargin.right;
-    const height = containerHeight - dynamicMargin.top - dynamicMargin.bottom;
+    const svg = d3.select("#pv-diagram").append("svg")
+    .attr("width", containerWidth)
+    .attr("height", containerWidth * aspectRatio)
+    .append("g")
+    .attr("transform", `translate(${dynamicMargin.left},${dynamicMargin.top})`);
 
-    // Adjust the size of your SVG according to your actual available space
-    const svg = d3.select('#pv-diagram').append('svg')
-                  .attr('width', width + dynamicMargin.left + dynamicMargin.right)
-                  .attr('height', height + dynamicMargin.top + dynamicMargin.bottom)
-                  .append('g')
-                  .attr('transform', `translate(${dynamicMargin.left},${dynamicMargin.top})`);
+    const totalModuleWidth = moduleColumns * (cellWidth + cellSpacing) + cellToBorderGap * 2 - cellSpacing;
+    const totalModuleHeight = moduleRows * (cellHeight + cellSpacing) + cellToBorderGap * 2 - cellSpacing;
+    const totalPanelWidth = panelColumns * (totalModuleWidth + moduleSpacing) - moduleSpacing;
+    const totalPanelHeight = panelRows * (totalModuleHeight + moduleSpacing) - moduleSpacing;
 
-    // Constants for drawing
-    const cellWidth = 10;
-    const cellHeight = 10;
-    const moduleRows = 6;
-    const moduleColumns = 10;
-    const moduleSpacing = 10; // spacing between modules
-    const arrayRows = 2; // how many rows of modules in the array
-    const arrayColumns = 3; // how many columns of modules in the array
-    const cellSpacing = 0.5; // spacing between cells
+     /* ----------------------- Draw Sun ----------------------- */
+     const sunGroup = svg.append("g");
 
-    // Constants for border and gap around cells
-    const moduleBorderThickness = 1; // Thickness of the module border
-    const cellToBorderGap = 2; // Gap between cells and module border
+     const sunX = dynamicMargin.left; // Updated the sun position to top-left corner
+    const sunY = dynamicMargin.top; // Updated the sun position to top-left corner
+    const sunRadius = containerWidth * 0.1; // Example sun radius
+ 
+     // Draw the sun
+     sunGroup.append("circle")
+         .attr("cx", sunX)
+         .attr("cy", sunY)
+         .attr("r", sunRadius)
+         .attr("fill", "yellow")
+ 
+     // Draw sun rays
+     const numRays = 12; // Number of rays we want to draw
+     const rayLength = sunRadius * 1.5; // Length of the rays
+     const rayWidth = 2; // How thick the rays are
+ 
+     for (let i = 0; i < numRays; i++) {
+         const angle = (i / numRays) * (2 * Math.PI); // angle in radians
+         const rayX = sunX + Math.cos(angle) * sunRadius;
+         const rayY = sunY + Math.sin(angle) * sunRadius;
+         const rayEndX = sunX + Math.cos(angle) * (sunRadius + rayLength);
+         const rayEndY = sunY + Math.sin(angle) * (sunRadius + rayLength);
+         
+         sunGroup.append("line")
+             .attr("x1", rayX)
+             .attr("y1", rayY)
+             .attr("x2", rayEndX)
+             .attr("y2", rayEndY)
+             .attr("stroke", "yellow")
+             .attr("stroke-width", rayWidth);
+     }
+  
 
-    // Function to draw a border around a group, adjust for gap
-    function drawBorder(group, width, height, gap, thickness) {
-        group.append('rect')
-            .attr('x', -gap)
-            .attr('y', -gap)
-            .attr('width', width + gap * 2)
-            .attr('height', height + gap * 2)
-            .attr('fill', 'none')
-            .attr('stroke', '#000') // The border color
-            .attr('stroke-width', thickness);
-    }
-
-    // Calculate total module width and height including the cell-to-border gap
-    const totalModuleWidthWithGap = moduleColumns * (cellWidth + cellSpacing) - cellSpacing + cellToBorderGap * 2;
-    const totalModuleHeightWithGap = moduleRows * (cellHeight + cellSpacing) - cellSpacing + cellToBorderGap * 2;
-
-    // Function to draw an octagon-shaped cell with cut corners
-    function drawOctagonCell(group, x, y, width, height, cutSize) {
-        // Define the points for an octagon shape by cutting the corners
+     /* ----------------------- Draw Array ----------------------- */
+    const drawBorder = (group, width, height, gap, thickness, className) => {
+        group.append("rect")
+            .attr("x", -gap).attr("y", -gap)
+            .attr("width", width + 2 * gap).attr("height", height + 2 * gap)
+            .attr("rx", 8) // Adjust the rx and ry values for rounded corners
+            .attr("ry", 8)
+            .attr("fill", "none").attr("stroke", "#ccc")
+            .attr("stroke-width", thickness)
+            .attr("class", className)
+            .on("mouseover", function () {
+                d3.select(this).attr("stroke", "#ff0000"); // Change the border color on mouseover
+                d3.select("#tooltip7").style("display", "block").text(className);
+            })
+            .on("mouseout", function () {
+                d3.select(this).attr("stroke", "#ccc"); // Restore the original border color on mouseout
+                d3.select("#tooltip7").style("display", "none");
+            });
+    };
+  
+    const drawOctagonCell = (group, x, y, width, height, cutSize) => {
         const points = [
             { x: x + cutSize, y }, // Top-left
             { x: x + width - cutSize, y }, // Top-right
@@ -68,55 +106,66 @@ document.addEventListener('DOMContentLoaded', function() {
             { x, y: y + height - cutSize }, // Left-bottom
             { x, y: y + cutSize }, // Left-top
         ];
-
-        // Move to the first point
-        let pathData = `M ${points[0].x},${points[0].y} `;
-
-        // Draw lines to subsequent points
-        for (let i = 1; i < points.length; i++) {
-            pathData += `L ${points[i].x},${points[i].y} `;
-        }
-        // Close the path
-        pathData += 'Z';
-
-        // Draw the path
-        group.append('path')
-            .attr('d', pathData)
-            .attr('fill', '#808080'); // Specify the fill color or any other style as needed
-    }
-
-    // Constants for octagon cells
-    const cutSize = 2; // Size of the cut corners
-
-    // Modified code to draw each module with cells and borders
-    for (let r = 0; r < arrayRows; r++) {
-        for (let c = 0; c < arrayColumns; c++) {
-            const moduleGroup = svg.append('g')
-                .attr('transform', `translate(${c * (totalModuleWidthWithGap + moduleSpacing) + moduleSpacing / 2}, ${r * (totalModuleHeightWithGap + moduleSpacing) + moduleSpacing / 2})`);
-
-            // Draw the module border with gap
-            drawBorder(moduleGroup, totalModuleWidthWithGap, totalModuleHeightWithGap, cellToBorderGap, moduleBorderThickness);
-
-            // Draw octagon cells within each module group, include the cellToBorderGap in the position
-            for (let y = 0; y < moduleRows; y++) {
-                for (let x = 0; x < moduleColumns; x++) {
-                    drawOctagonCell(
-                        moduleGroup,
-                        x * (cellWidth + cellSpacing) + cellToBorderGap,
-                        y * (cellHeight + cellSpacing) + cellToBorderGap,
-                        cellWidth,
-                        cellHeight,
-                        cutSize
-                    );
+  
+        let pathData = `M${points.map(p => `${p.x},${p.y}`).join(' L')} Z`;
+        group.append("path").attr("d", pathData).attr("fill", "#808080")
+            .attr("class", "cell")
+            .on("mouseover", function () {
+                d3.select(this).attr("fill", "#ff0000"); // Change the fill color to red on mouseover
+                d3.select("#tooltip7").style("display", "block").text("cell");
+            })
+            .on("mouseout", function () {
+                d3.select(this).attr("fill", "#808080"); // Restore the original fill color on mouseout
+                d3.select("#tooltip7").style("display", "none");
+            });
+    };
+  
+    const drawPanel = (panelGroup) => {
+        for (let r = 0; r < panelRows; r++) {
+            for (let c = 0; c < panelColumns; c++) {
+                const moduleX = c * (totalModuleWidth + moduleSpacing), moduleY = r * (totalModuleHeight + moduleSpacing);
+                let moduleGroup = panelGroup.append("g").attr("transform", `translate(${moduleX}, ${moduleY})`);
+                drawBorder(moduleGroup, totalModuleWidth, totalModuleHeight, cellToBorderGap, moduleBorderThickness, "module");
+  
+                for (let y = 0; y < moduleRows; y++) {
+                    for (let x = 0; x < moduleColumns; x++) {
+                        let cellX = x * (cellWidth + cellSpacing) + cellToBorderGap,
+                            cellY = y * (cellHeight + cellSpacing) + cellToBorderGap;
+                        drawOctagonCell(moduleGroup, cellX, cellY, cellWidth, cellHeight, cutSize);
+                    }
                 }
             }
         }
+        drawBorder(panelGroup, totalPanelWidth, totalPanelHeight, moduleSpacing, moduleBorderThickness, "panel");
+    };
+  
+    // const arrayGroup = svg.append("g");
+    const arrayMoveRight = 50;  // Move 50 pixels to the right
+    const arrayMoveDown = 30;   // Move 30 pixels down
+
+    const arrayGroup = svg.append("g")
+  .attr("transform", `translate(${dynamicMargin.left + arrayMoveRight},${dynamicMargin.top + arrayMoveDown})`);
+    for (let arrRow = 0; arrRow < arrayRows; arrRow++) {
+        for (let arrCol = 0; arrCol < arrayColumns; arrCol++) {
+            const xOffset = arrCol * (totalPanelWidth + arraySpacing), yOffset = arrRow * (totalPanelHeight + arraySpacing);
+            let panelGroup = arrayGroup.append("g").attr("transform", `translate(${xOffset},${yOffset})`);
+            drawPanel(panelGroup);
+        }
     }
+  
+    // array border
+    drawBorder(arrayGroup, arrayColumns * totalPanelWidth + (arrayColumns - 1) * arraySpacing,
+        arrayRows * totalPanelHeight + (arrayRows - 1) * arraySpacing, arraySpacing, moduleBorderThickness, "array");
+  
+    svg.attr("width", containerWidth).attr("height", containerWidth * aspectRatio);
+})();
 
-    // Calculate the total size of the array including module borders and gaps
-    const totalArrayWidth = arrayColumns * (totalModuleWidthWithGap + moduleSpacing) - moduleSpacing + moduleSpacing;
-    const totalArrayHeight = arrayRows * (totalModuleHeightWithGap + moduleSpacing) - moduleSpacing + moduleSpacing;
+  
 
-    // Draw the border around the entire array, without additional gap
-    drawBorder(svg, totalArrayWidth, totalArrayHeight, moduleSpacing / 2, moduleBorderThickness);
-});
+  // Update the tooltip position based on mouse movement
+  document.addEventListener("mousemove", function (event) {
+    d3.select("#tooltip7")
+      .style("left", `${event.pageX + 10}px`)
+      .style("top", `${event.pageY + 10}px`);
+  });
+  

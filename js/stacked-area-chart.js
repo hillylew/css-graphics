@@ -97,7 +97,7 @@
       .attr("text-anchor", "middle")
       .attr("transform", `translate(0, -${dynamicMargin.top / 2})`)
       .style("fill", "#000")
-      .text("in millions");
+      .text("millions");
 
     /* ----------------------- Draw the chart ----------------------- */
     // Define the area generator
@@ -229,7 +229,7 @@
       // Position tooltip
       tooltip
         .style("opacity", 0.9)
-        .style("left", `${event.pageX}px`)
+        .style("left", `${event.pageX + dynamicMargin.left/4}px`)
         .style("top", `${event.pageY}px`);
 
       const formatNumber = d3.format(",");

@@ -38,6 +38,19 @@
   text-align: left;
 }
 
+.tooltip-diagram {
+  pointer-events: none;
+  position: absolute;
+  width: auto;
+  height: auto;
+  padding: 5px;
+  background-color: white;
+  opacity: 0.9;
+  border-radius: 5px;
+  font-family: sans-serif;
+  font-size: 14px;
+}
+
 .tooltip-title {
   font-weight: bold;
   border-radius: 5px 5px 0 0;
