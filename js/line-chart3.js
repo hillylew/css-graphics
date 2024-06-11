@@ -2,7 +2,7 @@
     const aspectRatio = 0.7; // Define an aspect ratio for the chart
   
     // Get the container and its dimensions
-    const container = document.getElementById("line-chart2");
+    const container = document.getElementById("line-chart3");
     const containerWidth = container.offsetWidth; // Use offsetWidth for full element width
     const containerHeight = containerWidth * aspectRatio; // Calculate the height based on the width and aspect ratio
   
@@ -20,7 +20,7 @@
   
     // Append SVG object
     const svg = d3
-      .select("#line-chart2")
+      .select("#line-chart3")
       .append("svg")
       .attr("viewBox", `0 0 ${containerWidth} ${containerHeight}`)
       .attr("preserveAspectRatio", "xMinYMin meet")
@@ -33,23 +33,21 @@
   
     // Define the axes
     const xAxis = d3.axisBottom(x).tickFormat(d3.timeFormat("%Y"));
-
-    // const yAxis = d3.axisLeft(y).tickFormat(d3.format("$"));
-    const yAxis = d3.axisLeft(y).tickFormat(d3.format("$")).ticks(4); // CHECK THIS 
+    const yAxis = d3.axisLeft(y).tickFormat(d3.format(",")).ticks(5); // Adjust ticks as needed
   
-    const tooltip = d3.select("#tooltip6");
+    const tooltip = d3.select("#tooltip8");
   
     // Load and process the CSV data
-    d3.csv("./data/graph-7-data.csv").then((data) => {
+    d3.csv("./data/graph-8-data.csv").then((data) => {
       // Parse years and convert string values to numbers
       data.forEach((d) => {
         d.Year = new Date(+d.Year, 0, 1);
-        d["$/MWh"] = +d["$/MWh"];
+        d["Trillion Btu"] = +d["Trillion Btu"];
       });
   
       // Update the scale domains with the processed data
       x.domain(d3.extent(data, (d) => d.Year));
-      y.domain([0, Math.ceil(d3.max(data, (d) => d["$/MWh"]) / 100) * 100]);
+      y.domain([0, Math.ceil(d3.max(data, (d) => d["Trillion Btu"]) / 100) * 100]);
 
       // Draw the Y-axis
       const yAxisGroup = svg
@@ -64,7 +62,7 @@
         .attr("text-anchor", "middle")
         .attr("transform", `translate(0, -${dynamicMargin.top / 2})`)
         .style("fill", "#000")
-        .text("$/MWh");
+        .text("Trillion Btu");
   
       const xAxisGroup = svg
         .append("g")
@@ -78,7 +76,7 @@
       const lineGenerator = d3
         .line()
         .x((d) => x(d.Year))
-        .y((d) => y(d["$/MWh"]));
+        .y((d) => y(d["Trillion Btu"]));
   
       const mainLine = svg.append("path")
         .datum(data)
@@ -88,46 +86,6 @@
         .attr("stroke", "#377eb8")
         .style("stroke-width", 1.5);
 
-      // Add the 2030 goal dashed horizontal line
-      const goalValue = 30;
-      const goalLine = svg.append("line")
-        .attr("x1", 0)
-        .attr("y1", y(goalValue))
-        .attr("x2", width)
-        .attr("y2", y(goalValue))
-        .attr("stroke", "red")
-        .attr("stroke-width", 1)
-        .attr("stroke-dasharray", "6,6");
-      
-      // Add the label for the 2030 goal
-      const goalLabel = svg.append("text")
-        .attr("class", "chart-labels")
-        .attr("x", width + 5) // Slightly offset to the right of the line
-        .attr("y", y(goalValue))
-        .attr("dy", "0.35em") // Vertically align with the line
-        .attr("text-anchor", "start")
-        .attr("fill", "#e41a1c")
-        .text("2030 Goal");
-
-      // Highlight function for goal line
-      function highlightGoal() {
-        goalLine
-          .attr("stroke-width", 2)
-          .attr("stroke-dasharray", "6,6");
-        mainLine.style("opacity", 0.2);
-      }
-
-      // Reset function for goal line
-      function resetHighlight() {
-        goalLine
-          .attr("stroke-width", 1)
-          .attr("stroke-dasharray", "4,4");
-        mainLine.style("opacity", 1);
-      }
-
-      goalLabel
-        .on("mouseover", highlightGoal)
-        .on("mouseout", resetHighlight);
   
       function onMouseMove(event) {
         const [xPos, yPos] = d3.pointer(event, this);
@@ -142,16 +100,15 @@
           .style("left", `${event.pageX + dynamicMargin.left / 4}px`)
           .style("top", `${event.pageY}px`);
   
-        const formatNumber = d3.format(",");
+        const formatNumber = d3.format(",.2f");
         if (hoverData) {
           tooltip.html(`
                 <div class="tooltip-title">${hoverData.Year.getFullYear()}</div>
                 <table class="tooltip-content">
                     <tr>
-                        <td><span class="color-legend" style="background-color: #377eb8"
-                        )};"></span>Cost</td>
-                        <td class="value">$${formatNumber(
-                          hoverData["$/MWh"] 
+                        <td><span class="color-legend" style="background-color: #377eb8"></span>Production</td>
+                        <td class="value">${formatNumber(
+                          hoverData["Trillion Btu"] 
                         )}</td>
                     </tr>
                 </tr>
@@ -161,7 +118,7 @@
           mouseG
             .selectAll("circle")
             .attr("cx", x(hoverData.Year))
-            .attr("cy", y(hoverData["$/MWh"]))
+            .attr("cy", y(hoverData["Trillion Btu"]))
             .attr("r", 4)
             .style("fill", "#377eb8")
             .style("stroke", "white")
@@ -207,3 +164,4 @@
         });
     });
 })();
+

@@ -2,20 +2,11 @@
 
     const aspectRatio = 0.7;
     const cellWidth = 10, cellHeight = 10, cellSpacing = 0.5, cellToBorderGap = 2;
-    const moduleRows = 10, moduleColumns = 6, moduleSpacing = 10, moduleBorderThickness = 4;
+    const moduleRows = 8, moduleColumns = 4, moduleSpacing = 10, moduleBorderThickness = 4;
     const panelRows = 2, panelColumns = 3;
     const arrayRows = 1, arrayColumns = 2, arraySpacing = 25;
     const cutSize = 2;
   
-    // const container = document.getElementById("pv-diagram");
-    // const containerWidth = container.offsetWidth;
-    // const dynamicMargin = {
-    //     top: containerWidth * aspectRatio * 0.1,
-    //     right: containerWidth * 0.02,
-    //     bottom: containerWidth * aspectRatio * 0.5,
-    //     left: containerWidth * 0.05
-    // };
-
     const container = document.getElementById("pv-diagram");
     const containerWidth = container.offsetWidth; // Use offsetWidth for full element width
     const containerHeight = containerWidth * aspectRatio; // Calculate the height based on the width and aspect ratio
@@ -55,6 +46,15 @@
          .attr("cy", sunY)
          .attr("r", sunRadius)
          .attr("fill", "yellow")
+
+    sunGroup.append("text")
+        .attr("x", sunX)
+        .attr("y", sunY)
+        .attr("text-anchor", "middle")
+        .attr("dy", ".35em")
+        .text("100%")
+        .attr("font-size", "16px")  // resonsive
+        .attr("fill", "black");
  
      // Draw sun rays
      const numRays = 12; // Number of rays we want to draw
@@ -78,7 +78,7 @@
      }
   
 
-     /* ----------------------- Draw Array ----------------------- */
+     /* ----------------------- Draw PV System ----------------------- */
     const drawBorder = (group, width, height, gap, thickness, className) => {
         group.append("rect")
             .attr("x", -gap).attr("y", -gap)
@@ -142,12 +142,10 @@
         drawBorder(panelGroup, totalPanelWidth, totalPanelHeight, moduleSpacing, moduleBorderThickness, "panel");
     };
   
-    // const arrayGroup = svg.append("g");
-    const arrayMoveRight = 50;  // Move 50 pixels to the right
-    const arrayMoveDown = 30;   // Move 30 pixels down
+
 
     const arrayGroup = svg.append("g")
-  .attr("transform", `translate(${dynamicMargin.left + arrayMoveRight},${dynamicMargin.top + arrayMoveDown})`);
+  .attr("transform", `translate(${width / 5},${ height / 4})`);
     for (let arrRow = 0; arrRow < arrayRows; arrRow++) {
         for (let arrCol = 0; arrCol < arrayColumns; arrCol++) {
             const xOffset = arrCol * (totalPanelWidth + arraySpacing), yOffset = arrRow * (totalPanelHeight + arraySpacing);
@@ -163,22 +161,43 @@
     svg.attr("width", containerWidth).attr("height", containerWidth * aspectRatio);
 
 
-    // svg.append("text")
-    // .attr("x", containerWidth / 2) // Horizontal position - center of the container width
-    // .attr("y", containerHeight - dynamicMargin.bottom / 2) // Vertical position - near the bottom of the container margin
-    // .attr("text-anchor", "middle") // Center the text horizontally
-    // .attr("font-size", "14px") // Set the font size
-    // .attr("fill", "#555") // Set the text color
-    // .text("Most commercial panels have efficiencies from 17% to 20%");
 
-    // Add x-axis label
-    svg
-    .append("text")
+    /* ----------------------- Draw Conversion Efficiency ----------------------- */
+    const efficiencyGroup = svg.append("g")
+    .attr("transform", `translate(${containerWidth * 0.8},${containerHeight * 0.5})`); // Adjust position as needed
+
+efficiencyGroup.append("text")
+    .attr("x", 0)
+    .attr("y", 0)
     .attr("text-anchor", "middle")
-    .attr("font-size", "18px")   // NEED TO BE DYNAMIC
-    .attr("x", containerWidth / 2)
-    .attr("y", height + dynamicMargin.bottom / 4)
-    .text("Most commercial panels have efficiencies from 17% to 20%");
+    .attr("dy", "-1.5em") // Move text up
+    .text("Conversion Efficiency")
+    .attr("font-size", "16px")
+    .attr("fill", "black");
+
+// Draw the efficiency bar
+const efficiencyBarWidth = 100; // Adjust width as needed
+const efficiencyBarHeight = 10; // Adjust height as needed
+const efficiencyBarX = -efficiencyBarWidth / 2;
+const efficiencyBarY = 0;
+
+efficiencyGroup.append("rect")
+    .attr("x", efficiencyBarX)
+    .attr("y", efficiencyBarY)
+    .attr("width", efficiencyBarWidth)
+    .attr("height", efficiencyBarHeight)
+    .attr("fill", "lightgreen");
+
+efficiencyGroup.append("text")
+    .attr("x", efficiencyBarX + efficiencyBarWidth / 2)
+    .attr("y", efficiencyBarY - 5) // Adjust text position above the bar
+    .attr("text-anchor", "middle")
+    .attr("dy", "-0.3em")
+    .text("17-20%")
+    .attr("font-size", "12px")
+    .attr("fill", "black");
+
+    
 })();
 
   
