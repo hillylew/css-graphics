@@ -9,7 +9,7 @@
     // Calculate the dynamic margins
     const dynamicMargin = {
       top: containerHeight * 0.1, // 10% of the container height
-      right: containerWidth * 0.12, // 10% of the container width
+      right: containerWidth * 0.07, // 10% of the container width
       bottom: containerHeight * 0.1, // 10% of the container height
       left: containerWidth * 0.07, // 10% of the container width
     };
@@ -47,7 +47,7 @@
   
       // Update the scale domains with the processed data
       x.domain(d3.extent(data, (d) => d.Year));
-      y.domain([0, Math.ceil(d3.max(data, (d) => d["Trillion Btu"]) / 100) * 100]);
+      y.domain([0, Math.ceil(d3.max(data, (d) => d["Trillion Btu"]) / 200) * 200]);
 
       // Draw the Y-axis
       const yAxisGroup = svg
@@ -63,6 +63,11 @@
         .attr("transform", `translate(0, -${dynamicMargin.top / 2})`)
         .style("fill", "#000")
         .text("Trillion Btu");
+
+    
+    // Draw the X-axis
+    //   const xTickValues = x.ticks().concat(new Date(2022, 0, 1)); // Add 2022 as a Date object
+    //   xAxis.tickValues(xTickValues);
   
       const xAxisGroup = svg
         .append("g")
@@ -86,6 +91,23 @@
         .attr("stroke", "#377eb8")
         .style("stroke-width", 1.5);
 
+
+    // Define the area generator
+    const areaGenerator = d3.area()
+        .x((d) => x(d.Year))
+        .y0(height) // Start of the area at the bottom of the chart
+        .y1((d) => y(d["Trillion Btu"])); // End of the area at the line
+
+
+    // Append the area path
+    const areaPath = svg.append("path")
+        .datum(data)
+        .attr("class", "area")
+        .attr("d", areaGenerator)
+        .attr("fill", "#377eb8")
+        areaPath.style("opacity", 0.2);
+
+
   
       function onMouseMove(event) {
         const [xPos, yPos] = d3.pointer(event, this);
@@ -93,6 +115,10 @@
         const hoverData = data.find(
           (d) => d.Year.getFullYear() === date.getFullYear()
         );
+
+
+        // area gets highlighted
+        areaPath.style("opacity", 0.7);
   
         // Position tooltip
         tooltip
@@ -161,6 +187,7 @@
           tooltip.style("opacity", 0);
           mouseG.selectAll("circle").style("opacity", "0");
           mouseG.select(".mouse-line").style("opacity", "0");
+          areaPath.style("opacity", 0.2);
         });
     });
 })();
