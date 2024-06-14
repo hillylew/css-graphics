@@ -37,7 +37,7 @@
     // const yAxis = d3.axisLeft(y).tickFormat(d3.format("$"));
     const yAxis = d3.axisLeft(y).tickFormat(d3.format("$")).ticks(4); // CHECK THIS 
   
-    const tooltip = d3.select("#tooltip6");
+    const tooltip = d3.select("#tooltip");
   
     // Load and process the CSV data
     d3.csv("./data/graph-7-data.csv").then((data) => {
@@ -86,7 +86,7 @@
         .attr("d", lineGenerator)
         .attr("fill", "none")
         .attr("stroke", "#377eb8")
-        .style("stroke-width", 1.5);
+        .style("stroke-width", 2);
 
       // Add the 2030 goal dashed horizontal line
       const goalValue = 30;
@@ -96,7 +96,7 @@
         .attr("x2", width)
         .attr("y2", y(goalValue))
         .attr("stroke", "red")
-        .attr("stroke-width", 1)
+        .attr("stroke-width", 2)
         .attr("stroke-dasharray", "6,6");
       
       // Add the label for the 2030 goal

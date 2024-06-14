@@ -45,7 +45,7 @@
     ])
     .range(["#e41a1c", "#377eb8", "#4daf4a", "#984ea3"]);
 
-  const tooltip = d3.select("#tooltip5");
+  const tooltip = d3.select("#tooltip");
 
   // Load and process the CSV data
   d3.csv("./data/graph-5-data.csv").then((data) => {

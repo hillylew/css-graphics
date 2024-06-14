@@ -5,13 +5,20 @@
 
   // Maps of state states to color and storage data
   const fipsToData = {};
+  
   releaseData.forEach((d) => {
     let color;
+    // const release = parseFloat(d.amount);
+    // if (release > 150) color = "#205b95";
+    // else if (release >= 35 && release <= 150) color = "#4585c6";
+    // else if (release >= 0.5 && release <= 35) color = "#8ab4e0";
+    // else if (release < 0.5) color = "#c0c0c0";
+
     const release = parseFloat(d.amount);
-    if (release > 150) color = "#205b95";
-    else if (release >= 35 && release <= 150) color = "#4585c6";
-    else if (release >= 0.5 && release <= 35) color = "#8ab4e0";
-    else if (release < 0.5) color = "#c0c0c0";
+    if (release > 150) color = "#1d476d";
+    else if (release >= 35 && release <= 150) color = "#2f65a7";
+    else if (release >= 0.5 && release <= 35) color = "#8fc8e5";
+    else if (release < 0.5) color = "#d8d8d8";
 
     fipsToData[d.FIPS] = {
       color: color,
@@ -19,8 +26,6 @@
     };
   });
 
-
-  console.log("FIPS to Data Map:", fipsToData);
 
   const states = topojson.feature(us, us.objects.states).features.map((d) => {
     const data = fipsToData[d.id] || {};
@@ -69,7 +74,7 @@
   });
   const path = d3.geoPath().projection(transform);
 
-  const tooltip = d3.select("#tooltip2");
+  const tooltip = d3.select("#tooltip");
 
   // Highlight states based on the color
   const highlightStates = (color) => {
@@ -122,7 +127,8 @@
     });
 
   // Create the legend
-  const legendColors = ["#205b95", "#4585c6", "#8ab4e0", "#c0c0c0"];
+  // const legendColors = ["#205b95", "#4585c6", "#8ab4e0", "#c0c0c0"];
+  const legendColors = ["#1d476d", "#2f65a7", "#8fc8e5", "#d8d8d8"];
   const legendText = [
     "> 150",
     "> 35",

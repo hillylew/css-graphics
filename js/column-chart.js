@@ -28,7 +28,7 @@
     .attr("transform", `translate(${dynamicMargin.left},${dynamicMargin.top})`);
   
     // Define the tooltip
-    var tooltip = d3.select("#tooltip3");
+    var tooltip = d3.select("#tooltip");
   
     // Load the CSV data
     d3.csv("./data/graph-3-data.csv").then(function (data) {
@@ -78,7 +78,7 @@
       const color = d3
         .scaleOrdinal()
         .domain(subgroups)
-        .range(["#f16248", "#32a28d"]);
+        .range(["#3167a4", "#ffcb03"]);
   
       const formatNumber = d3.format(",");
   

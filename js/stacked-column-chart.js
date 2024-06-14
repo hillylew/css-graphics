@@ -23,7 +23,9 @@
         .append('g')
         .attr('transform', `translate(${dynamicMargin.left},${dynamicMargin.top})`);
 
-    const colors = ["#08519c", "#3182bd", "#6baed6", "#9ecae1", "#c6dbef", "#eff3ff"];
+    // const colors = ["#08519c", "#3182bd", "#6baed6", "#9ecae1", "#c6dbef", "#eff3ff"];
+    const colors = ["#00274c", "#1d476d", "#2f65a7", "#9ecae1", "#8fc8e5", "#d8d8d8"];
+
 
     // Define scales
     const x = d3.scaleBand()
@@ -43,7 +45,7 @@
     svg.selectAll(".tick line").remove(); // Remove x-axis ticks
     
 
-    const tooltip = d3.select('#tooltip4');
+    const tooltip = d3.select('#tooltip');
 
     // Load CSV data and build chart
     d3.csv("./data/graph-4-data.csv", d3.autoType).then(function(data) {

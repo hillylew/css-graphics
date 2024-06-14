@@ -9,7 +9,7 @@
 
   // Calculate the dynamic margins
   const dynamicMargin = {
-    top: containerHeight * 0.05,
+    top: containerHeight * 0.1,
     right: containerWidth * 0.1,
     bottom: containerHeight * 0.1,
     left: containerWidth * 0.05,
@@ -38,9 +38,12 @@
   const colorScale = d3
     .scaleOrdinal()
     .domain(["Bus", "Heavy rail", "Other rail", "Other"])
-    .range(["#e41a1c", "#377eb8", "#4daf4a", "#984ea3"]);
+    // .range(["#e41a1c", "#377eb8", "#4daf4a", "#984ea3"]);
+    // .range(["#3167a4", "#8fc8e5", "#386660", "#e2e27a"]);
+    .range(["#3167a4", "#8fc8e5", "#ffcb03", "#ffd579"]);
+    
 
-  const tooltip = d3.select("#tooltip1");
+  const tooltip = d3.select("#tooltip");
 
   /* ----------------------- Load and process the CSV data ----------------------- */
   d3.csv("./data/graph-1-data.csv").then((data) => {
@@ -97,7 +100,7 @@
       .attr("text-anchor", "middle")
       .attr("transform", `translate(0, -${dynamicMargin.top / 2})`)
       .style("fill", "#000")
-      .text("millions");
+      .text("Millions");
 
     /* ----------------------- Draw the chart ----------------------- */
     // Define the area generator
@@ -124,7 +127,7 @@
       .append("path")
       .attr("class", "area-path")
       .attr("d", area)
-      .style("fill-opacity", "0.8")
+      .style("fill-opacity", 1)
       .style("fill", (d) => colorScale(d.key));
 
     // Add the line paths for each group
@@ -179,7 +182,7 @@
 
     // Function to reset all area layers to default opacity
     function resetAreaLayers() {
-      svg.selectAll(".area-path").style("fill-opacity", 0.8);
+      svg.selectAll(".area-path").style("fill-opacity", 1);
     }
 
     // Define the pandemic arrow

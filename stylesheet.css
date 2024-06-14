@@ -24,6 +24,10 @@
   font-size: 7px;
 }
 
+.diagram-labels {
+  font-size: 12px;
+}
+
 /* Tooltip */
 
 .tooltip {
@@ -38,7 +42,7 @@
   text-align: left;
 }
 
-.tooltip-diagram {
+.diagram-tooltip {
   pointer-events: none;
   position: absolute;
   width: auto;
@@ -119,6 +123,10 @@ table.tooltip-total {
     font-size: 10px;
   }
 
+  .diagram-labels {
+    font-size: 16px;
+  }
+
   .tooltip {
     font-size: 10px;
   }
@@ -146,6 +154,10 @@ table.tooltip-total {
 
   .chart-labels {
     font-size: 12px;
+  }
+
+  .diagram-labels {
+    font-size: 18px;
   }
 
   .tooltip {

@@ -5,28 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CSS Graphics</title>
     <link rel="stylesheet" href="stylesheet.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
 
     <!-- Google Font -->
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
-
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
 </head>
-<body>
-    <!-- U.S. Citites -->
-    <div class="CaptionedChart">
-        <div class="HeaderHTML">
-            <span>Number of Public Transportation Passenger Trips, 1990 to 2023</span>
-        </div>
 
-        <div>
-            <div id="stacked-area-chart" class="chart"></div>
-            <div id="tooltip1" class="tooltip"></div>
-        </div>
-    </div>
+<body>
 
     <!-- Environmental Justice -->
     <div class="CaptionedChart">
@@ -34,10 +21,16 @@
             <span>Total Toxic Release by State</span>
         </div>
 
-        <div>
-            <div id="interactive-map" class="chart"></div>
-            <div id="tooltip2" class="tooltip"></div>
+        <div id="interactive-map" class="chart"></div>
+    </div>
+
+    <!-- U.S. Grid Energy Storage -->
+    <div class="CaptionedChart">
+        <div class="HeaderHTML">
+            <span>Number of Grid Connected Energy Storage Projects by States</span>
         </div>
+
+        <div id="interactive-map2" class="chart"></div>
     </div>
 
     <!-- U.S. Water Supply and Distribution -->
@@ -46,35 +39,57 @@
             <span>Community Water Systems (CWS) by System Size</span>
         </div>
 
-        <div>
-            <div id="column-chart" class="chart"></div>
-            <div id="tooltip3" class="tooltip"></div>
-        </div>
+        <div id="column-chart" class="chart"></div>
     </div>
 
-    <!-- U.S. Water Supply and Distribution -->
     <div class="CaptionedChart">
         <div class="HeaderHTML">
             <span>Estimated Uses of Water, billion gallons per day (BGD), 2015</span>
         </div>
 
-        <div>
-            <div id="stacked-column-chart" class="chart"></div>
-            <div id="tooltip4" class="tooltip"></div>
-        </div>
+        <div id="stacked-column-chart" class="chart"></div>
     </div>
 
-    <!-- Photovoltaic Energy -->
-    <!-- NO LONGER USING THIS!!! -->
+    <!-- U.S. Citites -->
     <div class="CaptionedChart">
         <div class="HeaderHTML">
-            <span>Median Installed Price of PV Systems in the U.S.</span>
+            <span>Number of Public Transportation Passenger Trips, 1990 to 2023</span>
         </div>
 
-        <div>
-            <div id="line-chart" class="chart"></div>
-            <div id="tooltip5" class="tooltip"></div>
+        <div id="stacked-area-chart" class="chart"></div>
+    </div>
+
+    <!-- U.S. Renewable Energy -->
+    <div class="CaptionedChart">
+        <div class="HeaderHTML">
+            <span>U.S. Renewable Energy Consumption</span>
         </div>
+
+        <div id="stacked-area-chart2" class="chart"></div>
+    </div>
+
+    <div class="CaptionedChart">
+        <div class="HeaderHTML">
+            <span>U.S. Hydroelectric Power Production</span>
+        </div>
+
+        <div id="line-chart3" class="chart"></div>
+    </div>
+
+    <div class="CaptionedChart">
+        <div class="HeaderHTML">
+            <span>U.S. Wind Capacity</span>
+        </div>
+
+        <div id="stacked-column-chart3" class="chart"></div>
+    </div>
+
+    <div class="CaptionedChart">
+        <div class="HeaderHTML">
+            <span>U.S. Photovoltaic Installations</span>
+        </div>
+
+        <div id="stacked-column-chart2" class="chart"></div>
     </div>
 
     <!-- Photovoltaic Energy -->
@@ -83,25 +98,9 @@
             <span>Average Unsubsidized Levelized Cost of Energy for Utility-Scale Solar PV in the US</span>
         </div>
 
-        <div>
-            <div id="line-chart2" class="chart"></div>
-            <div id="tooltip6" class="tooltip"></div>
-        </div>
+        <div id="line-chart2" class="chart"></div>
     </div>
 
-    <!-- U.S. Renewable Energy -->
-    <div class="CaptionedChart">
-        <div class="HeaderHTML">
-            <span>Hydroelectric Power Production in the US by Year</span>
-        </div>
-
-        <div>
-            <div id="line-chart3" class="chart"></div>
-            <div id="tooltip8" class="tooltip"></div>
-        </div>
-    </div>
-
-    <!-- Photovoltaic Energy -->
     <div class="CaptionedChart">
         <div class="HeaderHTML">
             <span>Conversion Efficiency of a PV System</span>
@@ -109,24 +108,52 @@
 
         <div>
             <div id="pv-diagram" class="chart"></div>
-            <div id="tooltip7" class="tooltip-diagram"></div>
+            <div id="diagram-tooltip" class="diagram-tooltip"></div>
         </div>
     </div>
 
 
+    <!-- NO LONGER USING THIS!!! -->
+    <!-- <div class="CaptionedChart">
+        <div class="HeaderHTML">
+            <span>Median Installed Price of PV Systems in the U.S.</span>
+        </div>
+
+        <div id="line-chart" class="chart"></div>
+    </div> -->
+
+
+
+
+
+
+    <!-- tooltip -->
+    <div id="tooltip" class="tooltip"></div>
+
+
+    <!-- D3.js -->
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://d3js.org/topojson.v3.min.js"></script>
+
+    <!-- js files-->
     <script src="./js/stacked-area-chart.js"></script>
+    <script src="./js/stacked-area-chart2.js"></script>
+
     <script src="./js/interactive-map.js"></script>
-    <script src="./js/column-chart.js"></script>
+    <script src="./js/interactive-map2.js"></script>
+
     <script src="./js/stacked-column-chart.js"></script>
+    <script src="./js/stacked-column-chart2.js"></script>
+    <script src="./js/stacked-column-chart3.js"></script>
+
     <script src="./js/line-chart.js"></script>
     <script src="./js/line-chart2.js"></script>
     <script src="./js/line-chart3.js"></script>
-    <script src="./js/pv-diagram.js"></script>
-    <script src="./js/pv-energy.js"></script>
-    
 
+    <script src="./js/column-chart.js"></script>
+
+    <script src="./js/pv-diagram.js"></script>
+    
 
 </body>
 </html>

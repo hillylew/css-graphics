@@ -35,7 +35,7 @@
     const xAxis = d3.axisBottom(x).tickFormat(d3.timeFormat("%Y"));
     const yAxis = d3.axisLeft(y).tickFormat(d3.format(",")).ticks(5); // Adjust ticks as needed
   
-    const tooltip = d3.select("#tooltip8");
+    const tooltip = d3.select("#tooltip");
   
     // Load and process the CSV data
     d3.csv("./data/graph-8-data.csv").then((data) => {
@@ -88,7 +88,7 @@
         .attr("class", "line")
         .attr("d", lineGenerator)
         .attr("fill", "none")
-        .attr("stroke", "#377eb8")
+        .attr("stroke", "#2f65a7")
         .style("stroke-width", 1.5);
 
 
@@ -104,8 +104,8 @@
         .datum(data)
         .attr("class", "area")
         .attr("d", areaGenerator)
-        .attr("fill", "#377eb8")
-        areaPath.style("opacity", 0.2);
+        .attr("fill", "#2f65a7")
+        areaPath.style("opacity", 1);
 
 
   
@@ -118,7 +118,7 @@
 
 
         // area gets highlighted
-        areaPath.style("opacity", 0.7);
+        areaPath.style("opacity", 0.2);
   
         // Position tooltip
         tooltip
@@ -137,7 +137,6 @@
                           hoverData["Trillion Btu"] 
                         )}</td>
                     </tr>
-                </tr>
                 </table>
               `);
   
@@ -187,7 +186,7 @@
           tooltip.style("opacity", 0);
           mouseG.selectAll("circle").style("opacity", "0");
           mouseG.select(".mouse-line").style("opacity", "0");
-          areaPath.style("opacity", 0.2);
+          areaPath.style("opacity", 1);
         });
     });
 })();

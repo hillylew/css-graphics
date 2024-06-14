@@ -116,6 +116,8 @@
 
 
      /* ----------------------- Draw PV System ----------------------- */
+    const tooltip = d3.select("#diagram-tooltip");
+
     const drawBorder = (group, width, height, gap, className) => {
         group.append("rect")
             .attr("x", -gap).attr("y", -gap)
@@ -127,11 +129,11 @@
             .attr("class", className)
             .on("mouseover", function () {
                 d3.select(this).attr("stroke", "#ff0000");
-                d3.select("#tooltip7").style("display", "block").text(className);
+                tooltip.style("display", "block").text(className);
             })
             .on("mouseout", function () {
                 d3.select(this).attr("stroke", "#ccc"); 
-                d3.select("#tooltip7").style("display", "none");
+                tooltip.style("display", "none");
             });
     };
   
@@ -153,11 +155,11 @@
             .attr("class", "cell")
             .on("mouseover", function () {
                 d3.select(this).attr("fill", "#ff0000"); 
-                d3.select("#tooltip7").style("display", "block").text("cell");
+                tooltip.style("display", "block").text("cell");
             })
             .on("mouseout", function () { 
                 d3.select(this).attr("fill", "#3167a4"); 
-                d3.select("#tooltip7").style("display", "none");
+                tooltip.style("display", "none");
             });
     };
 
@@ -239,70 +241,61 @@
 
 
        /* ----------------------- Draw Conversion Efficiency ----------------------- */
-       const textStartX = sunCenterX + sunRadius + 5; 
-       const textStartY = sunCenterY;
-       const textEndX = width / 4 - 5; // Adjust the ending position as needed
-       const textEndY = height / 2;
-       
-       // Label for theindicating 100%
-       svg.append("text")
-           .attr("x", (textStartX + textEndX) / 2)
-           .attr("y", (textStartY + textEndY) / 2)
-           .text("100%")
-           .style("font-size", "18px")
-           .attr("text-anchor", "middle")
-           .attr("alignment-baseline", "middle")
-           .attr("fill", "black"); 
-       
+       // Calculate starting positions for the sun label
+const textStartX = sunCenterX + sunRadius + 5; 
+const textStartY = sunCenterY;
 
-    //    // Label for the indicating 17-20%
-    //    svg.append("text")
-    //        .attr("x", width * 0.8)
-    //        .attr("y", height * 0.5)
-    //        .text("17-20%")
-    //        .attr("text-anchor", "middle")
-    //        .attr("alignment-baseline", "middle")
-    //        .attr("fill", "black");
+// Calculate ending positions for the sun label
+const textEndX = width / 4 - 5;
+const textEndY = height / 2;
 
-    const arrowStartX = width/4 + arrayWidth; 
-       const arrowStartY = height/2 + arrayHeight/2;
-       const arrowEndX = width / 4 - 5; // Adjust the ending position as needed
-       const arrowEndY = height / 2;
+// Append sun label at the center point between starting and ending positions
+svg.append("text")
+  .attr("x", (textStartX + textEndX) / 2)
+  .attr("y", (textStartY + textEndY) / 2)
+  .text("100%")
+  .attr("class", "diagram-labels")
+  .attr("text-anchor", "middle")
+  .attr("alignment-baseline", "middle")
+  .attr("fill", "black");
+
+  const arrowStartX = width/4 + arrayWidth; 
+  const arrowStartY = height/2 + arrayHeight/2;
 
 // Initialize the length of the arrow
 const arrowLength = width * 0.1;  // Replace with the actual desired length
 
 // Append the line element as the arrow
 svg.append("line")
-    .attr("x1", arrowStartX)
-    .attr("y1", arrowStartY)
-    .attr("x2", arrowStartX + arrowLength) // End point X coordinate further to the right
-    .attr("y2", arrowStartY) // End point Y coordinate stays the same
-    .attr("stroke", "black") // The color of the arrow
-    .attr("stroke-width", 5) // The thickness of the arrow
-    .attr("marker-end", "url(#arrowhead)"); // Assuming you have defined an arrowhead marker with the id 'arrowhead'
+.attr("x1", arrowStartX)
+.attr("y1", arrowStartY)
+.attr("x2", arrowStartX + arrowLength) // End point X coordinate further to the right
+.attr("y2", arrowStartY) // End point Y coordinate stays the same
+.attr("stroke", "#636363") // The color of the arrow
+.attr("stroke-width", 10) // The thickness of the arrow
+.attr("marker-end", "url(#arrowhead)"); // Assuming you have defined an arrowhead marker with the id 'arrowhead'
 
 // Add an arrowhead marker to the defs section of your SVG
 svg.append("defs").append("marker")
-    .attr("id", "arrowhead")
-    .attr("viewBox", "0 -5 10 10") // Dimension of the marker
-    .attr("refX", 5) // Coordinate for the arrowhead tip
-    .attr("refY", 0)
-    .attr("orient", "auto-start-reverse")
-    .attr("markerWidth", 6) // Visual size of the arrowhead
-    .attr("markerHeight", 6)
-    .attr("xoverflow", "visible")
-  .append("svg:path")
-    .attr("d", "M0,-5L10,0L0,5")
-    .attr("fill", "black");
+.attr("id", "arrowhead")
+.attr("viewBox", "0 -5 10 10") // Dimension of the marker
+.attr("refX", 5) // Coordinate for the arrowhead tip
+.attr("refY", 0)
+.attr("orient", "auto-start-reverse")
+.attr("markerWidth", 2) // Visual size of the arrowhead
+.attr("markerHeight", 2)
+.attr("xoverflow", "visible")
+.append("svg:path")
+.attr("d", "M0,-5L10,0L0,5")
+.attr("fill", "#636363");
 
 // Append text label at the end of the arrow
 svg.append("text")
-    .attr("x", arrowStartX + arrowLength + width * 0.03) // Add some padding
-    .attr("y", arrowStartY)
-    .attr("fill", "black")  // The color of the text
-    .style("font-size", "18px") // Text size
-    .text("17-20%"); // The efficiency label text
+.attr("x", arrowStartX + arrowLength + width * 0.03) // Add some padding
+.attr("y", arrowStartY)
+.attr("fill", "black")  // The color of the text
+.style("font-size", "18px") // Text size
+.text("21%"); // The efficiency label text
     
 })();
 
@@ -310,7 +303,7 @@ svg.append("text")
 
   // Update the tooltip position based on mouse movement
   document.addEventListener("mousemove", function (event) {
-    d3.select("#tooltip7")
+    d3.select("#diagram-tooltip")
       .style("left", `${event.pageX + 10}px`)
       .style("top", `${event.pageY + 10}px`);
   });
