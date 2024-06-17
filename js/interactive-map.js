@@ -127,8 +127,8 @@
     });
 
   // Create the legend
-  // const legendColors = ["#205b95", "#4585c6", "#8ab4e0", "#c0c0c0"];
-  const legendColors = ["#1d476d", "#2f65a7", "#8fc8e5", "#d8d8d8"];
+  const legendColors = ["#205b95", "#4585c6", "#8ab4e0", "#c0c0c0"];
+  // const legendColors = ["#1d476d", "#2f65a7", "#8fc8e5", "#d8d8d8"];
   const legendText = [
     "> 150",
     "> 35",

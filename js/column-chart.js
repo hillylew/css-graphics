@@ -78,7 +78,7 @@
       const color = d3
         .scaleOrdinal()
         .domain(subgroups)
-        .range(["#3167a4", "#ffcb03"]);
+        .range(["#f16248", "#32a28d"]);
   
       const formatNumber = d3.format(",");
   

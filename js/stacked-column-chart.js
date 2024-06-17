@@ -23,8 +23,8 @@
         .append('g')
         .attr('transform', `translate(${dynamicMargin.left},${dynamicMargin.top})`);
 
-    // const colors = ["#08519c", "#3182bd", "#6baed6", "#9ecae1", "#c6dbef", "#eff3ff"];
-    const colors = ["#00274c", "#1d476d", "#2f65a7", "#9ecae1", "#8fc8e5", "#d8d8d8"];
+    const colors = ["#08519c", "#3182bd", "#6baed6", "#9ecae1", "#c6dbef", "#eff3ff"];
+    // const colors = ["#00274c", "#1d476d", "#2f65a7", "#9ecae1", "#8fc8e5", "#d8d8d8"];
 
 
     // Define scales

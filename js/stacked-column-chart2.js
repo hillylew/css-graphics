@@ -38,8 +38,9 @@
     const colorScale = d3
         .scaleOrdinal()
         .domain(["Utility","Residential","Commercial","Community Solar"])
+        .range(["#eb5250", "#6298c6", "#75bf70", "#ae71b6", "#f38f53"]);
         // .range(["#e41a1c", "#377eb8", "#4daf4a", "#984ea3", "#ff7f00"]);
-        .range(["#3167a4", "#8fc8e5", "#386660", "#e2e27a"]);
+        // .range(["#3167a4", "#8fc8e5", "#386660", "#e2e27a"]);
         
 
     const tooltip = d3.select("#tooltip");

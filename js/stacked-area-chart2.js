@@ -38,7 +38,8 @@
     const colorScale = d3
     .scaleOrdinal()
     .domain(["Biomass", "Hydroelectric", "Wind", "Solar",  "Geothermal"])
-    .range(["#e41a1c", "#377eb8", "#4daf4a", "#984ea3", "#ff7f00"]);
+    .range(["#eb5250", "#6298c6", "#75bf70", "#ae71b6", "#f38f53"]);
+    // .range(["#1d476d", "#3167a4", "#8fc8e5", "#ffcb03", "#ffd579"]);
   
   
     const tooltip = d3.select("#tooltip");
@@ -125,7 +126,6 @@
         .append("path")
         .attr("class", "area-path")
         .attr("d", area)
-        .style("fill-opacity", "0.8")
         .style("fill", (d) => colorScale(d.key));
   
       // Add the line paths for each group
@@ -172,15 +172,13 @@
         const index = colorScale.domain().indexOf(key);
         if (index !== -1) {
           d3.select(svg.selectAll(".area-path").nodes()[index]).style(
-            "fill-opacity",
-            0.8
-          );
+            "fill-opacity", 1);
         }
       }
   
       // Function to reset all area layers to default opacity
       function resetAreaLayers() {
-        svg.selectAll(".area-path").style("fill-opacity", 0.8);
+        svg.selectAll(".area-path").style("fill-opacity", 1);
       }
   
   
@@ -304,7 +302,7 @@
         .append("path")
         .attr("class", "mouse-line")
         .style("stroke", "#999")
-        .style("stroke-width", "0.5px")
+        .style("stroke-width", 0.5)
         .style("opacity", "0");
   
       // Create a rect for listening to mouse events

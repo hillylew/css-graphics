@@ -37,7 +37,7 @@
 
     const colorScale = d3
         .scaleOrdinal()
-        .domain(["U.S.","Rest of the World"])
+        .domain(["U.S.","Cumulative"])
         .range(["#3167a4", "#8fc8e5"]);
         // .range(["#ce5845", "#ffd579"]);
         
@@ -55,7 +55,7 @@
         });
 
         // Stack the data
-        const stack = d3.stack().keys(["U.S.","Rest of the World"]);
+        const stack = d3.stack().keys(["U.S.","Cumulative"]);
         const stackedData = stack(data);
 
         /* ----------------------- Update the scale domains with the processed data ----------------------- */
@@ -179,23 +179,25 @@
                     <div class="tooltip-title">${hoverData.Year.getFullYear()}</div>
                     <table class="tooltip-content">  
                     <tr>
-                        <td><span class="color-legend" style="background-color: ${colorScale("Rest of the World")};"></span>Community Solar</td>
-                        <td class="value">${formatNumber(hoverData["Rest of the World"])}</td>
+                        <td><span class="color-legend" style="background-color: ${colorScale("Cumulative")};"></span>Cumulative</td>
+                        <td class="value">${formatNumber(hoverData["U.S."] + hoverData["Cumulative"])}</td>
                     </tr>
                     <tr>
-                        <td><span class="color-legend" style="background-color: ${colorScale("U.S.")};"></span>Commercial</td>
+                        <td><span class="color-legend" style="background-color: ${colorScale("U.S.")};"></span>U.S.</td>
                         <td class="value">${formatNumber(hoverData["U.S."])}</td>
                     </tr>
                     </table>
-                    <table class="tooltip-total">
-                        <tr>
-                            <td><strong>Total</strong></td>
-                            <td class="value">${formatNumber(hoverData["U.S."] + hoverData["Rest of the World"])}</td>
-                        </tr>
-                    </table>
+
                 `);
             }
         }
+
+        // <table class="tooltip-total">
+        // <tr>
+        //     <td><strong>Cumulative</strong></td>
+        //     <td class="value">${formatNumber(hoverData["U.S."] + hoverData["Cumulative"])}</td>
+        // </tr>
+        // </table>
 
         // Create a rect for listening to mouse events
         svg

@@ -38,9 +38,9 @@
   const colorScale = d3
     .scaleOrdinal()
     .domain(["Bus", "Heavy rail", "Other rail", "Other"])
-    // .range(["#e41a1c", "#377eb8", "#4daf4a", "#984ea3"]);
+    .range(["#eb5250", "#6298c6", "#75bf70", "#ae71b6"]);
     // .range(["#3167a4", "#8fc8e5", "#386660", "#e2e27a"]);
-    .range(["#3167a4", "#8fc8e5", "#ffcb03", "#ffd579"]);
+    // .range(["#3167a4", "#8fc8e5", "#ffcb03", "#ffd579"]);
     
 
   const tooltip = d3.select("#tooltip");
@@ -127,7 +127,6 @@
       .append("path")
       .attr("class", "area-path")
       .attr("d", area)
-      .style("fill-opacity", 1)
       .style("fill", (d) => colorScale(d.key));
 
     // Add the line paths for each group
@@ -174,9 +173,7 @@
       const index = colorScale.domain().indexOf(key);
       if (index !== -1) {
         d3.select(svg.selectAll(".area-path").nodes()[index]).style(
-          "fill-opacity",
-          0.8
-        );
+          "fill-opacity", 1);
       }
     }
 
@@ -337,7 +334,7 @@
       .append("path")
       .attr("class", "mouse-line")
       .style("stroke", "#999")
-      .style("stroke-width", "0.5px")
+      .style("stroke-width", 0.5)
       .style("opacity", "0");
 
     // Create a rect for listening to mouse events
