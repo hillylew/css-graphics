@@ -35,7 +35,7 @@
     .attr("y", 0)
     .attr("width", width)
     .attr("height", skyHeight)
-    .attr("fill", "#8fc8e5"); // Replace with the hex or rgb value that you want for the sky
+    .attr("fill", "#81c0eb"); // Replace with the hex or rgb value that you want for the sky
 
   // Append grass rectangle
   svg
@@ -44,10 +44,10 @@
     .attr("y", skyHeight)
     .attr("width", width)
     .attr("height", grassHeight)
-    .attr("fill", "#6b9936"); // Replace with the hex or rgb value that you want for the grass
+    .attr("fill", "#6da41d"); // Replace with the hex or rgb value that you want for the grass
 
   // Calculate dimensions as percentages of container width and height
-  const cellPercentage = 1.5; // 1.5% of container height
+  const cellPercentage = 2; // 2% of container height
   const cellSpacingPercentage = 0.1; // 10% of container width
   const cellToBorderGapPercentage = 0.5; // 0.5% of container width
   const moduleSpacingPercentage = 1.5; // 1.5% of container width
@@ -79,12 +79,12 @@
     panelRows * (totalModuleHeight + moduleSpacing) - moduleSpacing;
 
   /* ----------------------- Draw Sun ----------------------- */
-  const sunGroup = svg.append("g").attr("transform", "translate(10, 10)"); // fix this
+  const sunGroup = svg.append("g");
 
   // Draw Sun Circle
-  const sunCenterX = width * 0.1;
+  const sunCenterX = width * 0.12;
   const sunCenterY = height * 0.15;
-  const sunRadius = width * 0.07;
+  const sunRadius = width * 0.06;
 
   sunGroup
     .append("circle")
@@ -257,8 +257,6 @@
   // Calculate the center positions
   const arrayXCenter = (width - arrayWidth) / 2;
   const arrayYCenter = (height - arrayHeight) / 2;
-  // const arrayXCenter = (width) * 0.4;
-  // const arrayYCenter = (height) / 2;
 
   // Reposition the arrayGroup to the center of the SVG element
   const arrayGroup = svg
@@ -278,11 +276,8 @@
   const sunRayStartPoint1 = { x: sunCenterX - sunRadius, y: sunCenterY }; // Left end of the sun diameter
   const sunRayStartPoint2 = { x: sunCenterX + sunRadius, y: sunCenterY }; // Right end of the sun diameter
 
-  const pvSystemBottomLeft = {
-    x: width / 4,
-    y: height / 2 + arrayHeight + arraySpacing,
-  }; // Bottom left corner of the PV system array
-  const pvSystemTopRight = { x: (2 * width) / 3, y: height / 2 }; // Top right corner of the PV system array
+  const pvSystemBottomLeft = {x: arrayXCenter * 0.8, y: arrayYCenter * 1.5 + arrayHeight}; // Bottom left corner of the PV system array
+  const pvSystemTopRight = { x: arrayXCenter * 0.8 + arrayWidth, y: arrayYCenter * 1.5}; // Top right corner of the PV system array
 
   // Draw sun ray area
   const sunRayArea = svg
@@ -296,89 +291,160 @@
     .style("pointer-events", "none");
 
   /* ----------------------- Draw Conversion Efficiency (Light Bulb) ----------------------- */
-  const textStartX = sunCenterX + sunRadius + 5;
-  const textStartY = sunCenterY;
 
-  // Calculate ending positions for the sun label
-  const textEndX = width / 4 - 5;
-  const textEndY = height / 2;
-
-  // Append sun label at the center point between starting and ending positions
+   /* ----------------------- Texts for Diagram ----------------------- */
   svg
     .append("text")
-    .attr("x", (textStartX + textEndX) / 2)
-    .attr("y", (textStartY + textEndY) / 2)
+    .attr("x", arrayXCenter - arraySpacing)
+    .attr("y", arrayYCenter)
     .text("100%")
     .attr("class", "diagram-labels")
     .attr("text-anchor", "middle")
     .attr("alignment-baseline", "middle")
     .attr("fill", "white");
 
-  const chordStartX = arrayXCenter * 0.9 + arrayWidth;
-  const chordStartY = arrayYCenter * 1.5 + arrayHeight / 2;
+svg
+    .append("text")
+    .attr("x", width * 0.8)
+    .attr("y", height * 0.2)
+    .text("Conversion Efficiency")
+    .attr("class", "diagram-labels")
+    .attr("text-anchor", "middle")
+    .attr("alignment-baseline", "middle")
+    .attr("fill", "white");
 
-  // Initialize the length of the chortd
-  const chordLength = width * 0.15; // Replace with the actual desired length
+svg
+    .append("text")
+    .attr("x", width * 0.8)
+    .attr("y", height * 0.25)
+    .text("21%")
+    .attr("class", "diagram-labels")
+    .attr("text-anchor", "middle")
+    .attr("alignment-baseline", "middle")
+    .attr("fill", "white");
 
-  // Draw Light Bulb
 
-  const lightBulbCenterX = chordStartX + chordLength;
-  const lightBulbCenterY = height * 0.5;
-  const lightBulbRadius = sunRadius * 0.4; // This can be adjusted to your liking
 
-  svg
-    .append("circle") // Bulb part
-    .attr("cx", lightBulbCenterX)
-    .attr("cy", lightBulbCenterY)
-    .attr("r", lightBulbRadius)
-    .attr("fill", "#ffcb03");
+    /* ----------------------- Draw Light Bulb ----------------------- */
+    function blinkLightBulb() {
+        const lightBulb = d3.select("#light-bulb"); // Assign an ID to the light bulb circle in the SVG
+      
+        // Define the blink interval (e.g., 1000 milliseconds)
+        const interval = 1000;
+      
+        setInterval(() => {
+          const currentOpacity = lightBulb.style("opacity");
+      
+          // Change the opacity from 1 to 0 or from 0 to 1
+          lightBulb.style("opacity", currentOpacity == 1 ? 0.7 : 1);
+        }, interval);
+      }
 
-  svg
-    .append("rect") // Threaded base part
-    .attr("x", lightBulbCenterX - lightBulbRadius / 2)
-    .attr("y", lightBulbCenterY + lightBulbRadius)
-    .attr("width", lightBulbRadius)
-    .attr("height", lightBulbRadius)
-    .attr("fill", "#CCCCCC");
+const chordLength = width * 0.1; // Replace with the actual desired length
+const lightBulbCenterX = arrayXCenter + arrayWidth + chordLength;
+const lightBulbCenterY = height * 0.4;
+const lightBulbRadius = sunRadius * 0.5; // This can be adjusted to your liking
 
-   // Example bottom position for the light bulb
-const lightBulbBottomPosition = { 
-    x: lightBulbCenterX, 
-    y: lightBulbCenterY + lightBulbRadius + lightBulbRadius / 2 // adjust lightBulbRadius as per your predefined variable
-  };
+const bulbGradient = svg.append("defs")
+  .append("radialGradient")
+  .attr("id", "bulbGradient");
+
+bulbGradient.append("stop")
+  .attr("offset", "0%")
+  .attr("stop-color", "#ffffff");
+
+bulbGradient.append("stop")
+  .attr("offset", "100%")
+  .attr("stop-color", "#f5ee33");
+
+svg.append("circle") // Bulb part
+  .attr("cx", lightBulbCenterX)
+  .attr("cy", lightBulbCenterY)
+  .attr("r", lightBulbRadius)
+  .attr("fill", "url(#bulbGradient)")
+  .attr("id", "light-bulb");
+
+  blinkLightBulb();
+
+// Add an ellipse for the screw thread base
+svg.append("ellipse")
+  .attr("cx", lightBulbCenterX)
+  .attr("cy", lightBulbCenterY + lightBulbRadius)
+  .attr("rx", lightBulbRadius / 2)
+  .attr("ry", lightBulbRadius * 0.25)
+  .attr("fill", "#777");
+
+// Draw the threaded base
+svg.append("rect") // Threaded base part
+  .attr("x", lightBulbCenterX - lightBulbRadius / 2)
+  .attr("y", lightBulbCenterY + lightBulbRadius)
+  .attr("width", lightBulbRadius)
+  .attr("height", lightBulbRadius * 0.8)
+  .attr("fill", "#ccc")
+  .attr("rx", 4)  // Adjust the value as needed
+  .attr("ry", 4); // Adjust the value as needed
+
+
+// Filament
+svg.append("path")
+  .attr("d", `M${lightBulbCenterX - (lightBulbRadius / 4)} ${lightBulbCenterY} Q${lightBulbCenterX} ${lightBulbCenterY - lightBulbRadius / 2}, ${lightBulbCenterX + (lightBulbRadius / 4)} ${lightBulbCenterY}`)
+  .attr("stroke", "#FFED22")
+  .attr("stroke-width", 2)
+  .attr("fill", "none");
+
+// Reflection effect
+svg.append("circle")
+  .attr("cx", lightBulbCenterX - (lightBulbRadius / 4))
+  .attr("cy", lightBulbCenterY - (lightBulbRadius / 4))
+  .attr("r", lightBulbRadius * 0.1)
+  .attr("fill", "white")
+  .attr("opacity", 0.6);
+
+
+
+ /* ----------------------- Draw Chord ----------------------- */
+  const pvArrayAttachX = arrayXCenter * 0.8 + arrayWidth + arraySpacing;
+  const pvArrayAttachY = arrayYCenter * 1.5 + arrayHeight / 2;
+
   
-  // Define the PV system position to attach the other end of the chord
-  const pvSystemAttachPosition = { 
-    x: chordStartX, 
-    y: chordStartY 
-  };
+  // Define the start of the chord (attached to the bottom of the light bulb)
+  const chordStartX = lightBulbCenterX;
+  const chordStartY = lightBulbCenterY + lightBulbRadius * 1.6;
   
-  // Function to describe a Bézier curve for the chord
-  const pathData = d3.path();
-  pathData.moveTo(lightBulbBottomPosition.x, lightBulbBottomPosition.y);
+  const chordStrokeColor = "#ccc"; // Chord color
+  const chordStrokeWidth = arrayWidth * 0.015; // Chord thickness
   
-  // Two control points for a more curly "S" type curve
-  const controlPoint1 = {
-    x: lightBulbBottomPosition.x + 50, // This will determine how far to the right the curve goes
-    y: lightBulbBottomPosition.y + 100 // This will determine the vertical stretch of the "S" part
-  };
-  const controlPoint2 = {
-    x: pvSystemAttachPosition.x - 50, // Mirroring control point 1 horizontally
-    y: pvSystemAttachPosition.y - 100 // This will determine the height of the second curve
-  };
-  
-  pathData.bezierCurveTo(
-    controlPoint1.x, controlPoint1.y,
-    controlPoint2.x, controlPoint2.y,
-    pvSystemAttachPosition.x, pvSystemAttachPosition.y
+  // Define the path for the chord using multiple Bezier curves to create three swirly loops
+  const chordPath = d3.path();
+  chordPath.moveTo(chordStartX, chordStartY); // Start at the light bulb
+  // Bezier curve for first curve (leftward arc)
+  chordPath.bezierCurveTo(
+    chordStartX, chordStartY + 20,
+    chordStartX - 30, chordStartY + 40,
+    chordStartX, chordStartY + 60
+  );
+  // Bezier curve for second curve (rightward arc)
+  chordPath.bezierCurveTo(
+    chordStartX + 15, chordStartY + 80,
+    chordStartX + 30, chordStartY + 100,
+    chordStartX, chordStartY + 120
+  );
+  // Bezier curve for third curve (leftward arc) leading into the attachment point
+  chordPath.bezierCurveTo(
+    chordStartX - 30, chordStartY + 140,
+    pvArrayAttachX - 50, pvArrayAttachY - 20,
+    pvArrayAttachX, pvArrayAttachY
   );
   
-  // Append the path to the SVG
-  svg.append('path')
-    .attr('d', pathData.toString())
-    .attr('stroke', 'white')
-    .attr('stroke-width', 2)
-    .attr('fill', 'none');
+  // Draw the chord on the SVG
+  svg.append("path")
+    .attr("d", chordPath.toString())
+    .attr("stroke", chordStrokeColor)
+    .attr("stroke-width", chordStrokeWidth)
+    .attr("fill", "none");
+  
+
+
 })();
 
 // Update the tooltip position based on mouse movement

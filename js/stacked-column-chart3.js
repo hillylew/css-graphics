@@ -10,7 +10,7 @@
     // Calculate the dynamic margins
     const dynamicMargin = {
         top: containerHeight * 0.1,
-        right: containerWidth * 0.17,
+        right: containerWidth * 0.18,
         bottom: containerHeight * 0.1,
         left: containerWidth * 0.05,
     };
@@ -37,7 +37,7 @@
 
     const colorScale = d3
         .scaleOrdinal()
-        .domain(["U.S.","Cumulative"])
+        .domain(["Annual Additions","Cumulative Capacity"])
         .range(["#3167a4", "#8fc8e5"]);
         // .range(["#ce5845", "#ffd579"]);
         
@@ -55,7 +55,7 @@
         });
 
         // Stack the data
-        const stack = d3.stack().keys(["U.S.","Cumulative"]);
+        const stack = d3.stack().keys(["Annual Additions","Cumulative Capacity"]);
         const stackedData = stack(data);
 
         /* ----------------------- Update the scale domains with the processed data ----------------------- */
@@ -179,12 +179,14 @@
                     <div class="tooltip-title">${hoverData.Year.getFullYear()}</div>
                     <table class="tooltip-content">  
                     <tr>
-                        <td><span class="color-legend" style="background-color: ${colorScale("Cumulative")};"></span>Cumulative</td>
-                        <td class="value">${formatNumber(hoverData["U.S."] + hoverData["Cumulative"])}</td>
+                        <td><span class="color-legend" style="background-color: ${colorScale("Annual Additions")};"></span>Annual Additions</td>
+                        <td class="value">${formatNumber(hoverData["Annual Additions"])}</td>
                     </tr>
-                    <tr>
-                        <td><span class="color-legend" style="background-color: ${colorScale("U.S.")};"></span>U.S.</td>
-                        <td class="value">${formatNumber(hoverData["U.S."])}</td>
+                    </table>
+                    <table class="tooltip-total">
+                     <tr>
+                        <td><span class="color-legend" style="background-color: ${colorScale("Cumulative Capacity")};"></span>Cumulative Capacity</td>
+                        <td class="value">${formatNumber(hoverData["Annual Additions"] + hoverData["Cumulative Capacity"])}</td>
                     </tr>
                     </table>
 
@@ -194,8 +196,8 @@
 
         // <table class="tooltip-total">
         // <tr>
-        //     <td><strong>Cumulative</strong></td>
-        //     <td class="value">${formatNumber(hoverData["U.S."] + hoverData["Cumulative"])}</td>
+        //     <td><strong>Cumulative Capacity</strong></td>
+        //     <td class="value">${formatNumber(hoverData["Annual Additions"] + hoverData["Cumulative Capacity"])}</td>
         // </tr>
         // </table>
 
