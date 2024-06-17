@@ -1,3 +1,33 @@
+/* styling for the header for website not grpahs */
+* {
+  margin: 0;
+  box-sizing: border-box;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; 
+  padding: 30px 40px;
+  background: #00274c;
+  font-family: "IBM Plex Sans", sans-serif;
+}
+
+header a {
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 600;
+  color: white;
+  transition: 0.3s ease;
+}
+
+.factsheets-container {
+  padding: 30px;
+}
+
+
+
+/* chart/graph styling */
 .CaptionedChart {
   padding: 5px 10px;
   font-family: "IBM Plex Sans", sans-serif;
