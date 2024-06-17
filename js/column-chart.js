@@ -2,7 +2,7 @@
   const aspectRatio = 0.75; // Define an aspect ratio for the chart
 
   // Get the container and its dimensions
-  const container = document.getElementById("interactive-map");
+  const container = document.getElementById("column-chart");
   const containerWidth = container.offsetWidth; // Use offsetWidth for full element width
   const containerHeight = containerWidth * aspectRatio; // Calculate the height based on the width and aspect ratio
 

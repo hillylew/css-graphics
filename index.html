@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CSS Graphics</title>
-    <link rel="stylesheet" href="stylesheet.css" />
+    <link rel="stylesheet" href="./css/stylesheet.css" />
 
     <!-- Google Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -20,143 +20,69 @@
   </head>
 
   <body>
-    <!-- U.S. Renewable Energy -->
-    <div class="CaptionedChart">
-      <div class="HeaderHTML">
-        <span>U.S. Renewable Energy Consumption</span>
-      </div>
 
-      <div id="stacked-area-chart2" class="chart"></div>
-    </div>
+    <ol>
+        <li>
+            Built Environment
+            <ul> 
+                <li>
+                    <!-- U.S. Citites -->
+                    <a href="us-cities.html">U.S. Cities</a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            Climate Change
+        </li>
+        <li>
+            Energy
+            <ul> 
+                <li>
+                    <!-- U.S. Renewable Energy -->
+                    <a href="renewable-energy.html">Renewable Energy</a>
+                </li> 
+                <li>
+                     <!-- Photovoltaic Energy -->
+                    <a href="photovoltaic.html">Photovoltaic</a>
+                </li>
+                <li>
+                    <!-- U.S. Grid Energy Storage -->
+                    <a href="grid-energy.html">U.S. Grid Energy Storage</a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            Food
+        </li>
+        <li>
+            Material Resources
+        </li>
+        <li>
+            Mobility
+        </li>
+        <li>
+            Sustainability Indicators
+            <ul> 
+                <li>
+                    <!-- Environmental Justice -->
+                    <a href="environmental-justice.html">Environmental Justice</a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            Water
+            <ul> 
+                <li>
+                    <!-- U.S. Water Supply and Distribution -->
+                    <a href="water-supply.html">U.S. Water Supply and Distribution</a>
+                </li>
+            </ul>
+        </li>
 
-    <div class="CaptionedChart">
-      <div class="HeaderHTML">
-        <span>U.S. Hydroelectric Power Production</span>
-      </div>
+    </ol>
 
-      <div id="line-chart3" class="chart"></div>
-    </div>
 
-    <div class="CaptionedChart">
-      <div class="HeaderHTML">
-        <span>U.S. Wind Capacity</span>
-      </div>
 
-      <div id="stacked-column-chart3" class="chart"></div>
-    </div>
 
-    <div class="CaptionedChart">
-      <div class="HeaderHTML">
-        <span>U.S. Photovoltaic Installations</span>
-      </div>
-
-      <div id="stacked-column-chart2" class="chart"></div>
-    </div>
-
-    <!-- Environmental Justice -->
-    <div class="CaptionedChart">
-      <div class="HeaderHTML">
-        <span
-          >Total Toxic Release by State, Total Gross Release (million lb)</span
-        >
-      </div>
-
-      <div id="interactive-map" class="chart"></div>
-    </div>
-
-    <!-- U.S. Grid Energy Storage -->
-    <div class="CaptionedChart">
-      <div class="HeaderHTML">
-        <span>Number of Grid Connected Energy Storage Projects by States</span>
-      </div>
-
-      <div id="interactive-map2" class="chart"></div>
-    </div>
-
-    <!-- U.S. Water Supply and Distribution -->
-    <div class="CaptionedChart">
-      <div class="HeaderHTML">
-        <span>Community Water Systems (CWS) by System Size</span>
-      </div>
-
-      <div id="column-chart" class="chart"></div>
-    </div>
-
-    <div class="CaptionedChart">
-      <div class="HeaderHTML">
-        <span
-          >Estimated Uses of Water, billion gallons per day (BGD), 2015</span
-        >
-      </div>
-
-      <div id="stacked-column-chart" class="chart"></div>
-    </div>
-
-    <!-- U.S. Citites -->
-    <div class="CaptionedChart">
-      <div class="HeaderHTML">
-        <span>Number of Public Transportation Passenger Trips</span>
-      </div>
-
-      <div id="stacked-area-chart" class="chart"></div>
-    </div>
-
-    <!-- Photovoltaic Energy -->
-    <div class="CaptionedChart">
-      <div class="HeaderHTML">
-        <span
-          >Average Unsubsidized Levelized Cost of Energy for Utility-Scale Solar
-          PV in the US</span
-        >
-      </div>
-
-      <div id="line-chart2" class="chart"></div>
-    </div>
-
-    <div class="CaptionedChart">
-      <div class="HeaderHTML">
-        <span>Conversion Efficiency of a PV System</span>
-      </div>
-
-      <div>
-        <div id="pv-diagram" class="chart"></div>
-        <div id="diagram-tooltip" class="diagram-tooltip"></div>
-      </div>
-    </div>
-
-    <!-- NO LONGER USING THIS!!! -->
-    <!-- <div class="CaptionedChart">
-        <div class="HeaderHTML">
-            <span>Median Installed Price of PV Systems in the U.S.</span>
-        </div>
-
-        <div id="line-chart" class="chart"></div>
-    </div> -->
-
-    <!-- tooltip -->
-    <div id="tooltip" class="tooltip"></div>
-
-    <!-- D3.js -->
-    <script src="https://d3js.org/d3.v7.min.js"></script>
-    <script src="https://d3js.org/topojson.v3.min.js"></script>
-
-    <!-- js files-->
-    <script src="./js/stacked-area-chart.js"></script>
-    <script src="./js/stacked-area-chart2.js"></script>
-
-    <script src="./js/interactive-map.js"></script>
-    <script src="./js/interactive-map2.js"></script>
-
-    <script src="./js/stacked-column-chart.js"></script>
-    <script src="./js/stacked-column-chart2.js"></script>
-    <script src="./js/stacked-column-chart3.js"></script>
-
-    <script src="./js/line-chart.js"></script>
-    <script src="./js/line-chart2.js"></script>
-    <script src="./js/line-chart3.js"></script>
-
-    <script src="./js/column-chart.js"></script>
-
-    <script src="./js/pv-diagram.js"></script>
   </body>
 </html>
