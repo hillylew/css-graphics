@@ -340,6 +340,45 @@
     .attr("width", lightBulbRadius)
     .attr("height", lightBulbRadius)
     .attr("fill", "#CCCCCC");
+
+   // Example bottom position for the light bulb
+const lightBulbBottomPosition = { 
+    x: lightBulbCenterX, 
+    y: lightBulbCenterY + lightBulbRadius + lightBulbRadius / 2 // adjust lightBulbRadius as per your predefined variable
+  };
+  
+  // Define the PV system position to attach the other end of the chord
+  const pvSystemAttachPosition = { 
+    x: chordStartX, 
+    y: chordStartY 
+  };
+  
+  // Function to describe a Bézier curve for the chord
+  const pathData = d3.path();
+  pathData.moveTo(lightBulbBottomPosition.x, lightBulbBottomPosition.y);
+  
+  // Two control points for a more curly "S" type curve
+  const controlPoint1 = {
+    x: lightBulbBottomPosition.x + 50, // This will determine how far to the right the curve goes
+    y: lightBulbBottomPosition.y + 100 // This will determine the vertical stretch of the "S" part
+  };
+  const controlPoint2 = {
+    x: pvSystemAttachPosition.x - 50, // Mirroring control point 1 horizontally
+    y: pvSystemAttachPosition.y - 100 // This will determine the height of the second curve
+  };
+  
+  pathData.bezierCurveTo(
+    controlPoint1.x, controlPoint1.y,
+    controlPoint2.x, controlPoint2.y,
+    pvSystemAttachPosition.x, pvSystemAttachPosition.y
+  );
+  
+  // Append the path to the SVG
+  svg.append('path')
+    .attr('d', pathData.toString())
+    .attr('stroke', 'white')
+    .attr('stroke-width', 2)
+    .attr('fill', 'none');
 })();
 
 // Update the tooltip position based on mouse movement
