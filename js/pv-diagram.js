@@ -372,7 +372,7 @@ svg.append("ellipse")
   .attr("cy", lightBulbCenterY + lightBulbRadius)
   .attr("rx", lightBulbRadius / 2)
   .attr("ry", lightBulbRadius * 0.25)
-  .attr("fill", "#777");
+  .attr("fill", "#ccc");
 
 // Draw the threaded base
 svg.append("rect") // Threaded base part
@@ -380,7 +380,7 @@ svg.append("rect") // Threaded base part
   .attr("y", lightBulbCenterY + lightBulbRadius)
   .attr("width", lightBulbRadius)
   .attr("height", lightBulbRadius * 0.8)
-  .attr("fill", "#ccc")
+  .attr("fill", "#777")
   .attr("rx", 4)  // Adjust the value as needed
   .attr("ry", 4); // Adjust the value as needed
 
@@ -411,7 +411,7 @@ svg.append("circle")
   const chordStartX = lightBulbCenterX;
   const chordStartY = lightBulbCenterY + lightBulbRadius * 1.6;
   
-  const chordStrokeColor = "#ccc"; // Chord color
+  const chordStrokeColor = "#777"; // Chord color
   const chordStrokeWidth = arrayWidth * 0.015; // Chord thickness
   
   // Define the path for the chord using multiple Bezier curves to create three swirly loops
@@ -425,14 +425,14 @@ svg.append("circle")
   );
   // Bezier curve for second curve (rightward arc)
   chordPath.bezierCurveTo(
-    chordStartX + 15, chordStartY + 80,
+    chordStartX + 25, chordStartY + 80,
     chordStartX + 30, chordStartY + 100,
     chordStartX, chordStartY + 120
   );
   // Bezier curve for third curve (leftward arc) leading into the attachment point
   chordPath.bezierCurveTo(
     chordStartX - 30, chordStartY + 140,
-    pvArrayAttachX - 50, pvArrayAttachY - 20,
+    pvArrayAttachX - 20, pvArrayAttachY - 10,
     pvArrayAttachX, pvArrayAttachY
   );
   
