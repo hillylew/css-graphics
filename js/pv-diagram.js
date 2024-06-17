@@ -91,7 +91,7 @@
     .attr("cx", sunCenterX)
     .attr("cy", sunCenterY)
     .attr("r", sunRadius)
-    .attr("fill", "#ffcb03");
+    .attr("fill", "#f5ee33");
 
   // Draw Sun Triangles
   const numberOfTriangles = 12; // Choose how many triangles you want around the sun
@@ -127,7 +127,7 @@
         "d",
         `M${triangle[0].x},${triangle[0].y} L${triangle[1].x},${triangle[1].y} L${triangle[2].x},${triangle[2].y} L${triangle[3].x},${triangle[3].y} Z`
       )
-      .attr("fill", "#ffcb03");
+      .attr("fill", "#f5ee33");
   }
 
   /* ----------------------- Draw PV System ----------------------- */
