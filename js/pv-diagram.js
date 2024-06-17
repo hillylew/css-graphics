@@ -24,25 +24,27 @@
     .append("g")
     .attr("transform", `translate(${dynamicMargin.left},${dynamicMargin.top})`);
 
-        // Calculate the height for sky and grass portions
-        const skyHeight = height * (2 / 3);
-        const grassHeight = height * (1 / 3);
-    
-        // Append sky rectangle
-        svg.append("rect")
-            .attr("x", 0)
-            .attr("y", 0)
-            .attr("width", width)
-            .attr("height", skyHeight)
-            .attr("fill", "#8fc8e5"); // Replace with the hex or rgb value that you want for the sky
-    
-        // Append grass rectangle
-        svg.append("rect")
-            .attr("x", 0)
-            .attr("y", skyHeight)
-            .attr("width", width)
-            .attr("height", grassHeight)
-            .attr("fill", "#6b9936"); // Replace with the hex or rgb value that you want for the grass
+  // Calculate the height for sky and grass portions
+  const skyHeight = height * (2 / 3);
+  const grassHeight = height * (1 / 3);
+
+  // Append sky rectangle
+  svg
+    .append("rect")
+    .attr("x", 0)
+    .attr("y", 0)
+    .attr("width", width)
+    .attr("height", skyHeight)
+    .attr("fill", "#8fc8e5"); // Replace with the hex or rgb value that you want for the sky
+
+  // Append grass rectangle
+  svg
+    .append("rect")
+    .attr("x", 0)
+    .attr("y", skyHeight)
+    .attr("width", width)
+    .attr("height", grassHeight)
+    .attr("fill", "#6b9936"); // Replace with the hex or rgb value that you want for the grass
 
   // Calculate dimensions as percentages of container width and height
   const cellPercentage = 1.5; // 1.5% of container height
@@ -58,14 +60,23 @@
   const moduleSpacing = (width * moduleSpacingPercentage) / 100;
   const arraySpacing = (width * arraySpacingPercentage) / 100;
 
-  const moduleRows = 8, moduleColumns = 4;
-  const panelRows = 2, panelColumns = 3;
-  const arrayRows = 1, arrayColumns = 2;
+  const moduleRows = 8,
+    moduleColumns = 4;
+  const panelRows = 2,
+    panelColumns = 3;
+  const arrayRows = 1,
+    arrayColumns = 2;
 
-  const totalModuleWidth = moduleColumns * (cellWidth + cellSpacing) + cellToBorderGap * 2 - cellSpacing;
-  const totalModuleHeight = moduleRows * (cellHeight + cellSpacing) + cellToBorderGap * 2 - cellSpacing;
-  const totalPanelWidth = panelColumns * (totalModuleWidth + moduleSpacing) - moduleSpacing;
-  const totalPanelHeight = panelRows * (totalModuleHeight + moduleSpacing) - moduleSpacing;
+  const totalModuleWidth =
+    moduleColumns * (cellWidth + cellSpacing) +
+    cellToBorderGap * 2 -
+    cellSpacing;
+  const totalModuleHeight =
+    moduleRows * (cellHeight + cellSpacing) + cellToBorderGap * 2 - cellSpacing;
+  const totalPanelWidth =
+    panelColumns * (totalModuleWidth + moduleSpacing) - moduleSpacing;
+  const totalPanelHeight =
+    panelRows * (totalModuleHeight + moduleSpacing) - moduleSpacing;
 
   /* ----------------------- Draw Sun ----------------------- */
   const sunGroup = svg.append("g").attr("transform", "translate(10, 10)"); // fix this
@@ -81,10 +92,6 @@
     .attr("cy", sunCenterY)
     .attr("r", sunRadius)
     .attr("fill", "#ffcb03");
-
-
-
-
 
   // Draw Sun Triangles
   const numberOfTriangles = 12; // Choose how many triangles you want around the sun
@@ -247,17 +254,19 @@
     drawBorder(arrayGroup, arrayWidth, arrayHeight, arraySpacing, "array");
   };
 
-  
   // Calculate the center positions
-    const arrayXCenter = (width - arrayWidth) / 2;
-    const arrayYCenter = (height - arrayHeight) / 2;
-    // const arrayXCenter = (width) * 0.4;
-    // const arrayYCenter = (height) / 2;
+  const arrayXCenter = (width - arrayWidth) / 2;
+  const arrayYCenter = (height - arrayHeight) / 2;
+  // const arrayXCenter = (width) * 0.4;
+  // const arrayYCenter = (height) / 2;
 
-    // Reposition the arrayGroup to the center of the SVG element
-    const arrayGroup = svg
+  // Reposition the arrayGroup to the center of the SVG element
+  const arrayGroup = svg
     .append("g")
-    .attr("transform", `translate(${arrayXCenter * 0.8},${arrayYCenter * 1.5})`);
+    .attr(
+      "transform",
+      `translate(${arrayXCenter * 0.8},${arrayYCenter * 1.5})`
+    );
 
   drawArray(arrayGroup);
   svg
@@ -265,120 +274,72 @@
     .attr("height", containerWidth * aspectRatio);
 
   /* ----------------------- Draw Sun Rays ----------------------- */
-// const arrowColor = "#ffcb03";
-// const arrowLength = width * 0.15;
-// const arrowWidth = width * 0.01;
 
-// const rays = [
-//   { startX: sunCenterX, startY: sunCenterY, endX: width * 0.2, endY: height * 0.6},
-//   { startX: sunCenterX, startY: sunCenterY, endX: width * 0.4, endY: height * 0.6},
-// //   { startX: sunCenterX + sunRadius, startY: sunCenterY + sunRadius * 2, endX: width / 2, endY: arrayYCenter + sunRadius }
-// ];
+  const sunRayStartPoint1 = { x: sunCenterX - sunRadius, y: sunCenterY }; // Left end of the sun diameter
+  const sunRayStartPoint2 = { x: sunCenterX + sunRadius, y: sunCenterY }; // Right end of the sun diameter
 
-// const arrowHeadLength = 15; // The size of the arrowhead can be adjusted as per the visualization requirement
-// const arrowHeadWidth = 10;
+  const pvSystemBottomLeft = {
+    x: width / 4,
+    y: height / 2 + arrayHeight + arraySpacing,
+  }; // Bottom left corner of the PV system array
+  const pvSystemTopRight = { x: (2 * width) / 3, y: height / 2 }; // Top right corner of the PV system array
 
-// rays.forEach(ray => {
-//     // Calculate the angle of the line
-//     const angle = Math.atan2(ray.endY - ray.startY, ray.endX - ray.startX);
-    
-//     // Calculate the new end point for line where arrowhead will start
-//     const newEndX = ray.endX - arrowHeadLength * Math.cos(angle);
-//     const newEndY = ray.endY - arrowHeadLength * Math.sin(angle);
-  
-//     // Append the line without overlapping arrowhead
-//     svg.append("line")
-//       .attr("x1", ray.startX)
-//       .attr("y1", ray.startY)
-//       .attr("x2", newEndX) // Use the new end coordinates
-//       .attr("y2", newEndY)
-//       .attr("stroke", arrowColor)
-//       .attr("stroke-width", arrowWidth);
-  
-//     // Calculate polygon points for the arrowhead
-//     const arrowPoints = [
-//       { x: ray.endX, y: ray.endY },
-//       { x: newEndX - arrowHeadLength * Math.cos(angle - Math.PI / 6), y: newEndY - arrowHeadLength * Math.sin(angle - Math.PI / 6) },
-//       { x: newEndX - arrowHeadLength * Math.cos(angle + Math.PI / 6), y: newEndY - arrowHeadLength * Math.sin(angle + Math.PI / 6) }
-//     ].map(point => `${point.x},${point.y}`).join(' ');
-  
-//     // Append the arrowhead
-//     svg.append('polygon')
-//       .attr('points', arrowPoints)
-//       .attr('fill', arrowColor);
-//   });
-  
-
-const sunRayStartPoint1 = { x: sunCenterX - sunRadius, y: sunCenterY }; // Left end of the sun diameter
-const sunRayStartPoint2 = { x: sunCenterX + sunRadius, y: sunCenterY }; // Right end of the sun diameter
-
-const pvSystemBottomLeft = { x: width / 4, y: height / 2 + arrayHeight + arraySpacing }; // Bottom left corner of the PV system array
-const pvSystemTopRight = { x: 2 * width / 3, y: height / 2 }; // Top right corner of the PV system array
-
-// Draw sun ray area
-const sunRayArea = svg.append("path")
-    .attr("d", `M${sunRayStartPoint1.x},${sunRayStartPoint1.y} L${pvSystemBottomLeft.x},${pvSystemBottomLeft.y} L${pvSystemTopRight.x},${pvSystemTopRight.y} L${sunRayStartPoint2.x},${sunRayStartPoint2.y} Z`)
+  // Draw sun ray area
+  const sunRayArea = svg
+    .append("path")
+    .attr(
+      "d",
+      `M${sunRayStartPoint1.x},${sunRayStartPoint1.y} L${pvSystemBottomLeft.x},${pvSystemBottomLeft.y} L${pvSystemTopRight.x},${pvSystemTopRight.y} L${sunRayStartPoint2.x},${sunRayStartPoint2.y} Z`
+    )
     .attr("fill", "yellow")
     .attr("fill-opacity", "0.2")
     .style("pointer-events", "none");
 
-  /* ----------------------- Draw Conversion Efficiency Arrow & Text----------------------- */
-  const textStartX = sunCenterX + sunRadius + 5; 
+  /* ----------------------- Draw Conversion Efficiency (Light Bulb) ----------------------- */
+  const textStartX = sunCenterX + sunRadius + 5;
   const textStartY = sunCenterY;
-  
+
   // Calculate ending positions for the sun label
   const textEndX = width / 4 - 5;
   const textEndY = height / 2;
-  
+
   // Append sun label at the center point between starting and ending positions
-  svg.append("text")
+  svg
+    .append("text")
     .attr("x", (textStartX + textEndX) / 2)
     .attr("y", (textStartY + textEndY) / 2)
     .text("100%")
     .attr("class", "diagram-labels")
     .attr("text-anchor", "middle")
     .attr("alignment-baseline", "middle")
-    .attr("fill", "black");
-  
-    const arrowStartX = width/4 + arrayWidth; 
-    const arrowStartY = height/2 + arrayHeight/2;
-  
-  // Initialize the length of the arrow
-  const arrowLength = width * 0.1;  // Replace with the actual desired length
-  
-  // Append the line element as the arrow
-  svg.append("line")
-  .attr("x1", arrowStartX)
-  .attr("y1", arrowStartY)
-  .attr("x2", arrowStartX + arrowLength) // End point X coordinate further to the right
-  .attr("y2", arrowStartY) // End point Y coordinate stays the same
-  .attr("stroke", "#636363") // The color of the arrow
-  .attr("stroke-width", 10) // The thickness of the arrow
-  .attr("marker-end", "url(#arrowhead)"); // Assuming you have defined an arrowhead marker with the id 'arrowhead'
-  
-  // Add an arrowhead marker to the defs section of your SVG
-  svg.append("defs").append("marker")
-  .attr("id", "arrowhead")
-  .attr("viewBox", "0 -5 10 10") // Dimension of the marker
-  .attr("refX", 5) // Coordinate for the arrowhead tip
-  .attr("refY", 0)
-  .attr("orient", "auto-start-reverse")
-  .attr("markerWidth", 2) // Visual size of the arrowhead
-  .attr("markerHeight", 2)
-  .attr("xoverflow", "visible")
-  .append("svg:path")
-  .attr("d", "M0,-5L10,0L0,5")
-  .attr("fill", "#636363");
-  
-  // Append text label at the end of the arrow
-  svg.append("text")
-  .attr("x", arrowStartX + arrowLength + width * 0.03) // Add some padding
-  .attr("y", arrowStartY)
-  .attr("fill", "black")  // The color of the text
-  .style("font-size", "18px") // Text size
-  .text("21%"); // The efficiency label text
+    .attr("fill", "white");
 
+  const chordStartX = arrayXCenter * 0.9 + arrayWidth;
+  const chordStartY = arrayYCenter * 1.5 + arrayHeight / 2;
 
+  // Initialize the length of the chortd
+  const chordLength = width * 0.15; // Replace with the actual desired length
+
+  // Draw Light Bulb
+
+  const lightBulbCenterX = chordStartX + chordLength;
+  const lightBulbCenterY = height * 0.5;
+  const lightBulbRadius = sunRadius * 0.4; // This can be adjusted to your liking
+
+  svg
+    .append("circle") // Bulb part
+    .attr("cx", lightBulbCenterX)
+    .attr("cy", lightBulbCenterY)
+    .attr("r", lightBulbRadius)
+    .attr("fill", "#ffcb03");
+
+  svg
+    .append("rect") // Threaded base part
+    .attr("x", lightBulbCenterX - lightBulbRadius / 2)
+    .attr("y", lightBulbCenterY + lightBulbRadius)
+    .attr("width", lightBulbRadius)
+    .attr("height", lightBulbRadius)
+    .attr("fill", "#CCCCCC");
 })();
 
 // Update the tooltip position based on mouse movement
