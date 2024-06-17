@@ -286,7 +286,7 @@
       "d",
       `M${sunRayStartPoint1.x},${sunRayStartPoint1.y} L${pvSystemBottomLeft.x},${pvSystemBottomLeft.y} L${pvSystemTopRight.x},${pvSystemTopRight.y} L${sunRayStartPoint2.x},${sunRayStartPoint2.y} Z`
     )
-    .attr("fill", "yellow")
+    .attr("fill", "#f5ee33")
     .attr("fill-opacity", "0.2")
     .style("pointer-events", "none");
 
