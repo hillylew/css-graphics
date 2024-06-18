@@ -303,27 +303,6 @@
     .attr("alignment-baseline", "middle")
     .attr("fill", "white");
 
-svg
-    .append("text")
-    .attr("x", width * 0.8)
-    .attr("y", height * 0.2)
-    .text("Conversion Efficiency")
-    .attr("class", "diagram-labels")
-    .attr("text-anchor", "middle")
-    .attr("alignment-baseline", "middle")
-    .attr("fill", "white");
-
-svg
-    .append("text")
-    .attr("x", width * 0.8)
-    .attr("y", height * 0.25)
-    .text("21%")
-    .attr("class", "diagram-labels")
-    .attr("text-anchor", "middle")
-    .attr("alignment-baseline", "middle")
-    .attr("fill", "white");
-
-
 
     /* ----------------------- Draw Light Bulb ----------------------- */
     function blinkLightBulb() {
@@ -336,7 +315,7 @@ svg
           const currentOpacity = lightBulb.style("opacity");
       
           // Change the opacity from 1 to 0 or from 0 to 1
-          lightBulb.style("opacity", currentOpacity == 1 ? 0.7 : 1);
+          lightBulb.style("opacity", currentOpacity == 1 ? 0.5 : 1);
         }, interval);
       }
 
@@ -402,6 +381,50 @@ svg.append("circle")
 
 
 
+
+
+  svg
+    .append("text")
+    .attr("x", lightBulbCenterX)
+    .attr("y", height * 0.15)
+    .text("Average")
+    .attr("class", "diagram-labels")
+    .attr("text-anchor", "middle")
+    .attr("alignment-baseline", "middle")
+    .attr("fill", "white");
+
+svg
+    .append("text")
+    .attr("x", lightBulbCenterX)
+    .attr("y", height * 0.2)
+    .text("Conversion")
+    .attr("class", "diagram-labels")
+    .attr("text-anchor", "middle")
+    .attr("alignment-baseline", "middle")
+    .attr("fill", "white");
+
+svg
+    .append("text")
+    .attr("x", lightBulbCenterX)
+    .attr("y", height * 0.25)
+    .text("Efficiency")
+    .attr("class", "diagram-labels")
+    .attr("text-anchor", "middle")
+    .attr("alignment-baseline", "middle")
+    .attr("fill", "white");
+
+svg
+    .append("text")
+    .attr("x", lightBulbCenterX)
+    .attr("y", height * 0.3)
+    .text("21%")
+    .attr("class", "diagram-labels")
+    .attr("text-anchor", "middle")
+    .attr("alignment-baseline", "middle")
+    .attr("fill", "white");
+
+
+
  /* ----------------------- Draw Chord ----------------------- */
   const pvArrayAttachX = arrayXCenter * 0.8 + arrayWidth + arraySpacing;
   const pvArrayAttachY = arrayYCenter * 1.5 + arrayHeight / 2;
@@ -419,20 +442,20 @@ svg.append("circle")
   chordPath.moveTo(chordStartX, chordStartY); // Start at the light bulb
   // Bezier curve for first curve (leftward arc)
   chordPath.bezierCurveTo(
-    chordStartX, chordStartY + 20,
-    chordStartX - 30, chordStartY + 40,
-    chordStartX, chordStartY + 60
+    chordStartX, chordStartY * 1.1,
+    chordStartX * 0.9, chordStartY * 1.25,
+    chordStartX, chordStartY * 1.35
   );
   // Bezier curve for second curve (rightward arc)
   chordPath.bezierCurveTo(
-    chordStartX + 25, chordStartY + 80,
-    chordStartX + 30, chordStartY + 100,
-    chordStartX, chordStartY + 120
+    chordStartX * 1.1, chordStartY * 1.45,
+    chordStartX * 1.15, chordStartY * 1.6,
+    chordStartX, chordStartY * 1.7
   );
   // Bezier curve for third curve (leftward arc) leading into the attachment point
   chordPath.bezierCurveTo(
-    chordStartX - 30, chordStartY + 140,
-    pvArrayAttachX - 20, pvArrayAttachY - 10,
+    chordStartX * 0.9, chordStartY * 1.75,
+    pvArrayAttachX * 0.95, pvArrayAttachY * 0.95,
     pvArrayAttachX, pvArrayAttachY
   );
   
@@ -443,8 +466,6 @@ svg.append("circle")
     .attr("stroke-width", chordStrokeWidth)
     .attr("fill", "none");
   
-
-
 })();
 
 // Update the tooltip position based on mouse movement

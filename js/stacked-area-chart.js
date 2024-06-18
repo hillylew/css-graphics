@@ -39,9 +39,8 @@
     .scaleOrdinal()
     .domain(["Bus", "Heavy rail", "Other rail", "Other"])
     .range(["#eb5250", "#6298c6", "#75bf70", "#ae71b6"]);
-    // .range(["#3167a4", "#8fc8e5", "#386660", "#e2e27a"]);
-    // .range(["#3167a4", "#8fc8e5", "#ffcb03", "#ffd579"]);
-    
+  // .range(["#3167a4", "#8fc8e5", "#386660", "#e2e27a"]);
+  // .range(["#3167a4", "#8fc8e5", "#ffcb03", "#ffd579"]);
 
   const tooltip = d3.select("#tooltip");
 
@@ -68,7 +67,8 @@
     y.domain([0, maxYValue]);
 
     // Draw the X-axis
-    const xTickValues = x.ticks().concat(new Date(2023, 0, 1)); // Add 2023 as a Date object
+    const maxDataYear = d3.max(data, (d) => d.Year);
+    const xTickValues = x.ticks().concat(maxDataYear); // Add 2023 as a Date object
     xAxis.tickValues(xTickValues);
 
     const xAxisGroup = svg
@@ -173,7 +173,9 @@
       const index = colorScale.domain().indexOf(key);
       if (index !== -1) {
         d3.select(svg.selectAll(".area-path").nodes()[index]).style(
-          "fill-opacity", 1);
+          "fill-opacity",
+          1
+        );
       }
     }
 
@@ -229,21 +231,22 @@
       // Position tooltip
       tooltip
         .style("opacity", 0.9)
-        .style("left", `${event.pageX + dynamicMargin.left/4}px`)
+        .style("left", `${event.pageX + dynamicMargin.left / 4}px`)
         .style("top", `${event.pageY}px`);
 
       const formatNumber = d3.format(",");
+      const formatNumber2 = d3.format(",.1f");
       if (hoverData) {
         /* ----------------------- Highlight the area layer being hovered over ----------------------- */
         let cumulative = 0;
         let foundLayer = false;
-    
+
         // Look through each layer to find which one we're hovering over
         stackedData.forEach((layer) => {
           const y0 = y(cumulative); // Bottom of the layer
           cumulative += hoverData[layer.key];
           const y1 = y(cumulative); // Top of the layer
-    
+
           // Check if yPos is between top and bottom of the layer
           if (yPos >= y1 && yPos < y0) {
             // Highlight the current layer
@@ -251,52 +254,55 @@
             foundLayer = true;
           }
         });
-  
 
+        const total =
+          hoverData.Other +
+          hoverData["Other rail"] +
+          hoverData["Heavy rail"] +
+          hoverData.Bus;
         tooltip.html(`
-              <div class="tooltip-title">${hoverData.Year.getFullYear()}</div>
-              <table class="tooltip-content">
-                  <tr>
-                      <td><span class="color-legend" style="background-color: ${colorScale(
-                        "Other"
-                      )};"></span>Other</td>
-                      <td class="value">${formatNumber(hoverData.Other)}</td>
-                  </tr>
-                  <tr>
-                      <td><span class="color-legend" style="background-color: ${colorScale(
-                        "Other rail"
-                      )};"></span>Other rail</td>
-                      <td class="value">${formatNumber(
-                        hoverData["Other rail"]
-                      )}</td>
-                  </tr>
-                  <tr>
-                      <td><span class="color-legend" style="background-color: ${colorScale(
-                        "Heavy rail"
-                      )};"></span>Heavy rail</td>
-                      <td class="value">${formatNumber(
-                        hoverData["Heavy rail"]
-                      )}</td>
-                  </tr>
-                  <tr>
-                      <td><span class="color-legend" style="background-color: ${colorScale(
-                        "Bus"
-                      )};"></span>Bus</td>
-                      <td class="value">${formatNumber(hoverData.Bus)}</td>
-                  </tr>
-              </table>
-              <table class="tooltip-total">
-                <tr>
-                    <td><strong>Total</strong></td>
-                    <td class="value">${formatNumber(
-                      hoverData.Other +
-                        hoverData["Other rail"] +
-                        hoverData["Heavy rail"] +
-                        hoverData.Bus
-                    )}</td>
-                </tr>
-              </table>
-            `);
+  <div class="tooltip-title">${hoverData.Year.getFullYear()}</div>
+  <table class="tooltip-content">
+      <tr>
+          <td><span class="color-legend" style="background-color: ${colorScale(
+            "Other"
+          )};"></span>Other</td>
+          <td class="value">${formatNumber(hoverData.Other)} (${formatNumber2(
+          (hoverData.Other / total) * 100
+        )}%)</td>
+      </tr>
+      <tr>
+          <td><span class="color-legend" style="background-color: ${colorScale(
+            "Other rail"
+          )};"></span>Other rail</td>
+          <td class="value">${formatNumber(
+            hoverData["Other rail"]
+          )} (${formatNumber2((hoverData["Other rail"] / total) * 100)}%)</td>
+      </tr>
+      <tr>
+          <td><span class="color-legend" style="background-color: ${colorScale(
+            "Heavy rail"
+          )};"></span>Heavy rail</td>
+          <td class="value">${formatNumber(
+            hoverData["Heavy rail"]
+          )} (${formatNumber2((hoverData["Heavy rail"] / total) * 100)}%)</td>
+      </tr>
+      <tr>
+          <td><span class="color-legend" style="background-color: ${colorScale(
+            "Bus"
+          )};"></span>Bus</td>
+          <td class="value">${formatNumber(hoverData.Bus)} (${formatNumber2(
+          (hoverData.Bus / total) * 100
+        )}%)</td>
+      </tr>
+  </table>
+  <table class="tooltip-total">
+    <tr>
+        <td><strong>Total</strong></td>
+        <td class="value">${formatNumber(total)} (100%)</td>
+    </tr>
+  </table>
+`);
 
         // Positioning the circles
         const totalStack = [];
@@ -348,7 +354,7 @@
       .on("mousemove", onMouseMove)
       .on("mouseout", () => {
         tooltip.style("opacity", "0");
-        resetAreaLayers()
+        resetAreaLayers();
         mouseG.selectAll("circle").style("opacity", "0");
         mouseG.select(".mouse-line").style("opacity", "0");
       });

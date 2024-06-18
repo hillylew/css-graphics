@@ -45,6 +45,14 @@
     const tooltip = d3.select("#tooltip");
 
     /* ----------------------- Load and process the CSV data ----------------------- */
+
+    /* ----------------------- DISCLAIMER FOR THE GRAPH-12-DATA.CSV ----------------------- */
+    // For "Cumulative Capacity" column, the REAL "Cumulative Capacity" data has 
+    // been subtracted by the "Annual Additions" for the purposes of stacking them. 
+    // If you stack it wihtout subtracking, you would be "adding" the Annual Additions twice. 
+    // For these reasons, you need to add Annual Additions and Cumulative Capacity to get the REAL Cumulative Capacity data. 
+
+
     d3.csv("./data/graph-12-data.csv").then((data) => {
         // Parse years and convert string values to numbers
         data.forEach((d) => {
@@ -55,7 +63,7 @@
         });
 
         // Stack the data
-        const stack = d3.stack().keys(["Annual Additions","Cumulative Capacity"]);
+        const stack = d3.stack().keys(["Cumulative Capacity", "Annual Additions"]);
         const stackedData = stack(data);
 
         /* ----------------------- Update the scale domains with the processed data ----------------------- */
@@ -65,6 +73,7 @@
                 d3.max(stackedData, (layer) => d3.max(layer, (d) => d[1])) / 20000
                 ) * 20000;
         y.domain([0, maxYValue]);
+        
 
         // Draw the X-axis
         const xTickValues = x.domain();
@@ -182,14 +191,11 @@
                         <td><span class="color-legend" style="background-color: ${colorScale("Annual Additions")};"></span>Annual Additions</td>
                         <td class="value">${formatNumber(hoverData["Annual Additions"])}</td>
                     </tr>
-                    </table>
-                    <table class="tooltip-total">
-                     <tr>
+                    <tr>
                         <td><span class="color-legend" style="background-color: ${colorScale("Cumulative Capacity")};"></span>Cumulative Capacity</td>
                         <td class="value">${formatNumber(hoverData["Annual Additions"] + hoverData["Cumulative Capacity"])}</td>
                     </tr>
                     </table>
-
                 `);
             }
         }

@@ -8,10 +8,10 @@
 
   // Calculate the dynamic margins
   const dynamicMargin = {
-    top: containerHeight * 0.1, // 5% of the container height
-    right: containerWidth * 0.15, // 10% of the container width
+    top: containerHeight * 0.1, // 10% of the container height
+    right: containerWidth * 0.15, // 15% of the container width
     bottom: containerHeight * 0.1, // 10% of the container height
-    left: containerWidth * 0.07, // 5% of the container width
+    left: containerWidth * 0.07, // 7% of the container width
   };
 
   // Calculate the width and height for the inner drawing area
@@ -33,27 +33,33 @@
 
   // Define the axes
   const xAxis = d3.axisBottom(x).tickFormat(d3.timeFormat("%Y"));
-  const yAxis = d3.axisLeft(y).tickFormat(d3.format("$,.2f")); // Format as dollars with two decimal places
+  const yAxis = d3.axisLeft(y).tickFormat((d) => d / 1000);
 
   const colorScale = d3
     .scaleOrdinal()
     .domain([
-      "22 Panel System Residential PV",
-      "200 kW Commercial PV",
-      "100 MW Utility-Scale PV, Fixed Tilt",
-      "100 MW Utility-Scale PV, One Axis Tracker",
+      "Combustion with Energy Recovery",
+      "Generation",
+      "Recycled",
+      "Landfill",
     ])
     .range(["#e41a1c", "#377eb8", "#4daf4a", "#984ea3"]);
 
   const tooltip = d3.select("#tooltip");
 
   // Load and process the CSV data
-  d3.csv("./data/graph-5-data.csv").then((data) => {
+  d3.csv("./data/graph-13-data.csv").then((data) => {
     // Parse years and convert string values to numbers
     data.forEach((d) => {
       d.Year = new Date(+d.Year, 0, 1);
       for (let prop in d) {
-        if (prop !== "Year") d[prop] = +d[prop];
+        if (prop !== "Year") {
+          if (d[prop] === "") {
+            d[prop] = undefined;       // Set as undefined for missing values
+          } else {
+            d[prop] = +d[prop];        // Convert to number if the value exists
+          }
+        }
       }
     });
 
@@ -62,14 +68,35 @@
     const maxYValue = Math.ceil(
       d3.max(data, (d) =>
         Math.max(
-          d["22 Panel System Residential PV"],
-          d["200 kW Commercial PV"],
-          d["100 MW Utility-Scale PV, Fixed Tilt"],
-          d["100 MW Utility-Scale PV, One Axis Tracker"]
+          d["Combustion with Energy Recovery"],
+          d["Generation"],
+          d["Recycled"],
+          d["Landfill"]
         )
-      )
-    );
+      ) / 10000
+    ) * 10000;
     y.domain([0, maxYValue]);
+
+
+  // Draw the X-axis
+  const maxDataYear = d3.max(data, (d) => d.Year);
+  const decadeTicks = d3.timeYears(x.domain()[0], x.domain()[1]).filter(d => d.getFullYear() % 10 === 0); // increment by decade
+
+  // Ensure maxDataYear is included
+  let xTickValues = decadeTicks;
+  if (!xTickValues.some(d => d.getFullYear() === maxDataYear.getFullYear())) {
+    xTickValues = xTickValues.concat(maxDataYear);
+  }
+
+  xAxis.tickValues(xTickValues);
+
+const xAxisGroup = svg
+  .append("g")
+  .attr("transform", `translate(0,${height})`)
+  .call(xAxis);
+
+xAxisGroup.selectAll(".tick text").attr("class", "chart-labels");
+
 
     // Draw the Y-axis
     const yAxisGroup = svg
@@ -84,53 +111,20 @@
       .attr("text-anchor", "middle")
       .attr("transform", `translate(0, -${dynamicMargin.top / 2})`)
       .style("fill", "#000")
-      .text("2023 USD / Watt");
-
-    // Draw the X-axis
-    // Add 2023 as a Date object
-    const xTickValues = x.ticks().concat(new Date(2023, 0, 1));
-    xAxis.tickValues(xTickValues);
-
-    const xAxisGroup = svg
-      .append("g")
-      .attr("transform", `translate(0,${height})`)
-      .call(xAxis);
-
-    // const xAxisGroup = svg
-    //   .append("g")
-    //   .attr("transform", `translate(0,${height})`)
-    //   .call(xAxis.tickFormat(d3.timeFormat("%Y")));
-
-    // // Here we'll filter tick values to show every other year except 2023
-    // const tickValues = x.ticks().filter(function (d) {
-    //   return d.getFullYear() % 2 === 0 || d.getFullYear() === 2023;
-    // });
-    // xAxis.tickValues(tickValues);
-
-    // Now call the axis with the new tick values
-    xAxisGroup.call(xAxis);
-
-    xAxisGroup.selectAll(".tick text").attr("class", "chart-labels");
-    // .style("text-anchor", (d) => {
-    //   return d.getFullYear() === 2010
-    //     ? "start"
-    //     : d.getFullYear() === 2023
-    //     ? "end"
-    //     : "middle";
-    // });
+      .text("Thousand Tons");
 
     // Define the line generator
-    const lineGenerator = d3
-      .line()
-      .x((d) => x(d.Year))
-      .y((d) => y(d.value));
+    const lineGenerator = d3.line()
+      .defined(d => !isNaN(d.value))   // Ignore data points that are NaN
+      .x(d => x(d.Year))
+      .y(d => y(d.value));
 
     // Transform the data into a format suitable for line charts
     const keys = [
-      "22 Panel System Residential PV",
-      "200 kW Commercial PV",
-      "100 MW Utility-Scale PV, Fixed Tilt",
-      "100 MW Utility-Scale PV, One Axis Tracker",
+      "Combustion with Energy Recovery",
+      "Generation",
+      "Recycled",
+      "Landfill",
     ];
     const lineData = keys.map((key) => ({
       key,
@@ -153,6 +147,24 @@
       .style("fill", "none")
       .style("stroke", (d) => colorScale(d.key))
       .style("stroke-width", 1);
+
+    lines.each(function(lineData) {
+      // Select the current line group
+      const lineGroup = d3.select(this);
+    
+      // Append circles to the line group
+      lineGroup
+        .selectAll('.line-dot')
+        .data(lineData.values.filter(d => d.value != null))  // Filter out missing data
+        .enter()
+        .append('circle')
+        .attr('class', 'line-dot')
+        .attr('cx', d => x(d.Year))
+        .attr('cy', d => y(d.value))
+        .attr('r', 2) // Set the radius of the circle
+        .style('fill', colorScale(lineData.key));
+      });
+
 
     // Add legend
     const legend = svg
@@ -182,34 +194,23 @@
     legend.each(function (series, index) {
       const lastDatum = series.values[series.values.length - 1]; // Get the last data point
       const legendItem = d3.select(this);
-      const legendNames = {
-        "22 Panel System Residential PV": ["Residential PV"],
-        "200 kW Commercial PV": ["Commercial PV"],
-        "100 MW Utility-Scale PV, Fixed Tilt": [
-          "Fixed Tilt",
-          "Utility-Scale PV",
-        ],
-        "100 MW Utility-Scale PV, One Axis Tracker": [
-          "One Axis Tracker",
-          "Utility-Scale PV",
-        ],
-      };
 
-      const lines = legendNames[series.key];
+      let fixLegend = series.key;
+      if (series.key == "Combustion with Energy Recovery") {
+         fixLegend= "Combustion";
+      }
 
-      lines.forEach((line, i) => {
-        legendItem
-          .append("text")
-          .datum(lastDatum)
-          .attr("transform", function (d) {
-            return `translate(${width},${y(d.value) + i * 12})`; // Adjust these values as needed for correct positioning
-          })
-          .attr("class", "chart-labels")
-          .attr("x", 5) // This sets the distance of the text from the end of the line
-          .attr("dy", ".35em") // This aligns the text vertically
-          .style("fill", colorScale(series.key))
-          .text(line);
-      });
+      legendItem
+        .append("text")
+        .datum(lastDatum)
+        .attr("transform", function (d) {
+          return `translate(${width},${y(d.value)})`; // Adjust these values as needed for correct positioning
+        })
+        .attr("class", "chart-labels")
+        .attr("x", 5) // This sets the distance of the text from the end of the line
+        .attr("dy", ".35em") // This aligns the text vertically
+        .style("fill", colorScale(series.key))
+        .text(fixLegend);
     });
 
     function onMouseMove(event) {
@@ -229,84 +230,89 @@
       if (hoverData) {
         tooltip.html(`
               <div class="tooltip-title">${hoverData.Year.getFullYear()}</div>
-              <table class="tooltip-content">
+                <table class="tooltip-content">
                   <tr>
                       <td><span class="color-legend" style="background-color: ${colorScale(
-                        "22 Panel System Residential PV"
-                      )};"></span>22 Panel System Residential PV</td>
-                      <td class="value">$${formatNumber(
-                        hoverData["22 Panel System Residential PV"]
-                      )}</td>
+                        "Generation"
+                      )};"></span>Generation</td>
+                      <td class="value">${formatNumber(
+                        hoverData["Generation"]
+                      )} Tons</td>
                   </tr>
-                  <tr>
-                      <td><span class="color-legend" style="background-color: ${colorScale(
-                        "200 kW Commercial PV"
-                      )};"></span>200 kW Commercial PV</td>
-                      <td class="value">$${formatNumber(
-                        hoverData["200 kW Commercial PV"]
-                      )}</td>
-                  </tr>
-                  <tr>
-                      <td><span class="color-legend" style="background-color: ${colorScale(
-                        "100 MW Utility-Scale PV, One Axis Tracker"
-                      )};"></span>100 MW Utility-Scale PV, One Axis Tracker</td>
-                      <td class="value">$${formatNumber(
-                        hoverData["100 MW Utility-Scale PV, One Axis Tracker"]
-                      )}</td>
-                  </tr>
-                  <tr>
                   <td><span class="color-legend" style="background-color: ${colorScale(
-                    "100 MW Utility-Scale PV, Fixed Tilt"
-                  )};"></span>100 MW Utility-Scale PV, Fixed Tilt</td>
-                  <td class="value">$${formatNumber(
-                    hoverData["100 MW Utility-Scale PV, Fixed Tilt"]
-                  )}</td>
+                    "Landfill"
+                    )};"></span>Landfill</td>
+                    <td class="value">${formatNumber(
+                      hoverData["Landfill"]
+                    )} Tons</td>
+                  <tr>
+                      <td><span class="color-legend" style="background-color: ${colorScale(
+                        "Combustion with Energy Recovery"
+                      )};"></span>Combustion with Energy Recovery</td>
+                      <td class="value">${formatNumber(
+                        hoverData["Combustion with Energy Recovery"]
+                      )} Tons</td>
+                  </tr>
+  
+                  <tr>
+                      <td><span class="color-legend" style="background-color: ${colorScale(
+                        "Recycled"
+                      )};"></span>Recycled</td>
+                      <td class="value">${formatNumber(
+                        hoverData["Recycled"]
+                      )} Tons</td>
+                  </tr>
+                  <tr>
               </tr>
               </table>
             `);
 
-        mouseG
-          .selectAll("circle")
-          .data(keys)
-          .join("circle")
-          .attr("cx", x(hoverData.Year))
-          .attr("cy", (d) => y(hoverData[d]))
-          .attr("r", 4)
-          .style("fill", (d) => colorScale(d))
-          .style("stroke", "white")
-          .style("opacity", "1");
-
-        // Draw the vertical line
-        mouseG
-          .select(".mouse-line")
-          .style("opacity", "1")
-          .attr("d", () => `M${x(hoverData.Year)},0V${height}`);
+          const hoverDataPoints = keys
+            .map(key => ({ key, value: hoverData[key] }))
+            .filter(d => d.value != null); // Filter out keys with missing data for the hovered year
+          
+          mouseG
+            .selectAll("circle")
+            .data(hoverDataPoints)
+            .join("circle")
+            .attr("cx", x(hoverData.Year))
+            .attr("cy", d => y(d.value))
+            .attr("r", 5)
+            .style("fill", d => colorScale(d.key))
+            .style("stroke", "white")
+            .style("opacity", "1");
+  
+          // Draw the vertical line
+          mouseG
+            .select(".mouse-line")
+            .style("opacity", "1")
+            .attr("d", () => `M${x(hoverData.Year)},0V${height}`);
+        }
       }
-    }
-
-    const mouseG = svg.append("g").attr("class", "mouse-over-effects");
-
-    // Append a line that will follow the mouse cursor
-    mouseG
-      .append("path")
-      .attr("class", "mouse-line")
-      .style("stroke", "#999")
-      .style("stroke-width", "0.5px")
-      .style("opacity", "0");
-
-    // Create a rect for listening to mouse events
-    svg
-      .append("rect")
-      .attr("class", "listening-rect")
-      .attr("width", width + dynamicMargin.left / 4)
-      .attr("height", height)
-      .attr("fill", "none")
-      .attr("pointer-events", "all")
-      .on("mousemove", onMouseMove)
-      .on("mouseout", () => {
-        tooltip.style("opacity", 0);
-        mouseG.selectAll("circle").style("opacity", "0");
-        mouseG.select(".mouse-line").style("opacity", "0");
-      });
-  });
-})();
+  
+      const mouseG = svg.append("g").attr("class", "mouse-over-effects");
+  
+      // Append a line that will follow the mouse cursor
+      mouseG
+        .append("path")
+        .attr("class", "mouse-line")
+        .style("stroke", "#999")
+        .style("stroke-width", "0.5px")
+        .style("opacity", "0");
+  
+      // Create a rect for listening to mouse events
+      svg
+        .append("rect")
+        .attr("class", "listening-rect")
+        .attr("width", width + dynamicMargin.left / 4)
+        .attr("height", height)
+        .attr("fill", "none")
+        .attr("pointer-events", "all")
+        .on("mousemove", onMouseMove)
+        .on("mouseout", () => {
+          tooltip.style("opacity", 0);
+          mouseG.selectAll("circle").style("opacity", "0");
+          mouseG.select(".mouse-line").style("opacity", "0");
+        });
+    });
+  })();

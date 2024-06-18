@@ -2,7 +2,7 @@
   const aspectRatio = 0.7; // Define an aspect ratio for the chart
 
   // Get the container and its dimensions
-  const container = document.getElementById("line-chart2");
+  const container = document.getElementById("line-chart4");
   const containerWidth = container.offsetWidth; // Use offsetWidth for full element width
   const containerHeight = containerWidth * aspectRatio; // Calculate the height based on the width and aspect ratio
 
@@ -20,7 +20,7 @@
 
   // Append SVG object
   const svg = d3
-    .select("#line-chart2")
+    .select("#line-chart4")
     .append("svg")
     .attr("viewBox", `0 0 ${containerWidth} ${containerHeight}`)
     .attr("preserveAspectRatio", "xMinYMin meet")
@@ -40,7 +40,7 @@
   const tooltip = d3.select("#tooltip");
 
   // Load and process the CSV data
-  d3.csv("./data/graph-7-data.csv").then((data) => {
+  d3.csv("./data/graph-14-data.csv").then((data) => {
     // Parse years and convert string values to numbers
     data.forEach((d) => {
       d.Year = new Date(+d.Year, 0, 1);
@@ -49,7 +49,7 @@
 
     // Update the scale domains with the processed data
     x.domain(d3.extent(data, (d) => d.Year));
-    y.domain([0, Math.ceil(d3.max(data, (d) => d["LCOE"]) / 100) * 100]);
+    y.domain([0, Math.ceil(d3.max(data, (d) => d["LCOE"]) / 50) * 50]);
 
     // Draw the Y-axis
     const yAxisGroup = svg
@@ -80,6 +80,8 @@
       .x((d) => x(d.Year))
       .y((d) => y(d["LCOE"]));
 
+    
+
     const mainLine = svg
       .append("path")
       .datum(data)
@@ -102,7 +104,7 @@
       .attr("cy", function (d) {
         return y(d["LCOE"]);
       })
-      .attr("r", 2) // Specifies the radius of the circle
+      .attr("r", 3) // Specifies the radius of the circle
       .attr("fill", "#377eb8");
 
     const lastDataPoint = data[data.length - 1]; // Get the last data point
@@ -115,43 +117,6 @@
       .style("text-anchor", "start")
       .attr("fill", "#377eb8")
       .text("LCOE");
-
-    // Add the 2030 goal dashed horizontal line
-    const goalValue = 30;
-    const goalLine = svg
-      .append("line")
-      .attr("x1", 0)
-      .attr("y1", y(goalValue))
-      .attr("x2", width)
-      .attr("y2", y(goalValue))
-      .attr("stroke", "red")
-      .attr("stroke-width", 2)
-      .attr("stroke-dasharray", "6,6");
-
-    // Add the label for the 2030 goal
-    const goalLabel = svg
-      .append("text")
-      .attr("class", "chart-labels")
-      .attr("x", width + 5) // Slightly offset to the right of the line
-      .attr("y", y(goalValue))
-      .attr("dy", "0.35em")
-      .attr("text-anchor", "start")
-      .attr("fill", "#e41a1c")
-      .text("2030 Goal");
-
-    // Highlight function for goal line
-    function highlightGoal() {
-      goalLine.attr("stroke-width", 2).attr("stroke-dasharray", "6,6");
-      mainLine.style("opacity", 0.2);
-    }
-
-    // Reset function for goal line
-    function resetHighlight() {
-      goalLine.attr("stroke-width", 1).attr("stroke-dasharray", "4,4");
-      mainLine.style("opacity", 1);
-    }
-
-    goalLabel.on("mouseover", highlightGoal).on("mouseout", resetHighlight);
 
     function onMouseMove(event) {
       const [xPos, yPos] = d3.pointer(event, this);
@@ -177,11 +142,6 @@
                         <td class="value">$${formatNumber(
                           hoverData["LCOE"]
                         )}</td>
-                    </tr>
-                    <tr>
-                        <td><span class="color-legend" style="background-color: #e41a1c"
-                        )};"></span>2030 Goal</td>
-                        <td class="value">$${goalValue}</td>
                     </tr>
                 </tr>
                 </table>
