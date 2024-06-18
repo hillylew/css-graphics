@@ -146,7 +146,7 @@ xAxisGroup.selectAll(".tick text").attr("class", "chart-labels");
       .attr("d", (d) => lineGenerator(d.values))
       .style("fill", "none")
       .style("stroke", (d) => colorScale(d.key))
-      .style("stroke-width", 1);
+      .style("stroke-width", 1.5);
 
     lines.each(function(lineData) {
       // Select the current line group
@@ -161,7 +161,7 @@ xAxisGroup.selectAll(".tick text").attr("class", "chart-labels");
         .attr('class', 'line-dot')
         .attr('cx', d => x(d.Year))
         .attr('cy', d => y(d.value))
-        .attr('r', 2) // Set the radius of the circle
+        .attr('r', 2.5) // Set the radius of the circle
         .style('fill', colorScale(lineData.key));
       });
 
