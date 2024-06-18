@@ -12,7 +12,7 @@
       top: containerHeight * 0.1,
       right: containerWidth * 0.15,
       bottom: containerHeight * 0.1,
-      left: containerWidth * 0.05,
+      left: containerWidth * 0.07,
     };
   
     // Calculate the width and height for the inner drawing area
@@ -33,7 +33,8 @@
     const y = d3.scaleLinear().range([height, 0]);
   
     const xAxis = d3.axisBottom(x).tickFormat(d3.timeFormat("%Y"));
-    const yAxis = d3.axisLeft(y).tickFormat((d) => d);
+    const yAxis = d3.axisLeft(y).tickFormat(d3.format(","));
+
   
     const colorScale = d3
       .scaleOrdinal()
@@ -67,9 +68,14 @@
       y.domain([0, maxYValue]);
   
       // Draw the X-axis
-      const maxDataYear = d3.max(data, (d) => d.Year);
-      const xTickValues = x.ticks().concat(maxDataYear); // Add 2023 as a Date object
-      xAxis.tickValues(xTickValues);
+      // Create tick values for every other year
+    const startYear = d3.min(data, (d) => d.Year.getFullYear());
+    const endYear = d3.max(data, (d) => d.Year.getFullYear());
+    const xTickValues = [];
+    for (let year = startYear; year <= endYear; year += 2) {
+      xTickValues.push(new Date(year, 0, 1));
+    }
+    xAxis.tickValues(xTickValues);
   
       const xAxisGroup = svg
         .append("g")
@@ -100,7 +106,7 @@
         .attr("text-anchor", "middle")
         .attr("transform", `translate(0, -${dynamicMargin.top / 2})`)
         .style("fill", "#000")
-        .text("Quads");
+        .text("Gigawatts (GW)");
   
       /* ----------------------- Draw the chart ----------------------- */
       // Define the area generator

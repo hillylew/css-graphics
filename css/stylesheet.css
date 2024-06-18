@@ -11,6 +11,7 @@ header {
   padding: 30px 40px;
   background: #00274c;
   font-family: "IBM Plex Sans", sans-serif;
+  font-size: 15px;
 
   z-index: 999; 
   position: sticky;
@@ -20,12 +21,12 @@ header {
 
 header a {
   text-decoration: none;
-  font-size: 20px;
   color: white;
 }
 
 .factsheets-container {
   padding: 30px;
+  font-size: 18px;
 }
 
 /* chart/graph styling */
@@ -133,11 +134,13 @@ table.tooltip-total {
 
 /* tablet */
 @media only screen and (min-width: 768px) {
-  /* delete this --> only for debugging media queries*/
-  /* body {
-    background: rgb(234, 234, 169);
-  } */
 
+  header {
+    font-size: 25px;
+  }
+  
+
+  /* starts here */
   .CaptionedChart {
     padding: 10px 20px;
   }
@@ -166,11 +169,11 @@ table.tooltip-total {
 
 /* desktop */
 @media screen and (min-width: 1025px) {
-  /* delete this --> only for debugging media queries*/
-  /* body {
-    background: rgb(184, 196, 233);
-  } */
+  header {
+    font-size: 25px;
+  }
 
+  /* starts here */
   .CaptionedChart {
     padding: 10px 20px;
   }
@@ -181,7 +184,7 @@ table.tooltip-total {
   }
 
   .HeaderHTML {
-    font-size: 20px;
+    font-size: 25px;
   }
 
   .chart-labels {
