@@ -136,7 +136,7 @@ table.tooltip-total {
 @media only screen and (min-width: 720px) {
 
   header {
-    font-size: 25px;
+    font-size: 22px;
   }
 
   .factsheets-container {
@@ -174,7 +174,7 @@ table.tooltip-total {
 /* desktop */
 @media screen and (min-width: 1025px) {
   header {
-    font-size: 25px;
+    font-size: 22px;
   }
 
   .factsheets-container {
@@ -192,7 +192,7 @@ table.tooltip-total {
   }
 
   .HeaderHTML {
-    font-size: 25px;
+    font-size: 20px;
   }
 
   .chart-labels {

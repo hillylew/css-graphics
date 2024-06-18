@@ -14,7 +14,7 @@
     else if (projects >= 5 && projects <= 19) color = "#8ab4e0";
     else if (projects >= 1 && projects <= 4) color = "#c77c7c";
 
-    fipsToData[d.FIPS] = {
+    fipsToData[d.States] = {
       color: color,
       projects: d.Projects,
     };

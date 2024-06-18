@@ -20,7 +20,7 @@
     else if (release >= 0.5 && release <= 35) color = "#8fc8e5";
     else if (release < 0.5) color = "#d8d8d8";
 
-    fipsToData[d.FIPS] = {
+    fipsToData[d.States] = {
       color: color,
       release: d.amount,
     };

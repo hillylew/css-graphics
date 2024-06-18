@@ -1,15 +1,66 @@
-Year,"22 Panel System Residential PV","200 kW Commercial PV","100 MW Utility-Scale PV, Fixed Tilt","100 MW Utility-Scale PV, One Axis Tracker"
-2010,7.53,5.57,4.75,5.66
-2011,6.62,5.18,4.08,4.79
-2012,4.67,3.57,2.77,3.29
-2013,4.09,2.9,2.13,2.5
-2014,3.6,2.89,1.97,2.25
-2015,3.36,2.4,1.93,2.08
-2016,3.16,2.29,1.53,1.63
-2017,2.94,1.94,1.08,1.16
-2018,2.78,1.88,1.08,1.16
-2019,2.77,1.76,0.95,1.02
-2020,2.71,1.72,0.94,1.01
-2021,2.65,1.56,0.83,0.89
-2022,2.95,1.84,,0.99
-2023,2.68,1.76,,1.17
+States,Community Solar Projects,Community Solar Legislation?,Community Solar Programs,Program Name
+02,Yes,No,No,
+01,No,No,No,
+05,Yes,No,No,
+04,Yes,No,No,
+06,Yes,Yes,Yes,Disadvantaged Communities Green Tariff DAC-GT Program
+06,Yes,Yes,Yes,Community Solar Green Tariff Program
+06,Yes,Yes,Yes,Green Tariff/Shared Renewables Program (GTSR): Enhanced Community Renewables (ECR)
+08,Yes,Yes,Yes,Black Hills Energy Community Solar Garden
+08,Yes,Yes,Yes,Solar*Reward Community Program
+09,Yes,Yes,Yes,Statewide Shared Clean Energy Facility (SCEF) Program
+11,Yes,Yes,Yes,Solar for All
+10,Yes,Yes,Yes,Delaware Community Solar Program
+12,Yes,No,Yes,SolarTogether community solar program
+12,Yes,No,Yes,Duke Energy Program
+13,Yes,No,No,
+15,Yes,Yes,Yes,Community-Based Renewable Energy Program
+19,Yes,No,No,
+16,Yes,No,No,
+17,Yes,Yes,Yes,IL Solar for All Program
+17,Yes,Yes,Yes,Adjustable Block Program
+18,Yes,No,No,
+20,Yes,No,No,
+21,Yes,No,No,
+22,No,No,No,
+25,Yes,Yes,Yes,Solar Carve-Out I&II (Phased Out)
+25,Yes,Yes,Yes,Solar Massachusetts Renewable Target (SMART)
+24,Yes,Yes,Yes,Community Solar Energy Generating Systems Program
+24,Yes,Yes,Yes,Community Solar Pilot Program (Estabilished Before July 1 2023)
+23,Yes,Yes,Yes,Net Energy Billing
+26,Yes,No,No,
+27,Yes,Yes,Yes,Solar Reward Community Solar Garden Program
+27,Yes,Yes,Yes,LMI-Accessible Community Solar Garden Program (2024)
+29,Yes,No,No,
+28,No,No,No,
+30,Yes,No,No,
+37,Yes,Yes,Yes,North Carolina Community Solar Program
+38,Yes,No,No,
+31,Yes,No,No,
+33,No,Yes,No,NA
+34,Yes,Yes,Yes,New Jersey Community Solar Energy Pilot Program
+34,Yes,Yes,Yes,New Jersey Community Solar Energy Program
+35,Yes,Yes,Yes,New Mexico Community Solar Program
+32,Yes,Yes,Yes,Nevada Community Solar Target
+36,Yes,Yes,Yes,New York Solar for All
+36,Yes,Yes,Yes,New York SUN
+39,Yes,No,No,
+40,Yes,No,No,
+41,Yes,Yes,Yes,Oregon Community Solar Program
+42,No,No,No,
+44,Yes,Yes,Yes,Rhode Island Net Metering Tariff
+44,Yes,Yes,Yes,RI Community Remote Distributed Generation Program
+45,Yes,Yes,Yes,Duke Energy Shared Solar for Income-Qualified Customers
+45,Yes,Yes,Yes,Dominion Energy Community Solar Program
+45,Yes,Yes,Yes,Santee Cooper Solar Share
+45,Yes,Yes,Yes,SC Electric Cooperatives Community Solar
+46,No,No,No,
+47,Yes,No,No,
+48,Yes,No,No,
+49,Yes,No,No,
+51,Yes,Yes,Yes,Shared Solar Facility Program
+50,Yes,Yes,No,TBD
+53,Yes,Yes,Yes,Washington Community Solar Program
+55,Yes,No,Yes,Solar*Connect Community program
+54,No,No,No,
+56,No,No,No,
