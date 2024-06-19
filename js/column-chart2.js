@@ -12,7 +12,7 @@
     top: containerHeight * 0.08,
     right: containerWidth * 0.15, // Adjust right margin if labels are too long
     bottom: containerHeight * 0.1,
-    left: containerWidth * 0.3, // Increase left margin to fit labels
+    left: containerWidth * 0.22, // Increase left margin to fit labels
   };
 
   // Calculate the width and height for the inner drawing area
