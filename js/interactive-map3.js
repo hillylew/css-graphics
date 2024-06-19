@@ -3,7 +3,7 @@
   const us = await d3.json("https://d3js.org/us-10m.v2.json");
   const projectData = await d3.csv("./data/graph-5-data.csv");
 
-  // Maps of state states to color and storage data
+  // Map of states to data
   const fipsToData = {};
   projectData.forEach((d) => {
     fipsToData[d.States] = {
@@ -21,38 +21,28 @@
     return d;
   });
 
-  const aspectRatio = 0.75; // Define an aspect ratio for the chart
-
-  // Get the container and its dimensions
   const container = document.getElementById("interactive-map3");
-  const containerWidth = container.offsetWidth; // Use offsetWidth for full element width
-  const containerHeight = containerWidth * aspectRatio; // Calculate the height based on the width and aspect ratio
+  const aspectRatio = 0.75;
+  const containerWidth = container.offsetWidth;
+  const containerHeight = containerWidth * aspectRatio;
 
-  // Calculate the dynamic margins
   const dynamicMargin = {
     top: containerHeight * 0.05, // 5% of the container height
     right: containerWidth * 0.15, // 15% of the container width
     bottom: containerHeight * 0.1, // 10% of the container height
-    left: containerWidth * 0.08, // 8% of the container width
+    left: containerWidth * 0.08, // 5% of the container width
   };
-
-  // Calculate the width and height for the inner drawing area
   const width = containerWidth - dynamicMargin.left - dynamicMargin.right;
   const height = containerHeight - dynamicMargin.top - dynamicMargin.bottom;
 
-  // Append SVG object
   const svg = d3
     .select("#interactive-map3")
     .append("svg")
     .attr("viewBox", `0 0 ${containerWidth} ${containerHeight}`)
-    .attr("preserveAspectRatio", "xMinYMin meet")
     .append("g")
     .attr("transform", `translate(${dynamicMargin.left},${dynamicMargin.top})`);
 
-  // Define the scale factor for the map
-  const scaleFactor = width / 850; // Adjust this scaling factor as needed
-
-  // Create geoTransform function to scale down the map
+  const scaleFactor = width / 850;
   const transform = d3.geoTransform({
     point: function (x, y) {
       this.stream.point(x * scaleFactor, y * scaleFactor);
@@ -62,94 +52,22 @@
 
   const tooltip = d3.select("#tooltip");
 
-  const formatNumber = d3.format(",");
+  const defs = svg.append("defs");
 
-  const updateMap = (filter) => {
-    svg
-      .selectAll("path")
-      .data(states)
-      .join("path")
-      .attr("d", path)
-      .attr("fill", (d) => {
-        if (filter === "all") {
-          if (d.properties.projects) return "orange";
-          if (d.properties.legislation) return "url(#legislationPattern)";
-          if (d.properties.programs) return "url(#programIcon)";
-          return "white"; // Default fill color for states that don't match any criteria
-        }
-        if (filter === "projects" && d.properties.projects) return "orange";
-        if (filter === "legislation" && d.properties.legislation)
-          return "url(#legislationPattern)";
-        if (filter === "programs" && d.properties.programs)
-          return "url(#programIcon)";
-        return "white";
-      })
-      .attr("stroke", "#000")
-      .attr("stroke-width", 0.5)
-      .on("mouseover", function (event, d) {
-        tooltip
-          .html(
-            `<div class="tooltip-title">${d.properties.name}</div>
-                   <div class="tooltip-content">
-                   Projects: ${d.properties.projects ? "Yes" : "No"}<br>
-                   Legislation: ${d.properties.legislation ? "Yes" : "No"}<br>
-                   Programs: ${d.properties.programs ? "Yes" : "No"}<br>
-                   Number of Programs: ${d.properties.numberOfPrograms}<br>
-                   Program Names: ${d.properties.programNames}
-                   </div>`
-          )
-          .style("opacity", 0.9)
-          .style("left", `${event.pageX}px`)
-          .style("top", `${event.pageY}px`);
-      })
-      .on("mouseout", function () {
-        tooltip.style("opacity", 0);
-      });
-  };
-
-  // Initial map update
-  updateMap("all");
-
-  // Create the dropdown menu
-  const dropdown = d3
-    .select("#interactive-map3")
-    .insert("select", ":first-child")
-    .attr("id", "layer-dropdown")
-    .on("change", function () {
-      const selectedLayer = d3.select(this).property("value");
-      updateMap(selectedLayer);
-    });
-
-  dropdown
-    .selectAll("option")
-    .data([
-      { value: "all", text: "All Layers" },
-      { value: "projects", text: "Community Solar Projects" },
-      { value: "legislation", text: "Community Solar Legislation" },
-      { value: "programs", text: "Community Solar Programs" },
-    ])
-    .enter()
-    .append("option")
-    .attr("value", (d) => d.value)
-    .text((d) => d.text);
-
-  // Define patterns and icons
-  svg
-    .append("defs")
+  defs
     .append("pattern")
-    .attr("id", "legislationPattern")
+    .attr("id", "diagonalHatch")
     .attr("patternUnits", "userSpaceOnUse")
-    .attr("width", 10)
-    .attr("height", 10)
-    .append("rect")
-    .attr("width", 10)
-    .attr("height", 10)
-    .attr("fill", "yellow");
+    .attr("width", 4)
+    .attr("height", 4)
+    .append("path")
+    .attr("d", "M-1,1 l2,-2 M0,4 l4,-4 M3,5 l2,-2")
+    .attr("stroke", "#333333")
+    .attr("stroke-width", 1);
 
-  svg
-    .append("defs")
+  defs
     .append("pattern")
-    .attr("id", "programIcon")
+    .attr("id", "circlePattern")
     .attr("patternUnits", "userSpaceOnUse")
     .attr("width", 10)
     .attr("height", 10)
@@ -157,5 +75,145 @@
     .attr("cx", 5)
     .attr("cy", 5)
     .attr("r", 3)
-    .attr("fill", "green");
+    .attr("fill", "red");
+
+  let selectedOption = "all"; // Default selected option
+
+  const updateMap = () => {
+    svg.selectAll("g.state-group").remove();
+
+    const stateGroups = svg
+      .selectAll("g.state-group")
+      .data(states)
+      .enter()
+      .append("g")
+      .attr("class", "state-group");
+
+    // Create a path for each feature that should have a visual representation on the map
+    stateGroups.each(function (stateData) {
+      const group = d3.select(this);
+
+      // Always create the base layer for each state
+      group
+        .append("path")
+        .attr("d", path(stateData))
+        .attr("fill", "none")
+        .attr("stroke", "black")
+        .attr("stroke-width", 0.5);
+
+      // If showing "all" or if the current state has the specific feature, append a path for it
+      if (selectedOption === "all" || selectedOption === "projects") {
+        if (stateData.properties.projects) {
+          group
+            .append("path")
+            .attr("d", path(stateData))
+            .attr("fill", "#fd9c06");
+        }
+      }
+
+      if (selectedOption === "all" || selectedOption === "legislation") {
+        if (stateData.properties.legislation) {
+          group
+            .append("path")
+            .attr("d", path(stateData))
+            .attr("fill", "url(#diagonalHatch)");
+        }
+      }
+
+      if (selectedOption === "all" || selectedOption === "programs") {
+        if (stateData.properties.programs) {
+          group
+            .append("path")
+            .attr("d", path(stateData))
+            .attr("fill", "url(#circlePattern)");
+        }
+      }
+    });
+
+    // Add event handlers to groups instead of individual paths to prevent duplication
+    stateGroups
+      .on("mouseover", (event, d) => {
+        tooltip.style("opacity", 0.9);
+        tooltip
+          .html(
+            `
+            <div class="tooltip-title">${d.properties.name}</div>
+            <table class="tooltip-content">
+                <tr>
+                    <td><span class="color-legend" style="background-color: #fd9c06"
+                    )};"></span>Projects: </td>
+                    <td class="value">${
+                      d.properties.projects ? "Yes" : "No"
+                    }</td>
+                </tr>
+                <tr>
+                    <td><span class="color-legend" style="background: url(#diagonalHatch)"
+                    )};"></span>Legislation: </td>
+                    <td class="value">${
+                      d.properties.legislation ? "Yes" : "No"
+                    }</td>
+                </tr>
+                <tr>
+                    <td><span class="color-legend" style="background: url(#circlePattern)"
+                    )};"></span>Programs: </td>
+                    <td class="value">${
+                      d.properties.programs ? "Yes" : "No"
+                    }</td>
+                </tr>
+            </table>`
+          )
+          .style("left", `${event.pageX}px`)
+          .style("top", `${event.pageY}px`);
+      })
+      .on("mouseout", () => {
+        tooltip.style("opacity", 0);
+      });
+  };
+
+  //   <tr>
+  //   <td><span class="color-legend" style="background-color: #377eb8"
+  //   )};"></span>Number of Programs: </td>
+  //   <td class="value">${d.properties.numberOfPrograms}</td>
+  // </tr>
+  // <tr>
+  //   <td><span class="color-legend" style="background-color: #377eb8"
+  //   )};"></span>Program Names: </td>
+  //   <td class="value">${d.properties.programNames}</td>
+  // </tr>
+
+  const dropdown = d3.select("#map-dropdown")
+    .style('padding', '10px')
+    .style('border-radius', '5px')
+    // .style('background-color', '#f8f9fa')
+    .style('border', '1px solid #ced4da')
+    .style('font-size', '1rem')
+    .style('color', '#495057')
+    .style('cursor', 'pointer')
+    .on("change", function () {
+        selectedOption = this.value; // Update selected option
+        updateMap();
+    });
+
+  dropdown
+    .selectAll("option")
+    .data(["All", "Projects", "Legislation", "Programs"])
+    .enter()
+    .append("option")
+    .text((d) => d)
+    .attr("value", (d) => d.toLowerCase());
+
+  updateMap();
+
+  svg
+    .append("g")
+    .attr("class", "states-borders")
+    .selectAll("path")
+    .data(topojson.feature(us, us.objects.states).features) // get features for individual states
+    .enter()
+    .append("path")
+    .attr("d", path)
+    .attr("fill", "none") // No fill, only the stroke is needed
+    .attr("stroke", "black") // Black stroke color
+    .attr("stroke-width", 0.5)
+    .attr("stroke-linejoin", "round"); // for rounded corners if needed
 })();
