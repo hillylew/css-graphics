@@ -132,6 +132,22 @@ table.tooltip-total {
   margin-right: 5px;
 }
 
+/* Map Dropdown */
+#map-dropdown {
+  margin: 5px;
+  /* padding: 10px;
+  border-radius: 5px;
+  background-color: #f8f9fa;
+  border: 1px solid #ced4da;
+  color: #495057;
+  cursor: pointer; */
+}
+
+/* #map-dropdown option {
+  padding: 5px;
+  background-color: #ffffff;
+} */
+
 
 
 /* tablet */

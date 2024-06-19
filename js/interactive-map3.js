@@ -107,7 +107,7 @@
           group
             .append("path")
             .attr("d", path(stateData))
-            .attr("fill", "#fd9c06");
+            .attr("fill", "#ffd579")
         }
       }
 
@@ -140,7 +140,7 @@
             <div class="tooltip-title">${d.properties.name}</div>
             <table class="tooltip-content">
                 <tr>
-                    <td><span class="color-legend" style="background-color: #fd9c06"
+                    <td><span class="color-legend" style="background-color: #ffd579"
                     )};"></span>Projects: </td>
                     <td class="value">${
                       d.properties.projects ? "Yes" : "No"
