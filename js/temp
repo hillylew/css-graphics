@@ -1,312 +1,126 @@
 (function () {
-    const aspectRatio = 0.7; // Define an aspect ratio for the chart
+  /* ----------------------- Dynamic dimensions ----------------------- */
+  const aspectRatio = 0.7;
+
+  // Get the container and its dimensions
+  const container = document.getElementById("column-chart2");
+  const containerWidth = container.offsetWidth; // Use offsetWidth for full element width
+  const containerHeight = containerWidth * aspectRatio; // Calculate the height based on the width and aspect ratio
+
+  // Calculate the dynamic margins
+  const dynamicMargin = {
+    top: containerHeight * 0.08,
+    right: containerWidth * 0.15, // Adjust right margin if labels are too long
+    bottom: containerHeight * 0.1,
+    left: containerWidth * 0.22, // Increase left margin to fit labels
+  };
+
+  // Calculate the width and height for the inner drawing area
+  const width = containerWidth - dynamicMargin.left - dynamicMargin.right;
+  const height = containerHeight - dynamicMargin.top - dynamicMargin.bottom;
+
+  // Append SVG object
+  const svg = d3
+    .select("#column-chart2")
+    .append("svg")
+    .attr("viewBox", `0 0 ${containerWidth} ${containerHeight}`)
+    .attr("preserveAspectRatio", "xMinYMin meet")
+    .append("g")
+    .attr("transform", `translate(${dynamicMargin.left},${dynamicMargin.top})`);
+
+  /* ----------------------- Scales, axes, and color ----------------------- */
+  const xScale = d3.scaleLinear().range([0, width]);
+  const yScale = d3.scaleBand().range([0, height]).padding(0.1);
+  const colorScale = d3
+    .scaleOrdinal()
+    .range([
+      "#b577b0",
+      "#caa57c",
+      "#4c9d97",
+      "#37547c",
+      "#e16674",
+      "#ae416c",
+      "#c1824b",
+      "#c36043",
+      "#799a6c",
+      "#a25b61",
+    ]); // Updated color range
+  const formatDecimal = d3.format(".1f"); // Formatter to round to one decimal place
+
+  /* ----------------------- Icon mapping ----------------------- */
+
+const feedstockIconMap = {
+    'Jatropha': './svg/biofuels.svg',
+    'Cellulosic (Various)': './svg/biofuels.svg',
+    'Cellulosic (Poplar)': './svg/biofuels.svg',
+    'Cellulosic (Corn Stover)': './svg/biofuels.svg',
+    'Palm Oil': './svg/biofuels.svg',
+    'Biodiesel (Soybean)': './svg/biofuels.svg',
+    'Microalgae': './svg/biofuels.svg',
+    'Waste Loquat Seed Oil': './svg/biofuels.svg',
+    'Waste Date Seed Oil': './svg/biofuels.svg',
+    'Corn': './svg/biofuels.svg',
+  };
   
-    // Get the container and its dimensions
-    const container = document.getElementById("line-chart");
-    const containerWidth = container.offsetWidth; // Use offsetWidth for full element width
-    const containerHeight = containerWidth * aspectRatio; // Calculate the height based on the width and aspect ratio
-  
-    // Calculate the dynamic margins
-    const dynamicMargin = {
-      top: containerHeight * 0.1, // 5% of the container height
-      right: containerWidth * 0.15, // 10% of the container width
-      bottom: containerHeight * 0.1, // 10% of the container height
-      left: containerWidth * 0.07, // 5% of the container width
-    };
-  
-    // Calculate the width and height for the inner drawing area
-    const width = containerWidth - dynamicMargin.left - dynamicMargin.right;
-    const height = containerHeight - dynamicMargin.top - dynamicMargin.bottom;
-  
-    // Append SVG object
-    const svg = d3
-      .select("#line-chart")
-      .append("svg")
-      .attr("viewBox", `0 0 ${containerWidth} ${containerHeight}`)
-      .attr("preserveAspectRatio", "xMinYMin meet")
+  // Function to retrieve icons, expects the category to get the appropriate icon URL
+  function getFeedstockIconUrl(category) {
+    return feedstockIconMap[category];
+  }
+
+  const yAxis = (g) => g.call(d3.axisLeft(yScale).tickSizeOuter(0).tickSizeInner(0).tickPadding(5));
+
+
+  svg.append("text")
+  .attr("x", width / 2)
+  .attr("y", -dynamicMargin.top/2) // Place below the chart
+  .attr("class", "chart-labels")
+  .attr("text-anchor", "middle") // Center the text
+  .attr("fill", "#000") // Text color
+  .style("font-size", "12px") // Set font size
+  .text("Fossil Energy Ratio (FER)"); 
+
+  /* ----------------------- Loading and processing data ----------------------- */
+  d3.csv("data/graph-16-data.csv", (d) => ({
+    feedstock: d.Feedstock,
+    energyRatio: +d["Fossil Energy Ratio"],
+  })).then((data) => {
+    // Update scales and color domain
+    xScale.domain([0, d3.max(data, (d) => d.energyRatio)]);
+    yScale.domain(data.map((d) => d.feedstock));
+    colorScale.domain(data.map((d) => d.feedstock));
+
+    // Draw the y-axis
+    svg
       .append("g")
-      .attr("transform", `translate(${dynamicMargin.left},${dynamicMargin.top})`);
-  
-    // X and Y scales
-    const x = d3.scaleTime().range([0, width]);
-    const y = d3.scaleLinear().range([height, 0]);
-  
-    // Define the axes
-    const xAxis = d3.axisBottom(x).tickFormat(d3.timeFormat("%Y"));
-    const yAxis = d3.axisLeft(y).tickFormat(d3.format("$,.2f")); // Format as dollars with two decimal places
-  
-    const colorScale = d3
-      .scaleOrdinal()
-      .domain([
-        "22 Panel System Residential PV",
-        "200 kW Commercial PV",
-        "100 MW Utility-Scale PV, Fixed Tilt",
-        "100 MW Utility-Scale PV, One Axis Tracker",
-      ])
-      .range(["#e41a1c", "#377eb8", "#4daf4a", "#984ea3"]);
-  
-    const tooltip = d3.select("#tooltip");
-  
-    // Load and process the CSV data
-    d3.csv("./data/graph-5-data.csv").then((data) => {
-      // Parse years and convert string values to numbers
-      data.forEach((d) => {
-        d.Year = new Date(+d.Year, 0, 1);
-        for (let prop in d) {
-          if (prop !== "Year") d[prop] = +d[prop];
-        }
-      });
-  
-      // Update the scale domains with the processed data
-      x.domain(d3.extent(data, (d) => d.Year));
-      const maxYValue = Math.ceil(
-        d3.max(data, (d) =>
-          Math.max(
-            d["22 Panel System Residential PV"],
-            d["200 kW Commercial PV"],
-            d["100 MW Utility-Scale PV, Fixed Tilt"],
-            d["100 MW Utility-Scale PV, One Axis Tracker"]
-          )
-        )
-      );
-      y.domain([0, maxYValue]);
-  
-      // Draw the Y-axis
-      const yAxisGroup = svg
-        .append("g")
-        .call(yAxis)
-        .attr("class", "chart-labels");
-  
-      // Append y-axis label
-      yAxisGroup
-        .append("text")
-        .attr("class", "chart-labels")
-        .attr("text-anchor", "middle")
-        .attr("transform", `translate(0, -${dynamicMargin.top / 2})`)
-        .style("fill", "#000")
-        .text("2023 USD / Watt");
-  
-      // Draw the X-axis
-      // Add 2023 as a Date object
-      const xTickValues = x.ticks().concat(new Date(2023, 0, 1));
-      xAxis.tickValues(xTickValues);
-  
-      const xAxisGroup = svg
-        .append("g")
-        .attr("transform", `translate(0,${height})`)
-        .call(xAxis);
-  
-      // const xAxisGroup = svg
-      //   .append("g")
-      //   .attr("transform", `translate(0,${height})`)
-      //   .call(xAxis.tickFormat(d3.timeFormat("%Y")));
-  
-      // // Here we'll filter tick values to show every other year except 2023
-      // const tickValues = x.ticks().filter(function (d) {
-      //   return d.getFullYear() % 2 === 0 || d.getFullYear() === 2023;
-      // });
-      // xAxis.tickValues(tickValues);
-  
-      // Now call the axis with the new tick values
-      xAxisGroup.call(xAxis);
-  
-      xAxisGroup.selectAll(".tick text").attr("class", "chart-labels");
-      // .style("text-anchor", (d) => {
-      //   return d.getFullYear() === 2010
-      //     ? "start"
-      //     : d.getFullYear() === 2023
-      //     ? "end"
-      //     : "middle";
-      // });
-  
-      // Define the line generator
-      const lineGenerator = d3
-        .line()
-        .x((d) => x(d.Year))
-        .y((d) => y(d.value));
-  
-      // Transform the data into a format suitable for line charts
-      const keys = [
-        "22 Panel System Residential PV",
-        "200 kW Commercial PV",
-        "100 MW Utility-Scale PV, Fixed Tilt",
-        "100 MW Utility-Scale PV, One Axis Tracker",
-      ];
-      const lineData = keys.map((key) => ({
-        key,
-        values: data.map((d) => ({ Year: d.Year, value: d[key] })),
-      }));
-  
-      // Create a group for each line
-      const lines = svg
-        .selectAll(".line")
-        .data(lineData)
-        .enter()
-        .append("g")
-        .attr("class", "line");
-  
-      // Draw the lines
-      lines
-        .append("path")
-        .attr("class", "line-path")
-        .attr("d", (d) => lineGenerator(d.values))
-        .style("fill", "none")
-        .style("stroke", (d) => colorScale(d.key))
-        .style("stroke-width", 1);
-  
-      // Add legend
-      const legend = svg
-        .selectAll(".legend")
-        .data(lineData)
-        .enter()
-        .append("g")
-        .attr("class", "legend")
-        .on("mouseover", (event, d) => {
-          // Highlight the hovered line
-          svg
-            .selectAll(".line-path")
-            .style("opacity", (lineData) => (lineData.key === d.key ? 1 : 0.2))
-            .style("stroke-width", (lineData) =>
-              lineData.key === d.key ? 2 : 1
-            ); // Adjust stroke width on hover
-        })
-        .on("mouseout", () => {
-          // Reset style for all lines on mouseout
-          svg
-            .selectAll(".line-path")
-            .style("opacity", 1)
-            .style("stroke-width", 1); // Reset stroke width
-        });
-  
-      // Append legend text
-      legend.each(function (series, index) {
-        const lastDatum = series.values[series.values.length - 1]; // Get the last data point
-        const legendItem = d3.select(this);
-        const legendNames = {
-          "22 Panel System Residential PV": ["Residential PV"],
-          "200 kW Commercial PV": ["Commercial PV"],
-          "100 MW Utility-Scale PV, Fixed Tilt": [
-            "Fixed Tilt",
-            "Utility-Scale PV",
-          ],
-          "100 MW Utility-Scale PV, One Axis Tracker": [
-            "One Axis Tracker",
-            "Utility-Scale PV",
-          ],
-        };
-  
-        const lines = legendNames[series.key];
-  
-        lines.forEach((line, i) => {
-          legendItem
-            .append("text")
-            .datum(lastDatum)
-            .attr("transform", function (d) {
-              return `translate(${width},${y(d.value) + i * 12})`; // Adjust these values as needed for correct positioning
-            })
-            .attr("class", "chart-labels")
-            .attr("x", 5) // This sets the distance of the text from the end of the line
-            .attr("dy", ".35em") // This aligns the text vertically
-            .style("fill", colorScale(series.key))
-            .text(line);
-        });
-      });
-  
-      function onMouseMove(event) {
-        const [xPos, yPos] = d3.pointer(event, this);
-        const date = x.invert(xPos);
-        const hoverData = data.find(
-          (d) => d.Year.getFullYear() === date.getFullYear()
-        );
-  
-        // Position tooltip
-        tooltip
-          .style("opacity", 0.9)
-          .style("left", `${event.pageX + dynamicMargin.left / 4}px`)
-          .style("top", `${event.pageY}px`);
-  
-        const formatNumber = d3.format(",");
-        if (hoverData) {
-          tooltip.html(`
-                <div class="tooltip-title">${hoverData.Year.getFullYear()}</div>
-                <table class="tooltip-content">
-                    <tr>
-                        <td><span class="color-legend" style="background-color: ${colorScale(
-                          "22 Panel System Residential PV"
-                        )};"></span>22 Panel System Residential PV</td>
-                        <td class="value">$${formatNumber(
-                          hoverData["22 Panel System Residential PV"]
-                        )}</td>
-                    </tr>
-                    <tr>
-                        <td><span class="color-legend" style="background-color: ${colorScale(
-                          "200 kW Commercial PV"
-                        )};"></span>200 kW Commercial PV</td>
-                        <td class="value">$${formatNumber(
-                          hoverData["200 kW Commercial PV"]
-                        )}</td>
-                    </tr>
-                    <tr>
-                        <td><span class="color-legend" style="background-color: ${colorScale(
-                          "100 MW Utility-Scale PV, One Axis Tracker"
-                        )};"></span>100 MW Utility-Scale PV, One Axis Tracker</td>
-                        <td class="value">$${formatNumber(
-                          hoverData["100 MW Utility-Scale PV, One Axis Tracker"]
-                        )}</td>
-                    </tr>
-                    <tr>
-                    <td><span class="color-legend" style="background-color: ${colorScale(
-                      "100 MW Utility-Scale PV, Fixed Tilt"
-                    )};"></span>100 MW Utility-Scale PV, Fixed Tilt</td>
-                    <td class="value">$${formatNumber(
-                      hoverData["100 MW Utility-Scale PV, Fixed Tilt"]
-                    )}</td>
-                </tr>
-                </table>
-              `);
-  
-          mouseG
-            .selectAll("circle")
-            .data(keys)
-            .join("circle")
-            .attr("cx", x(hoverData.Year))
-            .attr("cy", (d) => y(hoverData[d]))
-            .attr("r", 4)
-            .style("fill", (d) => colorScale(d))
-            .style("stroke", "white")
-            .style("opacity", "1");
-  
-          // Draw the vertical line
-          mouseG
-            .select(".mouse-line")
-            .style("opacity", "1")
-            .attr("d", () => `M${x(hoverData.Year)},0V${height}`);
-        }
-      }
-  
-      const mouseG = svg.append("g").attr("class", "mouse-over-effects");
-  
-      // Append a line that will follow the mouse cursor
-      mouseG
-        .append("path")
-        .attr("class", "mouse-line")
-        .style("stroke", "#999")
-        .style("stroke-width", "0.5px")
-        .style("opacity", "0");
-  
-      // Create a rect for listening to mouse events
-      svg
-        .append("rect")
-        .attr("class", "listening-rect")
-        .attr("width", width + dynamicMargin.left / 4)
-        .attr("height", height)
-        .attr("fill", "none")
-        .attr("pointer-events", "all")
-        .on("mousemove", onMouseMove)
-        .on("mouseout", () => {
-          tooltip.style("opacity", 0);
-          mouseG.selectAll("circle").style("opacity", "0");
-          mouseG.select(".mouse-line").style("opacity", "0");
-        });
-    });
-  })();
+      .call(yAxis)
+      .selectAll(".tick text") // select all text elements within ticks
+      .attr("class", "chart-labels"); // Set the class to 'chart-labels'
+
+    /* ----------------------- Drawing bars ----------------------- */
+    svg
+      .selectAll(".bar")
+      .data(data)
+      .enter()
+      .append("rect")
+      .attr("class", "bar")
+      .attr("x", 0)
+      .attr("y", (d) => yScale(d.feedstock))
+      .attr("width", (d) => xScale(d.energyRatio))
+      .attr("height", yScale.bandwidth())
+      .attr("fill", (d) => colorScale(d.feedstock)); // Use color scale for fill
+
+    /* ----------------------- Adding labels ----------------------- */
+    svg
+      .selectAll(".label")
+      .data(data)
+      .enter()
+      .append("text")
+      .attr("class", "chart-labels")
+      .attr("x", (d) => xScale(d.energyRatio) + 3) // Offset the label to the right of the bar
+      .attr("y", (d) => yScale(d.feedstock) + yScale.bandwidth() / 2)
+      .attr("dy", "0.35em") // Vertically center
+      .text((d) => formatDecimal(d.energyRatio)) // Round to one decimal place
+      .attr("font-size", "10px") // Adjust font size if needed
+      .attr("fill", "#000"); // Text color
+  });
+})();

@@ -65,17 +65,28 @@
     .attr("stroke", "#333333")
     .attr("stroke-width", 1);
 
-  defs
-    .append("pattern")
-    .attr("id", "circlePattern")
-    .attr("patternUnits", "userSpaceOnUse")
-    .attr("width", 10)
-    .attr("height", 10)
-    .append("circle")
-    .attr("cx", 5)
-    .attr("cy", 5)
-    .attr("r", 3)
-    .attr("fill", "red");
+  // defs
+  //   .append("pattern")
+  //   .attr("id", "circlePattern")
+  //   .attr("patternUnits", "userSpaceOnUse")
+  //   .attr("width", 8)
+  //   .attr("height", 8)
+  //   .append("circle")
+  //   .attr("cx", 4)
+  //   .attr("cy", 4)
+  //   .attr("r", 2)
+  //   .attr("fill", "red");
+  // Define the vertical line pattern
+defs
+.append("pattern")
+.attr("id", "verticalLinePattern")
+.attr("patternUnits", "userSpaceOnUse")
+.attr("width", 5) // width of the pattern box
+.attr("height", 4) // height of the pattern box
+.append("path")
+.attr("d", "M 2,0 L 2,4") // A path for vertical line
+.attr("stroke", "red") // Color of the line
+.attr("stroke-width", 1.2); // Width of the stroke
 
   let selectedOption = "all"; // Default selected option
 
@@ -107,7 +118,7 @@
           group
             .append("path")
             .attr("d", path(stateData))
-            .attr("fill", "#ffd579")
+            .attr("fill", "#FFFF8F");
         }
       }
 
@@ -125,7 +136,8 @@
           group
             .append("path")
             .attr("d", path(stateData))
-            .attr("fill", "url(#circlePattern)");
+            // .attr("fill", "url(#circlePattern)");
+            .attr("fill", "url(#verticalLinePattern)");
         }
       }
     });
@@ -137,30 +149,39 @@
         tooltip
           .html(
             `
-            <div class="tooltip-title">${d.properties.name}</div>
-            <table class="tooltip-content">
-                <tr>
-                    <td><span class="color-legend" style="background-color: #ffd579"
-                    )};"></span>Projects: </td>
-                    <td class="value">${
-                      d.properties.projects ? "Yes" : "No"
-                    }</td>
-                </tr>
-                <tr>
-                    <td><span class="color-legend" style="background: url(#diagonalHatch)"
-                    )};"></span>Legislation: </td>
-                    <td class="value">${
-                      d.properties.legislation ? "Yes" : "No"
-                    }</td>
-                </tr>
-                <tr>
-                    <td><span class="color-legend" style="background: url(#circlePattern)"
-                    )};"></span>Programs: </td>
-                    <td class="value">${
-                      d.properties.programs ? "Yes" : "No"
-                    }</td>
-                </tr>
-            </table>`
+              <div class="tooltip-title">${d.properties.name}</div>
+              <table class="tooltip-content">
+                  <tr>
+                      <td><span class="color-legend" style="background-color: #FFFF8F"></span>Projects: </td>
+                      <td class="value">${
+                        d.properties.projects ? "Yes" : "No"
+                      }</td>
+                  </tr>
+                  <tr>
+                      <td><span class="color-legend" style="background: url(#diagonalHatch)"></span>Legislation: </td>
+                      <td class="value">${
+                        d.properties.legislation ? "Yes" : "No"
+                      }</td>
+                  </tr>
+                  <tr>
+                      <td><span class="color-legend" style="background: url(#circlePattern)"></span>Programs: </td>
+                      <td class="value">${
+                        d.properties.programs ? "Yes" : "No"
+                      }</td>
+                  </tr>
+                  <tr>
+                      <td><span class="color-legend" style="background: url(#circlePattern)"></span>Number of Programs: </td>
+                      <td class="value">${
+                        d.properties.numberOfPrograms
+                      }</td>
+                  </tr>
+                  <tr>
+                      <td><span class="color-legend" style="background: url(#circlePattern)"></span>Program Names: </td>
+                      <td class="value">${
+                        d.properties.programNames
+                      }</td>
+                  </tr>
+              </table>`
           )
           .style("left", `${event.pageX}px`)
           .style("top", `${event.pageY}px`);
@@ -170,28 +191,18 @@
       });
   };
 
-  //   <tr>
-  //   <td><span class="color-legend" style="background-color: #377eb8"
-  //   )};"></span>Number of Programs: </td>
-  //   <td class="value">${d.properties.numberOfPrograms}</td>
-  // </tr>
-  // <tr>
-  //   <td><span class="color-legend" style="background-color: #377eb8"
-  //   )};"></span>Program Names: </td>
-  //   <td class="value">${d.properties.programNames}</td>
-  // </tr>
-
-  const dropdown = d3.select("#map-dropdown")
-    .style('padding', '10px')
-    .style('border-radius', '5px')
-    // .style('background-color', '#f8f9fa')
-    .style('border', '1px solid #ced4da')
-    .style('font-size', '1rem')
-    .style('color', '#495057')
-    .style('cursor', 'pointer')
+  const dropdown = d3
+    .select("#map-dropdown")
+    .style("padding", "10px")
+    .style("border-radius", "5px")
+    .style("border", "1px solid #ced4da")
+    .style("font-size", "1rem")
+    .style("background-color", "#eaeaea")
+    .style("color", "#495057")
+    .style("cursor", "pointer")
     .on("change", function () {
-        selectedOption = this.value; // Update selected option
-        updateMap();
+      selectedOption = this.value; // Update selected option
+      updateMap();
     });
 
   dropdown
@@ -216,4 +227,43 @@
     .attr("stroke", "black") // Black stroke color
     .attr("stroke-width", 0.5)
     .attr("stroke-linejoin", "round"); // for rounded corners if needed
+
+  // Create the legend
+  const legendData = [
+    { color: "#FFFF8F", text: "Projects" },
+    { color: "url(#diagonalHatch)", text: "Legislation" },
+    { color: "url(#verticalLinePattern)", text: "Programs" },
+  ];
+
+  const legend = svg
+    .append("g")
+    .attr("class", "legend")
+    .attr(
+      "transform",
+      `translate(${width + dynamicMargin.left / 2}, ${height / 2})`
+    );
+
+  const legendRectWidth = containerWidth * 0.02; // 2% of container width
+  const legendRectHeight = containerHeight * 0.02; // 2% of container height
+
+  legend
+    .selectAll("rect")
+    .data(legendData)
+    .enter()
+    .append("rect")
+    .attr("x", 0)
+    .attr("y", (d, i) => i * (legendRectHeight + 5)) // Add some spacing between rectangles
+    .attr("width", legendRectWidth)
+    .attr("height", legendRectHeight)
+    .style("fill", (d) => d.color);
+
+  legend
+    .selectAll("text")
+    .data(legendData)
+    .enter()
+    .append("text")
+    .attr("x", legendRectWidth + 5) // Position text to the right of the rectangle
+    .attr("y", (d, i) => i * (legendRectHeight + 5) + legendRectHeight) // Center text vertically
+    .style("font-size", "12px")
+    .text((d) => d.text);
 })();

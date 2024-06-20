@@ -34,16 +34,15 @@
   const colorScale = d3
     .scaleOrdinal()
     .range([
-      "#b577b0",
-      "#caa57c",
-      "#4c9d97",
-      "#37547c",
-      "#e16674",
       "#ae416c",
+      "#ae416c",
+      "#ae416c",
+      "#e16674",
+      "#e16674",
+      "#e16674",
       "#c1824b",
       "#c36043",
       "#799a6c",
-      "#a25b61",
     ]); // Updated color range
   const formatDecimal = d3.format(".1f"); // Formatter to round to one decimal place
 
