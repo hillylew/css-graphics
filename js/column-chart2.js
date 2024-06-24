@@ -10,7 +10,7 @@
   // Calculate the dynamic margins
   const dynamicMargin = {
     top: containerHeight * 0.08,
-    right: containerWidth * 0.15, // Adjust right margin if labels are too long
+    right: containerWidth * 0.05, // Adjust right margin if labels are too long
     bottom: containerHeight * 0.1,
     left: containerWidth * 0.22, // Increase left margin to fit labels
   };
@@ -75,7 +75,6 @@ const feedstockIconMap = {
   .attr("class", "chart-labels")
   .attr("text-anchor", "middle") // Center the text
   .attr("fill", "#000") // Text color
-  .style("font-size", "12px") // Set font size
   .text("Fossil Energy Ratio (FER)"); 
 
   /* ----------------------- Loading and processing data ----------------------- */
