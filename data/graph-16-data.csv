@@ -1,10 +1,12 @@
-﻿Feedstock,Fossil Energy Ratio
-Biodiesel (Jatropha),15
-Biodiesel (Soybean),3.8875
-Biodiesel (Palm Oil),3.15
-Cellulosic (Various),6.61
-Cellulosic (Poplar),4.55
-Cellulosic  (Corn Stover),4.4
-Corn,1.36 
-Diesel, 0.84
-Gasoline, 0.76
+﻿Feedstock,Fossil Energy Ratio,Range
+Biodiesel (Jatropha),15,
+Biodiesel (Soybean),4.56,
+Biodiesel (Palm Oil),3.15,
+Biodiesel (Microalgae),3,
+Biodiesel (Seed Oil),2.2,(2.17-2.23)
+Cellulosic (Various),6.61,
+Cellulosic (Poplar),4.55,
+Cellulosic  (Corn Stover),4.4,
+Corn,1.36,(0.84-1.65)
+Diesel, 0.84,
+Gasoline, 0.76,

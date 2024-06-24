@@ -57,6 +57,10 @@ header a {
   font-size: 7px;
 }
 
+.chart-subtitle {
+  font-size: 9px;
+}
+
 .diagram-labels {
   font-size: 10px;
 }
@@ -181,6 +185,10 @@ table.tooltip-total {
     font-size: 10px;
   }
 
+  .chart-subtitle {
+    font-size: 12px;
+  }
+
   .diagram-labels {
     font-size: 16px;
   }
@@ -216,6 +224,10 @@ table.tooltip-total {
 
   .chart-labels {
     font-size: 12px;
+  }
+
+  .chart-subtitle {
+    font-size: 14px;
   }
 
   .diagram-labels {

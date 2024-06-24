@@ -63,7 +63,7 @@
       svg.append("text")
       .attr("x", width / 2)
       .attr("y", -dynamicMargin.top/2) // Place below the chart
-      .attr("class", "chart-labels")
+      .attr("class", "chart-subtitle")
       .attr("text-anchor", "middle") // Center the text
       .attr("fill", "#000") // Text color
       .text("Biodiesel"); 

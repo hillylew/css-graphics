@@ -37,8 +37,8 @@
 
   const colorScale = d3
     .scaleOrdinal()
-    .domain(["U.S.", "European Union", "Brazil", "Indonesia", "India"])
-    .range(["#eb5250", "#6298c6", "#75bf70", "#ae71b6", "#f38f53"]);
+    .domain(["U.S.", "European Union", "Brazil", "India"])
+    .range(["#eb5250", "#6298c6", "#75bf70", "#f38f53"]);
   // .range(["#1d476d", "#3167a4", "#8fc8e5", "#ffcb03", "#ffd579"]);
 
   const tooltip = d3.select("#tooltip");
@@ -56,14 +56,14 @@
     // Stack the data
     const stack = d3
       .stack()
-      .keys(["U.S.", "European Union", "Brazil", "Indonesia", "India"]);
+      .keys(["U.S.", "European Union", "Brazil", "India"]);
     const stackedData = stack(data);
 
     svg
       .append("text")
       .attr("x", width / 2)
       .attr("y", -dynamicMargin.top / 2) // Place below the chart
-      .attr("class", "chart-labels")
+      .attr("class", "chart-subtitle")
       .attr("text-anchor", "middle") // Center the text
       .attr("fill", "#000") // Text color
       .text("Ethanol");
@@ -242,8 +242,7 @@
           hoverData["U.S."] +
           hoverData.Brazil +
           hoverData["European Union"] +
-          hoverData.India +
-          hoverData.Indonesia;
+          hoverData.India;
 
         tooltip.html(`
                   <div class="tooltip-title">${hoverData.Year.getFullYear()}</div>
@@ -258,16 +257,6 @@
                       )} (${formatNumber2(
           (hoverData.India / total) * 100
         )}%)</td>
-                      </tr>
-                      <tr>
-                          <td><span class="color-legend" style="background-color: ${colorScale(
-                            "Indonesia"
-                          )};"></span>Indonesia</td>
-                          <td class="value">${formatNumber(
-                            hoverData.Indonesia
-                          )} (${formatNumber2(
-          (hoverData.Indonesia / total) * 100
-        )}%) </td>
                       </tr>
                       <tr>
                           <td><span class="color-legend" style="background-color: ${colorScale(
@@ -313,7 +302,7 @@
         let accumulatingStack = 0;
 
         // Calculate the top edge of each stack element
-        ["U.S.", "European Union", "Brazil", "Indonesia", "India"].forEach(
+        ["U.S.", "European Union", "Brazil", "India"].forEach(
           (cat) => {
             accumulatingStack += hoverData[cat];
             totalStack.push(accumulatingStack);

@@ -37,6 +37,8 @@
       "#ae416c",
       "#ae416c",
       "#ae416c",
+      "#ae416c",
+      "#ae416c",
       "#e16674",
       "#e16674",
       "#e16674",
@@ -47,24 +49,6 @@
   const formatDecimal = d3.format(".1f"); // Formatter to round to one decimal place
 
   /* ----------------------- Icon mapping ----------------------- */
-
-const feedstockIconMap = {
-    'Jatropha': './svg/biofuels.svg',
-    'Cellulosic (Various)': './svg/biofuels.svg',
-    'Cellulosic (Poplar)': './svg/biofuels.svg',
-    'Cellulosic (Corn Stover)': './svg/biofuels.svg',
-    'Palm Oil': './svg/biofuels.svg',
-    'Biodiesel (Soybean)': './svg/biofuels.svg',
-    'Microalgae': './svg/biofuels.svg',
-    'Waste Loquat Seed Oil': './svg/biofuels.svg',
-    'Waste Date Seed Oil': './svg/biofuels.svg',
-    'Corn': './svg/biofuels.svg',
-  };
-  
-  // Function to retrieve icons, expects the category to get the appropriate icon URL
-  function getFeedstockIconUrl(category) {
-    return feedstockIconMap[category];
-  }
 
   const yAxis = (g) => g.call(d3.axisLeft(yScale).tickSizeOuter(0).tickSizeInner(0).tickPadding(5));
 
@@ -81,6 +65,7 @@ const feedstockIconMap = {
   d3.csv("data/graph-16-data.csv", (d) => ({
     feedstock: d.Feedstock,
     energyRatio: +d["Fossil Energy Ratio"],
+    range: d.Range,
   })).then((data) => {
     // Update scales and color domain
     xScale.domain([0, d3.max(data, (d) => d.energyRatio)]);
@@ -118,7 +103,21 @@ const feedstockIconMap = {
       .attr("y", (d) => yScale(d.feedstock) + yScale.bandwidth() / 2)
       .attr("dy", "0.35em") // Vertically center
       .text((d) => formatDecimal(d.energyRatio)) // Round to one decimal place
-      .attr("font-size", "10px") // Adjust font size if needed
       .attr("fill", "#000"); // Text color
+
+
+    /* ----------------------- Adding ranges ----------------------- */
+    svg
+      .selectAll(".label")
+      .data(data)
+      .enter()
+      .append("text")
+      .attr("class", "chart-labels")
+      .attr("x", (d) => xScale(d.energyRatio) + width * 0.06) // Offset the label to the right of the bar
+      .attr("y", (d) => yScale(d.feedstock) + yScale.bandwidth() / 2)
+      .attr("dy", "0.35em") // Vertically center
+      .text((d) => d.range) // Round to one decimal place
+      .attr("fill", "#000"); // Text color
+
   });
 })();
