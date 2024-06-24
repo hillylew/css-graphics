@@ -86,7 +86,7 @@ defs
 .append("path")
 .attr("d", "M 2,0 L 2,4") // A path for vertical line
 .attr("stroke", "red") // Color of the line
-.attr("stroke-width", 1.2); // Width of the stroke
+.attr("stroke-width", 1.5); // Width of the stroke
 
   let selectedOption = "all"; // Default selected option
 
@@ -240,7 +240,7 @@ defs
     .attr("class", "legend")
     .attr(
       "transform",
-      `translate(${width + dynamicMargin.left / 2}, ${height / 2})`
+      `translate(${width + dynamicMargin.left / 3}, ${height / 2})`
     );
 
   const legendRectWidth = containerWidth * 0.02; // 2% of container width

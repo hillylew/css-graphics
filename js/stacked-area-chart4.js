@@ -1,6 +1,6 @@
 (function () {
   /* ----------------------- Dynamic dimensions ----------------------- */
-  const aspectRatio = 0.7;
+  const aspectRatio = 0.5;
 
   // Get the container and its dimensions
   const container = document.getElementById("stacked-area-chart4");
