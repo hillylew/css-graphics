@@ -42,8 +42,12 @@
     .domain(["Biomass", "Hydroelectric", "Wind", "Solar", "Geothermal"])
     // .range(["#eb5250", "#6298c6", "#75bf70", "#ae71b6", "#f38f53"]);
     // .range(["#00274c", "#1d476d", "#3167a4", "#8fc8e5", "#d8d8d8"]);
-    .range(["#1d476d", "#3167a4", "#8fc8e5", "#386660", "#e2e27a"]);
+    // .range(["#1d476d", "#3167a4", "#8fc8e5", "#386660", "#e2e27a"]);
     // .range(["#1d476d", "#3167a4", "#8fc8e5", "#ffcb03", "#ffd579"]);
+
+    .range(["#1d476d", "#4084bc", "#73b9e0", "#aedbed", "#d8d8d8"]);
+    // .range(["#1d476d", "#4084bc", "#aedbed", "#386660", "#e2e27a"]);
+    // .range(["#1d476d", "#4084bc", "#8cc9f2", "#ffcb03", "#ffe07d"]);
   
 
   const tooltip = d3.select("#tooltip");
