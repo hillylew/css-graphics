@@ -19,29 +19,30 @@
     />
   </head>
   <body>
-
     <header>
-        <a id="name" href="wind-energy.html"> Wind Energy Factsheet </a>
-        <a id="name" href="index.html"> &lt; Go Back </a>
+      <a id="name" href="environmental-justice.html">
+        Greenhouse Gases Factsheet
+      </a>
+      <a id="name" href="index.html"> &lt; Go Back </a>
     </header>
 
-    <!-- Wind Energy -->
+    <!-- Greenhouse Gases Justice -->
     <!-- Figure 1 -->
     <div class="CaptionedChart">
-        <div class="HeaderHTML">
-          <span>U.S. Average Unsubsidized Levelized Cost of Energy (LCOE) for On-Shore Wind</span>
-        </div>
-  
-        <div id="wind-energy-line-chart" class="chart"></div>
+      <div class="HeaderHTML">
+        <span>The Main Greenhouse Gases</span>
+      </div>
+
+      <div id="greenhouse-gases-graph" class="chart"></div>
     </div>
 
     <!-- Figure 2 -->
     <div class="CaptionedChart">
-        <div class="HeaderHTML">
-          <span>Global Wind Capacity</span>
-        </div>
-  
-        <div id="wind-energy-stacked-area-chart" class="chart"></div>
+      <div class="HeaderHTML">
+        <span>U.S. GHG Emissions by Gas</span>
+      </div>
+
+      <div id="greenhouse-gases-stacked-column-chart" class="chart"></div>
     </div>
 
     <!-- tooltip -->
@@ -50,8 +51,11 @@
     <!-- D3.js -->
     <script src="https://d3js.org/d3.v7.min.js"></script>
 
+    <!-- D3.js Map Library -->
+    <script src="https://d3js.org/topojson.v3.min.js"></script>
+
     <!-- js files-->
-    <script src="./js/wind-energy/wind-energy-line-chart.js"></script>
-    <script src="./js/wind-energy/wind-energy-stacked-area-chart.js"></script>
+    <script src="./js/greenhouse-gases/greenhouse-gases-graph.js"></script>
+    <script src="./js/greenhouse-gases/greenhouse-gases-stacked-column-chart.js"></script>
   </body>
 </html>

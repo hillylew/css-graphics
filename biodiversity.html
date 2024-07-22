@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Renewable Energy Factsheet Graphics</title>
+    <title>CSS Graphics</title>
     <link rel="stylesheet" href="./css/stylesheet.css" />
 
     <!-- Google Font -->
@@ -19,42 +19,38 @@
     />
   </head>
   <body>
-
     <header>
-        <a id="name" href="biodiversity.html"> Biodiversity Factsheet </a>
-        <a id="name" href="index.html"> &lt; Go Back </a>
+      <a id="name" href="biodiversity.html"> Biodiversity Factsheet </a>
+      <a id="name" href="index.html"> &lt; Go Back </a>
     </header>
-    
+
     <!-- Biodiveristy -->
+    <!-- Figure 1 -->
     <div class="CaptionedChart">
       <div class="HeaderHTML">
-        <span
-          >Catalogued Earth and Ocean Species</span
-        >
+        <span>Catalogued Earth and Ocean Species</span>
       </div>
 
-      <div id="stacked-column-chart4" class="chart"></div>
+      <div id="biodiversity-stacked-column-chart" class="chart"></div>
     </div>
 
+    <!-- Figure 2 -->
     <div class="CaptionedChart">
-        <div class="HeaderHTML">
-          <span
-            >Genotype vs. Phenotype</span
-          >
-        </div>
-  
-        <!-- <div id="column-chart2" class="chart"></div> -->
+      <div class="HeaderHTML">
+        <span>Genotype vs. Phenotype</span>
       </div>
 
-      <div class="CaptionedChart">
-        <div class="HeaderHTML">
-          <span
-            >Biodiversity, Ecosystem Services, and Human Well-Being</span
-          >
-        </div>
-  
-        <!-- <div id="column-chart2" class="chart"></div> -->
+      <!-- <div id="column-chart2" class="chart"></div> -->
+    </div>
+
+    <!-- Figure 3 -->
+    <div class="CaptionedChart">
+      <div class="HeaderHTML">
+        <span>Biodiversity, Ecosystem Services, and Human Well-Being</span>
       </div>
+
+      <!-- <div id="column-chart2" class="chart"></div> -->
+    </div>
 
     <!-- tooltip -->
     <div id="tooltip" class="tooltip"></div>
@@ -66,6 +62,6 @@
     <script src="https://d3js.org/topojson.v3.min.js"></script>
 
     <!-- js files-->
-    <script src="./js/stacked-column-chart4.js"></script>
+    <script src="./js/biodiversity/biodiversity-stacked-column-chart.js"></script>
   </body>
 </html>

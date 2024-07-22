@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Renewable Energy Factsheet Graphics</title>
+    <title>CSS Graphics</title>
     <link rel="stylesheet" href="./css/stylesheet.css" />
 
     <!-- Google Font -->
@@ -27,45 +27,51 @@
     </header>
 
     <!-- U.S. Renewable Energy -->
+    <!-- Figure 1 -->
     <div class="CaptionedChart">
       <div class="HeaderHTML">
         <span>U.S. Renewable Energy Consumption</span>
       </div>
 
-      <div id="stacked-area-chart2" class="chart"></div>
+      <div id="renewable-energy-stacked-area-chart" class="chart"></div>
     </div>
 
+    <!-- Figure 2 -->
     <div class="CaptionedChart">
       <div class="HeaderHTML">
-        <span>Average Unsubsidized  Levelized Cost of Energy for Various Energy Sources in the US</span>
+        <span>U.S. Average Unsubsidized Levelized Cost of Energy (LCOE) for Various Energy Sources</span>
       </div>
 
-      <!-- <div id="stacked-column-chart2" class="chart"></div> -->
+      <div id="renewable-energy-line-chart" class="chart"></div>
     </div>
 
-    <div class="CaptionedChart">
-      <div class="HeaderHTML">
-        <span>U.S. Hydroelectric Power Production</span>
-      </div>
-
-      <div id="line-chart3" class="chart"></div>
-    </div>
-
+    <!-- Figure 3 -->
     <div class="CaptionedChart">
       <div class="HeaderHTML">
         <span>U.S. Wind Capacity</span>
       </div>
 
-      <div id="stacked-column-chart3" class="chart"></div>
+      <div id="renewable-energy-stacked-column-chart1" class="chart"></div>
     </div>
 
+    <!-- Figure 4 -->
     <div class="CaptionedChart">
       <div class="HeaderHTML">
         <span>U.S. Photovoltaic Installations</span>
       </div>
 
-      <div id="stacked-column-chart2" class="chart"></div>
+      <div id="renewable-energy-stacked-column-chart2" class="chart"></div>
     </div>
+
+    <!-- Figure 5 -->
+    <div class="CaptionedChart">
+      <div class="HeaderHTML">
+        <span>U.S. Hydroelectric Power Production</span>
+      </div>
+
+      <div id="renewable-energy-area-chart" class="chart"></div>
+    </div>
+
 
     <!-- tooltip -->
     <div id="tooltip" class="tooltip"></div>
@@ -74,9 +80,11 @@
     <script src="https://d3js.org/d3.v7.min.js"></script>
 
     <!-- js files-->
-    <script src="./js/stacked-area-chart2.js"></script>
-    <script src="./js/stacked-column-chart2.js"></script>
-    <script src="./js/stacked-column-chart3.js"></script>
-    <script src="./js/line-chart3.js"></script>
+    <script src="./js/renewable-energy/renewable-energy-stacked-area-chart.js"></script>
+    <script src="./js/renewable-energy/renewable-energy-line-chart.js"></script>
+    <script src="./js/renewable-energy/renewable-energy-stacked-column-chart1.js"></script>
+    <script src="./js/renewable-energy/renewable-energy-stacked-column-chart2.js"></script>
+    <script src="./js/renewable-energy/renewable-energy-area-chart.js"></script>
+
   </body>
 </html>

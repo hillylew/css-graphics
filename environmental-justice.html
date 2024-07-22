@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Renewable Energy Factsheet Graphics</title>
+    <title>CSS Graphics</title>
     <link rel="stylesheet" href="./css/stylesheet.css" />
 
     <!-- Google Font -->
@@ -19,13 +19,15 @@
     />
   </head>
   <body>
-
     <header>
-        <a id="name" href="environmental-justice.html"> Environmental Justice Factsheet </a>
-        <a id="name" href="index.html"> &lt; Go Back </a>
+      <a id="name" href="environmental-justice.html">
+        Environmental Justice Factsheet
+      </a>
+      <a id="name" href="index.html"> &lt; Go Back </a>
     </header>
-    
+
     <!-- Environmental Justice -->
+    <!-- Figure 1 -->
     <div class="CaptionedChart">
       <div class="HeaderHTML">
         <span
@@ -33,7 +35,47 @@
         >
       </div>
 
-      <div id="interactive-map" class="chart"></div>
+      <div id="environmental-justice-interactive-map" class="chart"></div>
+    </div>
+
+    <!-- Figure 2 -->
+    <div class="CaptionedChart">
+      <div class="HeaderHTML">
+        <span>Prevalence of Food Insecurity in the United States in 2022</span>
+      </div>
+
+      <div id="environmental-justice-bar-chart" class="chart"></div>
+    </div>
+
+    <!-- Figure 3 -->
+    <div class="CaptionedChart">
+      <div class="HeaderHTML">
+        <span
+          >Average Shares of US Households Experiencing Energy Insecurity by
+          Race, July 2021 - May 2023</span
+        >
+      </div>
+
+      <div id="environmental-justice-bar-chart2" class="chart"></div>
+    </div>
+
+    <!-- Figure 4 -->
+    <div class="CaptionedChart">
+      <div class="HeaderHTML">
+        <span>Global E-Waste Generation (MT), 2022</span>
+      </div>
+
+      <!-- <div id="environmental-justice-interactive-map2" class="chart"></div> -->
+      <div id="environmental-justice-tree-map" class="chart"></div>
+    </div>
+
+    <!-- Figure 5 -->
+    <div class="CaptionedChart">
+      <div class="HeaderHTML">
+        <span>Disparities in Climate Change Contributions and Impacts Between Poor and Wealthy Countries</span>
+      </div>
+
+      <div id="environmental-justice-bubble-chart" class="chart"></div>
     </div>
 
     <!-- tooltip -->
@@ -46,6 +88,11 @@
     <script src="https://d3js.org/topojson.v3.min.js"></script>
 
     <!-- js files-->
-    <script src="./js/interactive-map.js"></script>
+    <script src="./js/environmental-justice/environmental-justice-interactive-map.js"></script>
+    <script src="./js/environmental-justice/environmental-justice-interactive-map2.js"></script>
+    <script src="./js/environmental-justice/environmental-justice-bar-chart.js"></script>
+    <script src="./js/environmental-justice/environmental-justice-bar-chart2.js"></script>
+    <script src="./js/environmental-justice/environmental-justice-tree-map.js"></script>
+    <script src="./js/environmental-justice/environmental-justice-bubble-chart.js"></script>
   </body>
 </html>

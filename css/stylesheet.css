@@ -1,0 +1,260 @@
+/* styling for the header for website not grpahs */
+* {
+  margin: 0;
+  box-sizing: border-box;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; 
+  padding: 30px 40px;
+  background: #00274c;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 15px;
+
+  z-index: 999; 
+  position: sticky;
+  top: 0;
+  left: 0;
+}
+
+header a {
+  text-decoration: none;
+  color: white;
+}
+
+.factsheets-container {
+  padding: 30px;
+  font-size: 16px;
+}
+
+/* chart/graph styling */
+.CaptionedChart {
+  padding: 5px 10px;
+  font-family: "IBM Plex Sans", sans-serif;
+  color: #343333;
+}
+
+.CaptionedChart,
+.chart {
+  width: 360px;
+  height: auto;
+}
+
+#environmental-justice-bubble-chart {
+  width: 500px;
+}
+
+.HeaderHTML {
+  padding: 10px 5px;
+  font-family: "IBM Plex Serif", sans-serif;
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.chart {
+  cursor: pointer;
+}
+
+.chart-labels {
+  font-size: 7px;
+}
+
+.chart-subtitle {
+  font-size: 9px;
+}
+
+.diagram-labels {
+  font-size: 10px;
+}
+
+/* Tooltip */
+
+.tooltip {
+  pointer-events: none;
+  position: absolute;
+  width: auto;
+  height: auto;
+  background-color: white;
+  border-radius: 5px;
+  font-family: sans-serif;
+  font-size: 8px;
+  text-align: left;
+}
+
+.diagram-tooltip {
+  pointer-events: none;
+  position: absolute;
+  width: auto;
+  height: auto;
+  padding: 5px;
+  background-color: white;
+  opacity: 0.9;
+  border-radius: 5px;
+  font-family: sans-serif;
+  font-size: 14px;
+}
+
+.tooltip-title {
+  font-weight: bold;
+  border-radius: 5px 5px 0 0;
+}
+
+.tooltip-total {
+  border-radius: 0 0 5px 5px;
+}
+
+.tooltip-title,
+.tooltip-total {
+  background-color: #f1eded;
+}
+
+.tooltip-title,
+.tooltip-total,
+.tooltip-content {
+  padding: 4px 6px;
+}
+
+.tooltip-content .value,
+.tooltip-total .value {
+  text-align: right;
+}
+
+table.tooltip-content,
+table.tooltip-total {
+  width: 100%;
+  border-spacing: 0;
+}
+
+.tooltip-content td:first-child,
+.tooltip-total td:first-child {
+  padding-right: 8px;
+}
+
+.color-legend {
+  display: inline-block;
+  background-color: inherit;
+  width: 10px;
+  height: 10px;
+  margin-right: 5px;
+}
+
+
+/* Map Dropdown */
+#map-dropdown {
+  margin-left: 20px;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ced4da;
+  font-size: 1rem;
+  background-color: #fff;
+  color: #495057;
+  cursor: pointer;
+  appearance: none; /* Removes default arrow */
+  background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
+  background-repeat: no-repeat;
+  background-position: calc(100% - 5px) center; 
+  padding-left: 10px;
+  padding-right: 30px; /* Ensure space for the arrow */
+}
+
+#map-dropdown:hover {
+  background-color: #e9ecef; /* Light grey background on hover */
+}
+
+
+
+
+
+/* tablet */
+@media only screen and (min-width: 720px) {
+
+  header {
+    font-size: 22px;
+  }
+
+  .factsheets-container {
+    font-size: 18px;
+  }
+  
+
+  /* starts here */
+  .CaptionedChart {
+    padding: 10px 20px;
+  }
+
+  .CaptionedChart,
+  .chart {
+    width: 600px;
+  }
+
+  #environmental-justice-bubble-chart {
+    width: 700px;
+  }
+
+  .HeaderHTML {
+    font-size: 18px;
+  }
+
+  .chart-labels {
+    font-size: 10px;
+  }
+
+  .chart-subtitle {
+    font-size: 12px;
+  }
+
+  .diagram-labels {
+    font-size: 16px;
+  }
+
+  .tooltip {
+    font-size: 10px;
+  }
+}
+
+/* desktop */
+@media screen and (min-width: 1025px) {
+  header {
+    font-size: 22px;
+  }
+
+  .factsheets-container {
+    font-size: 18px;
+  }
+
+  /* starts here */
+  .CaptionedChart {
+    padding: 10px 20px;
+  }
+
+  .CaptionedChart,
+  .chart {
+    width: 650px;
+  }
+
+  #environmental-justice-bubble-chart, #greenhouse-gases-graph {
+    width: 720px;
+  }
+
+  .HeaderHTML {
+    font-size: 20px;
+  }
+
+  .chart-labels {
+    font-size: 12px;
+  }
+
+  .chart-subtitle {
+    font-size: 14px;
+  }
+
+  .diagram-labels {
+    font-size: 18px;
+  }
+
+  .tooltip {
+    font-size: 12px;
+  }
+}
