@@ -53,6 +53,12 @@ header a {
   font-weight: 500;
 }
 
+.chart-title {
+  font-family: "IBM Plex Serif", sans-serif;
+  font-size: 10px;
+  font-weight: 500;
+}
+
 .chart {
   cursor: pointer;
 }
@@ -197,6 +203,10 @@ table.tooltip-total {
     font-size: 18px;
   }
 
+  .chart-title {
+    font-size: 18px;
+  }
+
   .chart-labels {
     font-size: 10px;
   }
@@ -239,6 +249,10 @@ table.tooltip-total {
   }
 
   .HeaderHTML {
+    font-size: 20px;
+  }
+
+  .chart-title {
     font-size: 20px;
   }
 

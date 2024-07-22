@@ -1,6 +1,6 @@
 (function () {
   /* ----------------------- Dynamic dimensions ----------------------- */
-  const aspectRatio = 0.7;
+  const aspectRatio = 0.8;
 
   // Get the container and its dimensions
   const container = document.getElementById(
@@ -11,7 +11,7 @@
 
   // Calculate the dynamic margins
   const dynamicMargin = {
-    top: containerHeight * 0.1,
+    top: containerHeight * 0.2,
     right: containerWidth * 0.17,
     bottom: containerHeight * 0.1,
     left: containerWidth * 0.05,
@@ -30,6 +30,13 @@
     .append("g")
     .attr("transform", `translate(${dynamicMargin.left},${dynamicMargin.top})`);
 
+    // Add the title
+    svg.append("text")
+      .attr("class", "chart-title")
+      .attr("text-anchor", "start")
+      .attr("transform", `translate(-${dynamicMargin.left}, -${dynamicMargin.top / 2})`)
+      .text("U.S. Renewable Energy Consumption");
+
   /* ----------------------- X and Y Scales ----------------------- */
   const x = d3.scaleTime().range([0, width]);
   const y = d3.scaleLinear().range([height, 0]);
@@ -45,8 +52,8 @@
     // .range(["#1d476d", "#3167a4", "#8fc8e5", "#386660", "#e2e27a"]);
     // .range(["#1d476d", "#3167a4", "#8fc8e5", "#ffcb03", "#ffd579"]);
 
-    .range(["#1d476d", "#4084bc", "#73b9e0", "#aedbed", "#d8d8d8"]);
-    // .range(["#1d476d", "#4084bc", "#aedbed", "#386660", "#e2e27a"]);
+    // .range(["#1d476d", "#4084bc", "#73b9e0", "#aedbed", "#d8d8d8"]);
+    .range(["#1d476d", "#4084bc", "#aedbed", "#386660", "#e2e27a"]);
     // .range(["#1d476d", "#4084bc", "#8cc9f2", "#ffcb03", "#ffe07d"]);
   
 
@@ -76,19 +83,13 @@
     y.domain([0, maxYValue]);
 
     // Draw X-axis
-    const startYear = d3.min(data, (d) => d.Year.getFullYear());
     const endYear = d3.max(data, (d) => d.Year.getFullYear());
-
-    // Define the years you want to filter out
-    const filteredYears = [1985, 2020];
+   
 
     // Filter xTickValues to exclude filteredYears
     const xTickValues = x.ticks(d3.timeYear.every(5))
-      .filter(year => !filteredYears.includes(year.getFullYear()));
+      .filter(year => year.getFullYear());
 
-    if (!xTickValues.includes(startYear)) {
-      xTickValues.unshift(new Date(startYear, 0, 1));
-    }
     if (!xTickValues.includes(endYear)) {
       xTickValues.push(new Date(endYear, 0, 1));
     }
@@ -103,11 +104,7 @@
       .selectAll(".tick text")
       .attr("class", "chart-labels")
       .style("text-anchor", (d) => {
-        return d.getFullYear() === startYear
-          ? "start"
-          : d.getFullYear() === endYear
-          ? "end"
-          : "middle";
+        return d.getFullYear()
       });
 
     // Draw the Y-axis
@@ -116,12 +113,12 @@
       .call(yAxis)
       .attr("class", "chart-labels");
 
-    // Append "in millions" label
+    // y-axis label
     yAxisGroup
       .append("text")
       .attr("class", "chart-labels")
       .attr("text-anchor", "middle")
-      .attr("transform", `translate(0, -${dynamicMargin.top / 2})`)
+      .attr("transform", `translate(0, -${dynamicMargin.top / 4})`)
       .style("fill", "#000")
       .text("Quads");
 

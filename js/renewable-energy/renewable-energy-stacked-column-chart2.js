@@ -1,6 +1,6 @@
 (function () {
     /* ----------------------- Dynamic dimensions ----------------------- */
-    const aspectRatio = 0.7;
+    const aspectRatio = 0.8;
 
     // Get the container and its dimensions
     const container = document.getElementById("renewable-energy-stacked-column-chart2");
@@ -9,7 +9,7 @@
 
     // Calculate the dynamic margins
     const dynamicMargin = {
-        top: containerHeight * 0.1,
+        top: containerHeight * 0.2,
         right: containerWidth * 0.17,
         bottom: containerHeight * 0.1,
         left: containerWidth * 0.05,
@@ -28,6 +28,13 @@
         .append("g")
         .attr("transform", `translate(${dynamicMargin.left},${dynamicMargin.top})`);
 
+    // Add the title
+    svg.append("text")
+      .attr("class", "chart-title")
+      .attr("text-anchor", "start")
+      .attr("transform", `translate(-${dynamicMargin.left}, -${dynamicMargin.top / 2})`)
+      .text("U.S. Photovoltaic Installations");
+
     /* ----------------------- X and Y Scales ----------------------- */
     const x = d3.scaleBand().range([0, width]).padding(0.1);
     const y = d3.scaleLinear().range([height, 0]);
@@ -38,10 +45,10 @@
     const colorScale = d3
         .scaleOrdinal()
         .domain(["Utility","Residential","Commercial","Community Solar"])
-        // .range(["#eb5250", "#6298c6", "#75bf70", "#ae71b6", "#f38f53"]);
-        // .range(["#1d476d", "#3167a4", "#8fc8e5", "#d8d8d8"]);
-        .range(["#1d476d", "#3167a4", "#8fc8e5", "#386660", "#e2e27a"]);
-        // .range(["#3167a4", "#8fc8e5", "#ffcb03", "#ffd579"]);
+        // .range(["#1d476d", "#3167a4", "#73b9e0", "#aedbed", "#d8d8d8"]);
+        // .range(["#1d476d", "#4084bc", "#aedbed", "#386660", "#e2e27a"]);
+        .range(["#1d476d", "#3167a4", "#8cc9f2", "#ffcb03", "#ffe07d"]);
+
         
 
     const tooltip = d3.select("#tooltip");
@@ -87,12 +94,12 @@
             .call(yAxis)
             .attr("class", "chart-labels");
 
-        // Append "in millions" label
+        // y-axis label
         yAxisGroup
             .append("text")
             .attr("class", "chart-labels")
             .attr("text-anchor", "middle")
-            .attr("transform", `translate(0, -${dynamicMargin.top / 2})`)
+            .attr("transform", `translate(0, -${dynamicMargin.top / 4})`)
             .style("fill", "#000")
             .text("Thousands");
 
