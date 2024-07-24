@@ -1,0 +1,152 @@
+(function () {
+    // Dynamic dimensions
+    const aspectRatio = 1; // Donut chart is usually square
+
+    // Get the container and its dimensions
+    const container = document.getElementById("carbon-footprint-donut-chart");
+    const containerWidth = container.offsetWidth;
+    const containerHeight = containerWidth * aspectRatio;
+
+    // Calculate the dynamic margins
+    const dynamicMargin = {
+        top: containerHeight * 0.15,
+        right: containerWidth * 0.15,
+        bottom: containerHeight * 0.1,
+        left: containerWidth * 0.2,
+    };
+
+    // Calculate the width and height for the inner drawing area
+    const width = containerWidth - dynamicMargin.left - dynamicMargin.right;
+    const height = containerHeight - dynamicMargin.top - dynamicMargin.bottom;
+    const radius = Math.min(width, height) / 2;
+
+    // Append SVG object
+    const svg = d3
+        .select("#carbon-footprint-donut-chart")
+        .append("svg")
+        .attr("width", containerWidth)
+        .attr("height", containerHeight)
+        .append("g")
+        .attr("transform", "translate(" + containerWidth / 2 + "," + containerHeight / 2 + ")");
+
+    // Add the title
+    svg.append("text")
+        .attr("class", "chart-title")
+        .attr("text-anchor", "middle")
+        .attr("transform", `translate(0, -${height / 2})`)
+        .text("Greenhouse Gases Contribution by Food Type in Average Diet");
+
+    // Placeholder for displaying percentages
+    const percentageText = svg.append("text")
+        .attr("class", "percentage-text")
+        .attr("text-anchor", "middle")
+        .attr("dy", "0.35em")
+        .style("font-size", "1.5em");
+
+    // Load data from CSV
+    d3.csv("./data/carbon-footprint/carbon-footprint3.csv").then((data) => {
+        // Convert the Percentage values to numerical format
+        data.forEach(d => d.Percentage = +d.Percentage);
+
+        // Set the color scale
+        const color = d3.scaleOrdinal()
+            .domain(data.map(d => d.Food))
+            .range([
+                "#CECECE",
+
+                "#FED679",
+                // "#FFCB05",
+                "#ED974A",
+                "#CE5845",
+
+                "#E2E27A",
+                "#386660",
+
+                "#8FC8E5",
+                "#3167A4",
+                "#1C476D",
+                
+                
+            ]);
+
+        // Compute the position of each group on the pie:
+        const pie = d3.pie()
+            .value(d => d.Percentage)
+            .sort(null); // Keep the order of the input data
+
+        const pieData = pie(data);
+
+        // Build the pie chart - arc generator
+        const arc = d3.arc()
+            .innerRadius(radius * 0.5) // This is the size of the donut hole
+            .outerRadius(radius * 0.8);
+
+        const outerArc = d3.arc()
+            .innerRadius(radius * 0.9)
+            .outerRadius(radius * 0.9);
+
+        // Build the donut chart
+        svg
+            .selectAll('allSlices')
+            .data(pieData)
+            .enter()
+            .append('path')
+            .attr('d', arc)
+            .attr('fill', d => color(d.data.Food))
+            .attr("stroke", "white")
+            .style("stroke-width", "2px")
+            .on("mouseover", function (event, d) {
+                // Highlight the current section
+                d3.selectAll('path').style('opacity', 0.3);
+                d3.select(this).style('opacity', 1);
+                // Show the percentage
+                percentageText.text(d.data.Percentage + "%");
+            })
+            .on("mouseout", function (event, d) {
+                // Reset the opacity
+                d3.selectAll('path').style('opacity', 1);
+                // Clear the percentage text
+                percentageText.text("");
+            });
+
+        // Add the polylines between chart and labels:
+        svg
+            .selectAll('allPolylines')
+            .data(pieData)
+            .enter()
+            .append('polyline')
+            .attr("stroke", "black")
+            .style("fill", "none")
+            .attr("stroke-width", 1)
+            .attr('points', d => {
+                const posA = arc.centroid(d); // line insertion in the slice
+                const posB = outerArc.centroid(d); // line break position
+                const posC = outerArc.centroid(d); // Label position
+                const midangle = d.startAngle + (d.endAngle - d.startAngle) / 2;
+                posC[0] = radius * 0.95 * (midangle < Math.PI ? 1 : -1);
+                return [posA, posB, posC];
+            });
+
+        // Add the labels
+        svg
+            .selectAll('allLabels')
+            .data(pieData)
+            .enter()
+            .append('text')
+            .attr("class", "chart-labels")
+            .text(d => d.data.Food)
+            .attr('transform', d => {
+                const pos = outerArc.centroid(d);
+                const midangle = d.startAngle + (d.endAngle - d.startAngle) / 2;
+                pos[0] = radius * 0.99 * (midangle < Math.PI ? 1 : -1);
+                return `translate(${pos})`;
+            })
+            .style('text-anchor', d => {
+                const midangle = d.startAngle + (d.endAngle - d.startAngle) / 2;
+                return (midangle < Math.PI ? 'start' : 'end');
+            });
+
+    }).catch(function (error) {
+        console.log(error);
+    });
+})();

@@ -84,7 +84,6 @@
 
     // Draw X-axis
     const endYear = d3.max(data, (d) => d.Year.getFullYear());
-   
 
     // Filter xTickValues to exclude filteredYears
     const xTickValues = x.ticks(d3.timeYear.every(5))

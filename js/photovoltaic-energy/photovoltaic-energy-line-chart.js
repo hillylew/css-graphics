@@ -77,11 +77,7 @@
       .selectAll(".tick text")
       .attr("class", "chart-labels")
       .style("text-anchor", (d) => {
-        return d.getFullYear() === startYear
-          ? "start"
-          : d.getFullYear() === endYear
-          ? "end"
-          : "middle";
+        return d.getFullYear()
       });
 
     // Draw Y-axis

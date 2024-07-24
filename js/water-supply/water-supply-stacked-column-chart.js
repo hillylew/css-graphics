@@ -145,3 +145,4 @@
         console.error('Error loading the CSV file:', error);
     });
 })();
+ 
