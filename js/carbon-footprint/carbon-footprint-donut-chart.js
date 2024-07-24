@@ -36,11 +36,20 @@
         .attr("transform", `translate(0, -${height / 2})`)
         .text("Greenhouse Gases Contribution by Food Type in Average Diet");
 
+    // Placeholder for displaying images
+    const percentageImg = svg.append('image')
+        .attr('class', 'percentage-image')
+        .attr('x', -35) // Adjust based on the new image size
+        .attr('y', -60) // Adjust this value to position the larger image
+        .attr('width', 70) // Set the new width
+        .attr('height', 70) // Set the new height
+        .style('display', 'none');
+
     // Placeholder for displaying percentages
     const percentageText = svg.append("text")
         .attr("class", "percentage-text")
         .attr("text-anchor", "middle")
-        .attr("dy", "0.35em")
+        .attr("dy", "1.5em") // Adjust this value to move the text closer to the image
         .style("font-size", "1.5em");
 
     // Load data from CSV
@@ -53,20 +62,14 @@
             .domain(data.map(d => d.Food))
             .range([
                 "#CECECE",
-
                 "#FED679",
-                // "#FFCB05",
                 "#ED974A",
                 "#CE5845",
-
                 "#E2E27A",
                 "#386660",
-
                 "#8FC8E5",
                 "#3167A4",
                 "#1C476D",
-                
-                
             ]);
 
         // Compute the position of each group on the pie:
@@ -99,6 +102,14 @@
                 // Highlight the current section
                 d3.selectAll('path').style('opacity', 0.3);
                 d3.select(this).style('opacity', 1);
+
+                // Create the dynamic image path
+                const imagePath = `./images/${d.data.Food.toLowerCase()}.png`;
+
+                // Show the corresponding image
+                percentageImg.attr('href', imagePath)
+                    .style('display', 'block');
+
                 // Show the percentage
                 percentageText.text(d.data.Percentage + "%");
             })
@@ -107,6 +118,8 @@
                 d3.selectAll('path').style('opacity', 1);
                 // Clear the percentage text
                 percentageText.text("");
+                // Hide the image
+                percentageImg.style('display', 'none');
             });
 
         // Add the polylines between chart and labels:
