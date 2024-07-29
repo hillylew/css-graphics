@@ -1,6 +1,6 @@
 (function () {
   /* ----------------------- Dynamic dimensions ----------------------- */
-  const aspectRatio = 0.8;
+  const aspectRatio = 0.7;
 
   // Get the container and its dimensions
   const container = document.getElementById(
@@ -11,7 +11,7 @@
 
   // Calculate the dynamic margins
   const dynamicMargin = {
-    top: containerHeight * 0.2,
+    top: containerHeight * 0.1,
     right: containerWidth * 0.17,
     bottom: containerHeight * 0.1,
     left: containerWidth * 0.05,
@@ -29,13 +29,6 @@
     .attr("preserveAspectRatio", "xMinYMin meet")
     .append("g")
     .attr("transform", `translate(${dynamicMargin.left},${dynamicMargin.top})`);
-
-    // Add the title
-    svg.append("text")
-      .attr("class", "chart-title")
-      .attr("text-anchor", "start")
-      .attr("transform", `translate(-${dynamicMargin.left}, -${dynamicMargin.top / 2})`)
-      .text("U.S. Renewable Energy Consumption");
 
   /* ----------------------- X and Y Scales ----------------------- */
   const x = d3.scaleTime().range([0, width]);
@@ -117,7 +110,7 @@
       .append("text")
       .attr("class", "chart-labels")
       .attr("text-anchor", "middle")
-      .attr("transform", `translate(0, -${dynamicMargin.top / 4})`)
+      .attr("transform", `translate(0, -${dynamicMargin.top / 2})`)
       .style("fill", "#000")
       .text("Quads");
 

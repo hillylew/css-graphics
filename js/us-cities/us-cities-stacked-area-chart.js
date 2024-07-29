@@ -109,7 +109,7 @@
       .call(yAxis)
       .attr("class", "chart-labels");
 
-    // Append "in millions" label
+    // Append y-axis label
     yAxisGroup
       .append("text")
       .attr("class", "chart-labels")

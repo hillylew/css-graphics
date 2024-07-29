@@ -3,16 +3,16 @@
     const aspectRatio = 0.7;
 
     // Get the container and its dimensions
-    const container = document.getElementById("renewable-energy-stacked-column-chart1");
+    const container = document.getElementById("grid-energy-stacked-column-chart3");
     const containerWidth = container.offsetWidth; // Use offsetWidth for full element width
     const containerHeight = containerWidth * aspectRatio; // Calculate the height based on the width and aspect ratio
 
     // Calculate the dynamic margins
     const dynamicMargin = {
-        top: containerHeight * 0.1,
-        right: containerWidth * 0.18,
+        top: containerHeight * 0.05,
+        right: containerWidth * 0.17,
         bottom: containerHeight * 0.1,
-        left: containerWidth * 0.05,
+        left: containerWidth * 0.06,
     };
 
     // Calculate the width and height for the inner drawing area
@@ -21,7 +21,7 @@
 
     // Append SVG object
     const svg = d3
-        .select("#renewable-energy-stacked-column-chart1")
+        .select("#grid-energy-stacked-column-chart3")
         .append("svg")
         .attr("viewBox", `0 0 ${containerWidth} ${containerHeight}`)
         .attr("preserveAspectRatio", "xMinYMin meet")
@@ -32,62 +32,50 @@
     const x = d3.scaleBand().range([0, width]).padding(0.1);
     const y = d3.scaleLinear().range([height, 0]);
 
-    const xAxis = d3.axisBottom(x).tickFormat(d3.timeFormat("%Y"));
+    const xAxis = d3.axisBottom(x);
     const yAxis = d3.axisLeft(y).tickFormat((d) => d / 1000);
 
     const colorScale = d3
         .scaleOrdinal()
-        .domain(["Annual Additions","Cumulative Capacity"])
-        .range(["#1C476D", "#8CC9F2"]);
-        
+        .domain(["Proposed", "Construction", "Operational"])
+        .range(["#1d476d", "#3167a4", "#8cc9f2"]);
 
-    const tooltip = d3.select("#tooltip");
+    // Create Tooltip element
+    const tooltip = d3.select("body").append("div")
+        .attr("id", "tooltip")
+        .attr("class", "tooltip")
+        .style("position", "absolute")
+        .style("pointer-events", "none")
+        .style("opacity", 0);
 
     /* ----------------------- Load and process the CSV data ----------------------- */
-
-    /* ----------------------- DISCLAIMER FOR THE GRAPH-12-DATA.CSV ----------------------- */
-    // For "Cumulative Capacity" column, the REAL "Cumulative Capacity" data has 
-    // been subtracted by the "Annual Additions" for the purposes of stacking them. 
-    // If you stack it wihtout subtracking, you would be "adding" the Annual Additions twice. 
-    // For these reasons, you need to add Annual Additions and Cumulative Capacity to get the REAL Cumulative Capacity data. 
-
-
-    d3.csv("./data/renewable-energy/renewable-energy3.csv").then((data) => {
-        // Parse years and convert string values to numbers
+    d3.csv("./data/grid-energy/grid-energy4.csv").then((data) => {
+        // Parse the data
         data.forEach((d) => {
-            d.Year = new Date(+d.Year, 0, 1);
             for (let prop in d) {
-                if (prop !== "Year") d[prop] = +d[prop];
+                if (prop !== "Technology Type") d[prop] = +d[prop] || 0;
             }
         });
 
         // Stack the data
-        const stack = d3.stack().keys(["Cumulative Capacity", "Annual Additions"]);
+        const stack = d3.stack().keys(["Proposed", "Construction", "Operational"]);
         const stackedData = stack(data);
 
         /* ----------------------- Update the scale domains with the processed data ----------------------- */
-        x.domain(data.map((d) => d.Year));
+        x.domain(data.map((d) => d["Technology Type"]));
         const maxYValue =
             Math.ceil(
-                d3.max(stackedData, (layer) => d3.max(layer, (d) => d[1])) / 20000
-                ) * 20000;
+                d3.max(stackedData, (layer) => d3.max(layer, (d) => d[1])) / 200
+            ) * 200;
         y.domain([0, maxYValue]);
-        
 
         // Draw the X-axis
-        const xTickValues = x.domain();
-        xAxis.tickValues(xTickValues);
-
-        const xAxisGroup = svg
+        svg
             .append("g")
             .attr("transform", `translate(0,${height})`)
-            .call(xAxis);
-
-        xAxisGroup
+            .call(xAxis)
             .selectAll(".tick text")
-            .attr("class", "chart-labels")
-            .attr("transform", "rotate(-45)") // Rotate the text
-            .style("text-anchor", "end");
+            .attr("class", "chart-labels");
 
         // Draw the Y-axis
         const yAxisGroup = svg
@@ -95,16 +83,6 @@
             .call(yAxis)
             .attr("class", "chart-labels");
 
-        // y-axis label
-        yAxisGroup
-            .append("text")
-            .attr("class", "chart-labels")
-            .attr("text-anchor", "middle")
-            .attr("transform", `translate(0, -${dynamicMargin.top / 2})`)
-            .style("fill", "#000")
-            .text("GW");
-
-        
         /* ----------------------- Draw the chart ----------------------- */
         // Use categoryGroups instead of bars for the rectangles to capture mouseover with the proper context
         const categoryGroups = svg.selectAll(".category-group")
@@ -118,16 +96,10 @@
             .data((d) => d)
             .enter()
             .append("rect")
-            .attr("x", (d) => x(d.data.Year))
+            .attr("x", (d) => x(d.data["Technology Type"]))
             .attr("y", (d) => y(d[1]))
             .attr("height", (d) => y(d[0]) - y(d[1]))
             .attr("width", x.bandwidth());
-            // .on("mouseover", function (event, d) {
-            //     // Highlight all bars in this category
-            //     highlightCategory(d3.select(this.parentNode).datum().key);
-            // })
-            // .on("mouseout", resetCategoryHighlight);
-        
 
         /* ----------------------- Highlight ----------------------- */
         function highlightCategory(category) {
@@ -172,8 +144,8 @@
         /* ----------------------- Mouseover event ----------------------- */
         function onMouseMove(event) {
             const [xPos, yPos] = d3.pointer(event, this);
-            const hoveredYear = x.domain().find((year) => x(year) <= xPos && xPos < x(year) + x.bandwidth());
-            const hoverData = data.find((d) => d.Year.getFullYear() === hoveredYear.getFullYear());
+            const hoveredType = x.domain().find((type) => x(type) <= xPos && xPos < x(type) + x.bandwidth());
+            const hoverData = data.find((d) => d["Technology Type"] === hoveredType);
 
             // Position tooltip
             tooltip
@@ -184,27 +156,30 @@
             const formatNumber = d3.format(",");
             if (hoverData) {
                 tooltip.html(`
-                    <div class="tooltip-title">${hoverData.Year.getFullYear()}</div>
+                    <div class="tooltip-title">${hoverData["Technology Type"]}</div>
                     <table class="tooltip-content">  
                     <tr>
-                        <td><span class="color-legend" style="background-color: ${colorScale("Annual Additions")};"></span>Annual Additions</td>
-                        <td class="value">${formatNumber(hoverData["Annual Additions"])} MW</td>
+                        <td><span class="color-legend" style="background-color: ${colorScale("Proposed")};"></span>Proposed</td>
+                        <td class="value">${formatNumber(hoverData.Proposed)}</td>
                     </tr>
                     <tr>
-                        <td><span class="color-legend" style="background-color: ${colorScale("Cumulative Capacity")};"></span>Cumulative Capacity</td>
-                        <td class="value">${formatNumber(hoverData["Annual Additions"] + hoverData["Cumulative Capacity"])} MW</td>
+                        <td><span class="color-legend" style="background-color: ${colorScale("Construction")};"></span>Construction</td>
+                        <td class="value">${formatNumber(hoverData.Construction)}</td>
                     </tr>
+                    <tr>
+                        <td><span class="color-legend" style="background-color: ${colorScale("Operational")};"></span>Operational</td>
+                        <td class="value">${formatNumber(hoverData.Operational)}</td>
+                    </tr>
+                    </table>
+                    <table class="tooltip-total">
+                        <tr>
+                            <td><strong>Total</strong></td>
+                            <td class="value">${formatNumber(hoverData.Proposed + hoverData.Construction + hoverData.Operational)}</td>
+                        </tr>
                     </table>
                 `);
             }
         }
-
-        // <table class="tooltip-total">
-        // <tr>
-        //     <td><strong>Cumulative Capacity</strong></td>
-        //     <td class="value">${formatNumber(hoverData["Annual Additions"] + hoverData["Cumulative Capacity"])}</td>
-        // </tr>
-        // </table>
 
         // Create a rect for listening to mouse events
         svg

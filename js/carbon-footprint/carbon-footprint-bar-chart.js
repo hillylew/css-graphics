@@ -9,7 +9,7 @@
   
     // Calculate the dynamic margins
     const dynamicMargin = {
-      top: containerHeight * 0.08,
+      top: containerHeight * 0.05,
       right: containerWidth * 0.1, // Adjust right margin if labels are too long
       bottom: containerHeight * 0.05,
       left: containerWidth * 0.1, // Increase left margin to fit labels
@@ -27,21 +27,6 @@
       .attr("preserveAspectRatio", "xMinYMin meet")
       .append("g")
       .attr("transform", `translate(${dynamicMargin.left},${dynamicMargin.top})`);
-
-
-    // Add the title using tspan for subscripts and adjust the size of the subscript
-    const title = svg.append("text")
-        .attr("class", "chart-title")
-        .attr("text-anchor", "start")
-        .attr("transform", `translate(-${dynamicMargin.left}, -${dynamicMargin.top / 2})`);
-
-    // Append text parts with tspan for subscripts
-    title.append("tspan").text("Pounds of CO");
-    title.append("tspan")
-        .attr("baseline-shift", "sub")
-        .attr("font-size", "60%") // Adjust the font size to make the subscript smaller
-        .text("2");
-    title.append("tspan").text("e Per Serving");
 
   
     /* ----------------------- Scales, axes, and color ----------------------- */

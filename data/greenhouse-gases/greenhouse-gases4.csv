@@ -1,6 +1,7 @@
 Category,End Use,Annual CO2 Emission (lbs)
 Electricity,Space heating,2034
 Electricity,Pool pumps,1950
+Electricty,Pool heaters,0
 Gas,Pool heaters,4602
 Electricity,EV charging,1933
 Electricity,AC,1897

@@ -8,7 +8,7 @@
 
   // Calculate the dynamic margins
   const dynamicMargin = {
-    top: containerHeight * 0.15, // 20% of the container height
+    top: containerHeight * 0.1, // 20% of the container height
     right: containerWidth * 0.2, // 20% of the container width
     bottom: containerHeight * 0.1, // 10% of the container height
     left: containerWidth * 0.07, // 7% of the container width
@@ -26,19 +26,6 @@
     .attr("preserveAspectRatio", "xMinYMin meet")
     .append("g")
     .attr("transform", `translate(${dynamicMargin.left},${dynamicMargin.top})`);
-
-  // Add the title with subscript
-  const title = svg.append("text")
-    .attr("class", "chart-title")
-    .attr("text-anchor", "start")
-    .attr("transform", `translate(-${dynamicMargin.left}, -${dynamicMargin.top / 2})`);
-
-  title.append("tspan").text("U.S. GHG Emissions by Sector (MMT CO");
-  title.append("tspan")
-    .attr("baseline-shift", "sub")
-    .attr("font-size", "60%") // Adjust the font size to make the subscript smaller
-    .text("2");
-  title.append("tspan").text("e)");
 
   // X and Y scales
   const x = d3.scaleTime().range([0, width]);
@@ -135,6 +122,21 @@
       .append("g")
       .call(yAxis)
       .attr("class", "chart-labels");
+
+    // Define the y-axis label with the desired text and formatting
+    const yAxisLabel = yAxisGroup.append("text")
+      .attr("class", "chart-labels")
+      .attr("text-anchor", "middle")
+      .attr("transform", `translate(0, -${dynamicMargin.top / 2})`)
+      .style("fill", "#000");
+
+    yAxisLabel.append("tspan").text("MMT CO");
+    yAxisLabel.append("tspan")
+      .attr("baseline-shift", "sub")
+      .attr("font-size", "60%") // Adjust the font size to make the subscript smaller
+      .text("2");
+    yAxisLabel.append("tspan").text("e");
+
 
     // Define the line generator
     const lineGenerator = d3

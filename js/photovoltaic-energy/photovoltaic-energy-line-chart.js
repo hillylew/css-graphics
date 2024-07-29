@@ -107,7 +107,7 @@
       .attr("class", "line")
       .attr("d", lineGenerator)
       .attr("fill", "none")
-      .attr("stroke", "#377eb8")
+      .attr("stroke", "#CE5845")
       .style("stroke-width", 2);
 
     // Appending circles to each data point on the LCOE line
@@ -124,7 +124,7 @@
         return y(d["LCOE"]);
       })
       .attr("r", 3) // Specifies the radius of the circle
-      .attr("fill", "#377eb8");
+      .attr("fill", "#CE5845");
 
     const lastDataPoint = data[data.length - 1]; // Get the last data point
     const lcoeLabel = svg
@@ -134,7 +134,7 @@
       .attr("y", y(lastDataPoint["LCOE"]))
       .attr("dy", "0.35em")
       .style("text-anchor", "start")
-      .attr("fill", "#377eb8")
+      .attr("fill", "#CE5845")
       .text("LCOE");
 
 
@@ -157,7 +157,7 @@
                 <div class="tooltip-title">${hoverData.Year.getFullYear()}</div>
                 <table class="tooltip-content">
                     <tr>
-                        <td><span class="color-legend" style="background-color: #377eb8"
+                        <td><span class="color-legend" style="background-color: #CE5845"
                         )};"></span>LCOE</td>
                         <td class="value">$<strong>${formatNumber(
                           hoverData["LCOE"]
@@ -172,7 +172,7 @@
           .attr("cx", x(hoverData.Year))
           .attr("cy", y(hoverData["LCOE"]))
           .attr("r", 5)
-          .style("fill", "#377eb8")
+          .style("fill", "#CE5845")
           .style("stroke", "white")
           .style("opacity", "1");
 

@@ -1,6 +1,6 @@
 (function () {
     // Dynamic dimensions
-    const aspectRatio = 1; // Donut chart is usually square
+    const aspectRatio = 0.8; // Donut chart is usually square
 
     // Get the container and its dimensions
     const container = document.getElementById("carbon-footprint-donut-chart");
@@ -9,7 +9,7 @@
 
     // Calculate the dynamic margins
     const dynamicMargin = {
-        top: containerHeight * 0.15,
+        top: containerHeight * 0.1,
         right: containerWidth * 0.15,
         bottom: containerHeight * 0.1,
         left: containerWidth * 0.2,
@@ -28,13 +28,6 @@
         .attr("height", containerHeight)
         .append("g")
         .attr("transform", "translate(" + containerWidth / 2 + "," + containerHeight / 2 + ")");
-
-    // Add the title
-    svg.append("text")
-        .attr("class", "chart-title")
-        .attr("text-anchor", "middle")
-        .attr("transform", `translate(0, -${height / 2})`)
-        .text("Greenhouse Gases Contribution by Food Type in Average Diet");
 
     // Placeholder for displaying images
     const percentageImg = svg.append('image')
@@ -85,8 +78,8 @@
             .outerRadius(radius * 0.8);
 
         const outerArc = d3.arc()
-            .innerRadius(radius * 0.9)
-            .outerRadius(radius * 0.9);
+            .innerRadius(radius)
+            .outerRadius(radius);
 
         // Build the donut chart
         svg
@@ -136,28 +129,29 @@
                 const posB = outerArc.centroid(d); // line break position
                 const posC = outerArc.centroid(d); // Label position
                 const midangle = d.startAngle + (d.endAngle - d.startAngle) / 2;
-                posC[0] = radius * 0.95 * (midangle < Math.PI ? 1 : -1);
+                posC[0] = radius * 1.05 * (midangle < Math.PI ? 1 : -1); // Increased separation
                 return [posA, posB, posC];
             });
 
-        // Add the labels
+        // Add the labels with percentages
         svg
             .selectAll('allLabels')
             .data(pieData)
             .enter()
             .append('text')
             .attr("class", "chart-labels")
-            .text(d => d.data.Food)
+            .text(d => `${d.data.Food} ${d.data.Percentage}%`) 
             .attr('transform', d => {
                 const pos = outerArc.centroid(d);
                 const midangle = d.startAngle + (d.endAngle - d.startAngle) / 2;
-                pos[0] = radius * 0.99 * (midangle < Math.PI ? 1 : -1);
+                pos[0] = radius * 1.09 * (midangle < Math.PI ? 1 : -1); // Increased separation
                 return `translate(${pos})`;
             })
             .style('text-anchor', d => {
                 const midangle = d.startAngle + (d.endAngle - d.startAngle) / 2;
                 return (midangle < Math.PI ? 'start' : 'end');
-            });
+            })
+            .attr("dy", "0.35em"); // Adjust this value to vertically center the text
 
     }).catch(function (error) {
         console.log(error);

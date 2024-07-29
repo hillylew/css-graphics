@@ -1,5 +1,5 @@
 (function () {
-  const aspectRatio = 0.8; // Define an aspect ratio for the chart
+  const aspectRatio = 0.7; // Define an aspect ratio for the chart
 
   // Get the container and its dimensions
   const container = document.getElementById("renewable-energy-area-chart");
@@ -8,8 +8,8 @@
 
   // Calculate the dynamic margins
   const dynamicMargin = {
-    top: containerHeight * 0.2, // 10% of the container height
-    right: containerWidth * 0.07, // 10% of the container width
+    top: containerHeight * 0.1, // 10% of the container height
+    right: containerWidth * 0.1, // 10% of the container width
     bottom: containerHeight * 0.1, // 10% of the container height
     left: containerWidth * 0.07, // 10% of the container width
   };
@@ -26,13 +26,6 @@
     .attr("preserveAspectRatio", "xMinYMin meet")
     .append("g")
     .attr("transform", `translate(${dynamicMargin.left},${dynamicMargin.top})`);
-
-  // Add the title
-  svg.append("text")
-    .attr("class", "chart-title")
-    .attr("text-anchor", "start")
-    .attr("transform", `translate(-${dynamicMargin.left}, -${dynamicMargin.top / 2})`)
-    .text("U.S. Hydroelectric Power Production (1950-2023)");
 
   // X and Y scales
   const x = d3.scaleTime().range([0, width]);
@@ -85,7 +78,7 @@
       .append("text")
       .attr("class", "chart-labels")
       .attr("text-anchor", "middle")
-      .attr("transform", `translate(0, -${dynamicMargin.top / 4})`)
+      .attr("transform", `translate(0, -${dynamicMargin.top / 2})`)
       .style("fill", "#000")
       .text("Trillion Btu");
 

@@ -26,16 +26,51 @@
     </header>
 
     <!-- U.S. Grid Energy Storage -->
-    <div class="CaptionedChart">
+    <!-- <div class="CaptionedChart">
       <div class="HeaderHTML">
         <span>Number of Grid Connected Energy Storage Projects by States</span>
       </div>
 
       <div id="grid-energy-interactive-map" class="chart"></div>
+    </div> -->
+
+    <div class="CaptionedChart">
+      <div class="HeaderHTML">
+        <span>Top 10 U.S. States with the Most Installed Energy Storage Capacity in 2023</span>
+      </div>
+
+      <div id="grid-energy-stacked-column-chart" class="chart"></div>
+    </div>
+
+
+
+    <!-- // U.S. Energy Storage Projects by Technology Type -->
+    <div class="CaptionedChart">
+      <div class="HeaderHTML">
+        <span>U.S. Energy Storage Projects by Technology Type</span>
+      </div>
+
+      <div id="grid-energy-stacked-column-chart2" class="chart"></div>
+    </div>
+
+    <div class="CaptionedChart">
+      <div class="HeaderHTML">
+        <span>Rated Power</span>
+      </div>
+
+      <div id="grid-energy-stacked-column-chart3" class="chart"></div>
+    </div>
+
+    <div class="CaptionedChart">
+      <div class="HeaderHTML">
+        <span>U.S. Energy Storage Rated Power by Technology Type</span>
+      </div>
+
+      <div id="grid-energy-range-chart" class="chart"></div>
     </div>
 
     <!-- tooltip -->
-    <div id="tooltip" class="tooltip"></div>
+    <!-- <div id="tooltip" class="tooltip"></div> -->
 
     <!-- D3.js -->
     <script src="https://d3js.org/d3.v7.min.js"></script>
@@ -45,5 +80,9 @@
 
     <!-- js files-->
     <script src="./js/grid-energy/grid-energy-interactive-map.js"></script>
+    <script src="./js/grid-energy/grid-energy-stacked-column-chart.js"></script>
+    <script src="./js/grid-energy/grid-energy-stacked-column-chart2.js"></script>
+    <script src="./js/grid-energy/grid-energy-stacked-column-chart3.js"></script>
+    <script src="./js/grid-energy/grid-energy-range-chart.js"></script>
   </body>
 </html>

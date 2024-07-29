@@ -1,5 +1,5 @@
 (function () {
-  const aspectRatio = 0.7; // Define an aspect ratio for the chart
+  const aspectRatio = 0.65; // Define an aspect ratio for the chart
   // Get the container and its dimensions
   const container = document.getElementById("photovoltaic-energy-line-chart2");
   const containerWidth = container.offsetWidth; // Use offsetWidth for full element width
@@ -8,9 +8,9 @@
   // Calculate the dynamic margins
   const dynamicMargin = {
     top: containerHeight * 0.1, // 5% of the container height
-    right: containerWidth * 0.15, // 10% of the container width
+    right: containerWidth * 0.3, // 10% of the container width
     bottom: containerHeight * 0.1, // 10% of the container height
-    left: containerWidth * 0.08, // 7% of the container width
+    left: containerWidth * 0.05, // 7% of the container width
   };
 
   const width = containerWidth - dynamicMargin.left - dynamicMargin.right;
@@ -28,7 +28,7 @@
   const y = d3.scaleLinear().range([height, 0]);
 
   const xAxis = d3.axisBottom(x).tickFormat(d3.timeFormat("%Y"));
-  const yAxis = d3.axisLeft(y).tickFormat(d3.format("$,.2f")); // Format as dollars with two decimal places
+  const yAxis = d3.axisLeft(y).tickFormat(d3.format("$")); // Format as dollars with two decimal places
 
   const colorScale = d3
     .scaleOrdinal()
@@ -38,7 +38,7 @@
       "100 MW Utility-Scale PV, Fixed Tilt",
       "100 MW Utility-Scale PV, One Axis Tracker",
     ])
-    .range(["#e41a1c", "#377eb8", "#4daf4a", "#984ea3"]);
+    .range(["#1d476d", "#4084bc", "#ED974A", "#CE5845"]);
 
   const tooltip = d3.select("#tooltip");
 
@@ -78,12 +78,13 @@
       .append("g")
       .call(yAxis)
       .attr("class", "chart-labels");
+
     // Append y-axis label
     yAxisGroup
       .append("text")
       .attr("class", "chart-labels")
       .attr("text-anchor", "middle")
-      .attr("transform", `translate(0, -${dynamicMargin.top / 2})`)
+      .attr("transform", `translate(${dynamicMargin.left / 2}, -${dynamicMargin.top / 2})`)
       .style("fill", "#000")
       .text("2023 USD / Watt");
 
@@ -173,18 +174,14 @@
       });
     // Append legend text
     legend.each(function (series, index) {
-      const lastDatum = series.values[series.values.length - 1]; // Get the last data point
+      const lastDatum = series.values[series.values.length - 1];
       const legendItem = d3.select(this);
       const legendNames = {
         "22 Panel System Residential PV": ["Residential PV"],
         "200 kW Commercial PV": ["Commercial PV"],
-        "100 MW Utility-Scale PV, Fixed Tilt": [
-          "Fixed Tilt",
-          "Utility-Scale PV",
-        ],
+        "100 MW Utility-Scale PV, Fixed Tilt": ["Utility-Scale PV, Fixed Tilt"],
         "100 MW Utility-Scale PV, One Axis Tracker": [
-          "One Axis Tracker",
-          "Utility-Scale PV",
+          "Utility-Scale PV, One Axis Tracker",
         ],
       };
 

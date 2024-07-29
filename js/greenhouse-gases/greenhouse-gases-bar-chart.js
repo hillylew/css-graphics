@@ -9,9 +9,9 @@
   
     // Calculate the dynamic margins
     const dynamicMargin = {
-      top: containerHeight * 0.1,
+      top: containerHeight * 0.05,
       right: containerWidth * 0.05,
-      bottom: containerHeight * 0.1,
+      bottom: containerHeight * 0.15,
       left: containerWidth * 0.15,
     };
   
@@ -28,20 +28,6 @@
       .append("g")
       .attr("transform", `translate(${dynamicMargin.left},${dynamicMargin.top})`);
 
-    // Add the title with subscript
-    const title = svg.append("text")
-        .attr("class", "chart-title")
-        .attr("text-anchor", "start")
-        .attr("transform", `translate(-${dynamicMargin.left}, -${dynamicMargin.top / 2})`);
-
-    // Add the main title text with CO2 subscripted
-    title.append("tspan").text("Average Annual C0");
-    title.append("tspan")
-        .text("2")
-        .attr("baseline-shift", "sub")
-        .attr("font-size", "60%"); // Adjust the font size for subscript
-    title.append("tspan").text(" Emissions by Household Activity in 2020");
-
   
     /* ----------------------- Scales, axes, and color ----------------------- */
     const yScale = d3.scaleBand().range([height, 0]).padding(0.1); // Scale for end-uses
@@ -56,14 +42,21 @@
     const yAxis = (g) =>
       g.call(d3.axisLeft(yScale).tickSizeOuter(0).tickSizeInner(0).tickPadding(10));
   
-    svg
-      .append("text")
-      .attr("x", width / 2)
-      .attr("y", height + dynamicMargin.bottom)
-      .attr("class", "chart-labels")
-      .attr("text-anchor", "middle")
-      .attr("fill", "#000")
-      .text("Annual CO2 Emission (lbs)");
+    // Append the main label text with CO2 subscripted
+    svg.append("text")
+        .attr("x", width / 2)
+        .attr("y", height + dynamicMargin.bottom * 0.6)
+        .attr("class", "chart-labels")
+        .attr("text-anchor", "middle")
+        .attr("fill", "#000")
+        .call(function(label) {
+            label.append("tspan").text("Average Annual CO");
+            label.append("tspan")
+                .text("2")
+                .attr("baseline-shift", "sub")
+                .attr("font-size", "60%"); // Adjust the font size for subscript
+            label.append("tspan").text(" Emissions (lbs)");
+        });
   
     const tooltip = d3.select("#tooltip");
   
