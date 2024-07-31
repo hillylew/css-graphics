@@ -60,8 +60,8 @@
   const moduleSpacing = (width * moduleSpacingPercentage) / 100;
   const arraySpacing = (width * arraySpacingPercentage) / 100;
 
-  const moduleRows = 8,
-    moduleColumns = 4;
+  const moduleRows = 7,
+    moduleColumns = 3;
   const panelRows = 2,
     panelColumns = 3;
   const arrayRows = 1,
@@ -290,19 +290,62 @@
     .attr("fill-opacity", "0.2")
     .style("pointer-events", "none");
 
+  /* ----------------------- Draw Inverter ----------------------- */
+  const inverterWidth = arrayWidth * 0.3;
+  const inverterHeight = arrayHeight * 0.3;
+  const inverterX = arrayXCenter * 0.5 + arrayWidth * 1.25;
+  const inverterY = arrayYCenter * 1.5 + (arrayHeight - inverterHeight) / 2;
+
+  svg.append("rect")
+    .attr("x", inverterX)
+    .attr("y", inverterY)
+    .attr("width", inverterWidth)
+    .attr("height", inverterHeight)
+    .attr("rx", 8)
+    .attr("ry", 8)
+    .attr("fill", "#cccc")
+    .attr("stroke", "white")
+    .attr("stroke-width", 2);
+
+  svg.append("text")
+    .attr("x", inverterX + inverterWidth / 2)
+    .attr("y", inverterY + inverterHeight / 2)
+    .attr("text-anchor", "middle")
+    .attr("alignment-baseline", "middle")
+    .text("Inverter")
+    .attr("class", "diagram-labels")
+    .attr("fill", "white");
+
+  svg.append("text")
+    .attr("x", inverterX - inverterWidth * 0.1)
+    .attr("y", inverterY + inverterHeight / 4)
+    .attr("text-anchor", "end")
+    .attr("alignment-baseline", "middle")
+    .text("DC")
+    .attr("class", "diagram-labels")
+    .attr("fill", "white");
+
+  svg.append("text")
+    .attr("x", inverterX + inverterWidth + inverterWidth * 0.1)
+    .attr("y", inverterY + inverterHeight / 4)
+    .attr("text-anchor", "start")
+    .attr("alignment-baseline", "middle")
+    .text("AC")
+    .attr("class", "diagram-labels")
+    .attr("fill", "white");
+
   /* ----------------------- Draw Conversion Efficiency (Light Bulb) ----------------------- */
 
    /* ----------------------- Texts for Diagram ----------------------- */
   svg
     .append("text")
-    .attr("x", arrayXCenter - arraySpacing)
+    .attr("x", arrayXCenter - arraySpacing * 2)
     .attr("y", arrayYCenter)
     .text("100%")
     .attr("class", "diagram-labels")
     .attr("text-anchor", "middle")
     .attr("alignment-baseline", "middle")
     .attr("fill", "white");
-
 
     /* ----------------------- Draw Light Bulb ----------------------- */
     function blinkLightBulb() {
@@ -317,160 +360,164 @@
           // Change the opacity from 1 to 0 or from 0 to 1
           lightBulb.style("opacity", currentOpacity == 1 ? 0.5 : 1);
         }, interval);
-      }
+    }
 
-const chordLength = width * 0.1; // Replace with the actual desired length
-const lightBulbCenterX = arrayXCenter + arrayWidth + chordLength;
-const lightBulbCenterY = height * 0.4;
-const lightBulbRadius = sunRadius * 0.5; // This can be adjusted to your liking
+    // Adjust the light bulb and chord positions within the container
+    const lightBulbCenterX = containerWidth - dynamicMargin.right - dynamicMargin.left - width * 0.1;
+    const lightBulbCenterY = height * 0.4;
+    const lightBulbRadius = sunRadius * 0.5; // This can be adjusted to your liking
 
-const bulbGradient = svg.append("defs")
-  .append("radialGradient")
-  .attr("id", "bulbGradient");
+    const bulbGradient = svg.append("defs")
+      .append("radialGradient")
+      .attr("id", "bulbGradient");
 
-bulbGradient.append("stop")
-  .attr("offset", "0%")
-  .attr("stop-color", "#ffffff");
+    bulbGradient.append("stop")
+      .attr("offset", "0%")
+      .attr("stop-color", "#ffffff");
 
-bulbGradient.append("stop")
-  .attr("offset", "100%")
-  .attr("stop-color", "#f5ee33");
+    bulbGradient.append("stop")
+      .attr("offset", "100%")
+      .attr("stop-color", "#f5ee33");
 
-svg.append("circle") // Bulb part
-  .attr("cx", lightBulbCenterX)
-  .attr("cy", lightBulbCenterY)
-  .attr("r", lightBulbRadius)
-  .attr("fill", "url(#bulbGradient)")
-  .attr("id", "light-bulb");
+    svg.append("circle") // Bulb part
+      .attr("cx", lightBulbCenterX)
+      .attr("cy", lightBulbCenterY)
+      .attr("r", lightBulbRadius)
+      .attr("fill", "url(#bulbGradient)")
+      .attr("id", "light-bulb");
 
-  blinkLightBulb();
+    blinkLightBulb();
 
-// Add an ellipse for the screw thread base
-svg.append("ellipse")
-  .attr("cx", lightBulbCenterX)
-  .attr("cy", lightBulbCenterY + lightBulbRadius)
-  .attr("rx", lightBulbRadius / 2)
-  .attr("ry", lightBulbRadius * 0.25)
-  .attr("fill", "#ccc");
+    // Add an ellipse for the screw thread base
+    svg.append("ellipse")
+      .attr("cx", lightBulbCenterX)
+      .attr("cy", lightBulbCenterY + lightBulbRadius)
+      .attr("rx", lightBulbRadius / 2)
+      .attr("ry", lightBulbRadius * 0.25)
+      .attr("fill", "#ccc");
 
-// Draw the threaded base
-svg.append("rect") // Threaded base part
-  .attr("x", lightBulbCenterX - lightBulbRadius / 2)
-  .attr("y", lightBulbCenterY + lightBulbRadius)
-  .attr("width", lightBulbRadius)
-  .attr("height", lightBulbRadius * 0.8)
-  .attr("fill", "#777")
-  .attr("rx", 4)  // Adjust the value as needed
-  .attr("ry", 4); // Adjust the value as needed
+    // Draw the threaded base
+    svg.append("rect") // Threaded base part
+      .attr("x", lightBulbCenterX - lightBulbRadius / 2)
+      .attr("y", lightBulbCenterY + lightBulbRadius)
+      .attr("width", lightBulbRadius)
+      .attr("height", lightBulbRadius * 0.8)
+      .attr("fill", "#777")
+      .attr("rx", 4)  // Adjust the value as needed
+      .attr("ry", 4); // Adjust the value as needed
 
+    // Filament
+    svg.append("path")
+      .attr("d", `M${lightBulbCenterX - (lightBulbRadius / 4)} ${lightBulbCenterY} Q${lightBulbCenterX} ${lightBulbCenterY - lightBulbRadius / 2}, ${lightBulbCenterX + (lightBulbRadius / 4)} ${lightBulbCenterY}`)
+      .attr("stroke", "#FFED22")
+      .attr("stroke-width", 2)
+      .attr("fill", "none");
 
-// Filament
-svg.append("path")
-  .attr("d", `M${lightBulbCenterX - (lightBulbRadius / 4)} ${lightBulbCenterY} Q${lightBulbCenterX} ${lightBulbCenterY - lightBulbRadius / 2}, ${lightBulbCenterX + (lightBulbRadius / 4)} ${lightBulbCenterY}`)
-  .attr("stroke", "#FFED22")
-  .attr("stroke-width", 2)
-  .attr("fill", "none");
+    // Reflection effect
+    svg.append("circle")
+      .attr("cx", lightBulbCenterX - (lightBulbRadius / 4))
+      .attr("cy", lightBulbCenterY - (lightBulbRadius / 4))
+      .attr("r", lightBulbRadius * 0.1)
+      .attr("fill", "white")
+      .attr("opacity", 0.6);
 
-// Reflection effect
-svg.append("circle")
-  .attr("cx", lightBulbCenterX - (lightBulbRadius / 4))
-  .attr("cy", lightBulbCenterY - (lightBulbRadius / 4))
-  .attr("r", lightBulbRadius * 0.1)
-  .attr("fill", "white")
-  .attr("opacity", 0.6);
+    svg
+      .append("text")
+      .attr("x", lightBulbCenterX)
+      .attr("y", height * 0.15)
+      .text("Average")
+      .attr("class", "diagram-labels")
+      .attr("text-anchor", "middle")
+      .attr("alignment-baseline", "middle")
+      .attr("fill", "white");
 
+    svg
+      .append("text")
+      .attr("x", lightBulbCenterX)
+      .attr("y", height * 0.2)
+      .text("Conversion")
+      .attr("class", "diagram-labels")
+      .attr("text-anchor", "middle")
+      .attr("alignment-baseline", "middle")
+      .attr("fill", "white");
 
+    svg
+      .append("text")
+      .attr("x", lightBulbCenterX)
+      .attr("y", height * 0.25)
+      .text("Efficiency")
+      .attr("class", "diagram-labels")
+      .attr("text-anchor", "middle")
+      .attr("alignment-baseline", "middle")
+      .attr("fill", "white");
 
+    svg
+      .append("text")
+      .attr("x", lightBulbCenterX)
+      .attr("y", height * 0.3)
+      .text("21%")
+      .attr("class", "diagram-labels")
+      .attr("text-anchor", "middle")
+      .attr("alignment-baseline", "middle")
+      .attr("fill", "white");
 
+    /* ----------------------- Draw Chord ----------------------- */
+    const pvArrayAttachX = inverterX + inverterWidth;
+    const pvArrayAttachY = arrayYCenter * 1.5 + arrayHeight / 2;
 
-  svg
-    .append("text")
-    .attr("x", lightBulbCenterX)
-    .attr("y", height * 0.15)
-    .text("Average")
-    .attr("class", "diagram-labels")
-    .attr("text-anchor", "middle")
-    .attr("alignment-baseline", "middle")
-    .attr("fill", "white");
+    // Define the start of the chord (attached to the bottom of the light bulb)
+    const chordStartX = lightBulbCenterX;
+    const chordStartY = lightBulbCenterY + lightBulbRadius * 1.6;
 
-svg
-    .append("text")
-    .attr("x", lightBulbCenterX)
-    .attr("y", height * 0.2)
-    .text("Conversion")
-    .attr("class", "diagram-labels")
-    .attr("text-anchor", "middle")
-    .attr("alignment-baseline", "middle")
-    .attr("fill", "white");
+    const chordStrokeColor = "#777"; // Chord color
+    const chordStrokeWidth = arrayWidth * 0.015; // Chord thickness
 
-svg
-    .append("text")
-    .attr("x", lightBulbCenterX)
-    .attr("y", height * 0.25)
-    .text("Efficiency")
-    .attr("class", "diagram-labels")
-    .attr("text-anchor", "middle")
-    .attr("alignment-baseline", "middle")
-    .attr("fill", "white");
+    // Define the path for the chord
+    const chordPath = d3.path();
+    chordPath.moveTo(chordStartX, chordStartY); // Start at the light bulb
 
-svg
-    .append("text")
-    .attr("x", lightBulbCenterX)
-    .attr("y", height * 0.3)
-    .text("21%")
-    .attr("class", "diagram-labels")
-    .attr("text-anchor", "middle")
-    .attr("alignment-baseline", "middle")
-    .attr("fill", "white");
+    // Bezier curve for first curve (leftward arc)
+    chordPath.bezierCurveTo(
+      chordStartX, chordStartY * 1.1,
+      chordStartX * 0.9, chordStartY * 1.2,
+      chordStartX, chordStartY * 1.3
+    );
+    // Bezier curve for second curve (rightward arc)
+    chordPath.bezierCurveTo(
+      chordStartX * 1.1, chordStartY * 1.4,
+      chordStartX * 1.1, chordStartY * 1.6,
+      chordStartX, chordStartY * 1.7
+    );
+    // Bezier curve for third curve (leftward arc) leading into the attachment point
+    chordPath.bezierCurveTo(
+      chordStartX * 0.9, chordStartY * 1.75,
+      pvArrayAttachX, pvArrayAttachY * 0.95,
+      pvArrayAttachX, pvArrayAttachY
+    );
 
+    // Draw the chord on the SVG
+    svg.append("path")
+      .attr("d", chordPath.toString())
+      .attr("stroke", chordStrokeColor)
+      .attr("stroke-width", chordStrokeWidth)
+      .attr("fill", "none");
 
+    // Draw a straight chord from the panel center to the inverter
+    const panelCenterX = arrayXCenter * 0.5 + arrayWidth + arraySpacing;
+    const panelCenterY = arrayYCenter * 1.5 + arrayHeight / 2;
+    
+    svg.append("line")
+      .attr("x1", panelCenterX)
+      .attr("y1", panelCenterY)
+      .attr("x2", inverterX)
+      .attr("y2", inverterY + inverterHeight / 2)
+      .attr("stroke", "#777")
+      .attr("stroke-width", arrayWidth * 0.015);
+  })();
 
- /* ----------------------- Draw Chord ----------------------- */
-  const pvArrayAttachX = arrayXCenter * 0.5 + arrayWidth + arraySpacing;
-  const pvArrayAttachY = arrayYCenter * 1.5 + arrayHeight / 2;
-
-  
-  // Define the start of the chord (attached to the bottom of the light bulb)
-  const chordStartX = lightBulbCenterX;
-  const chordStartY = lightBulbCenterY + lightBulbRadius * 1.6;
-  
-  const chordStrokeColor = "#777"; // Chord color
-  const chordStrokeWidth = arrayWidth * 0.015; // Chord thickness
-  
-  // Define the path for the chord using multiple Bezier curves to create three swirly loops
-  const chordPath = d3.path();
-  chordPath.moveTo(chordStartX, chordStartY); // Start at the light bulb
-  // Bezier curve for first curve (leftward arc)
-  chordPath.bezierCurveTo(
-    chordStartX, chordStartY * 1.1,
-    chordStartX * 0.9, chordStartY * 1.25,
-    chordStartX, chordStartY * 1.35
-  );
-  // Bezier curve for second curve (rightward arc)
-  chordPath.bezierCurveTo(
-    chordStartX * 1.1, chordStartY * 1.45,
-    chordStartX * 1.15, chordStartY * 1.6,
-    chordStartX, chordStartY * 1.7
-  );
-  // Bezier curve for third curve (leftward arc) leading into the attachment point
-  chordPath.bezierCurveTo(
-    chordStartX * 0.9, chordStartY * 1.75,
-    pvArrayAttachX * 0.95, pvArrayAttachY * 0.95,
-    pvArrayAttachX, pvArrayAttachY
-  );
-  
-  // Draw the chord on the SVG
-  svg.append("path")
-    .attr("d", chordPath.toString())
-    .attr("stroke", chordStrokeColor)
-    .attr("stroke-width", chordStrokeWidth)
-    .attr("fill", "none");
-  
-})();
-
-// Update the tooltip position based on mouse movement
-document.addEventListener("mousemove", function (event) {
-  d3.select("#diagram-tooltip")
-    .style("left", `${event.pageX + 10}px`)
-    .style("top", `${event.pageY + 10}px`);
-});
+  // Update the tooltip position based on mouse movement
+  document.addEventListener("mousemove", function (event) {
+    d3.select("#diagram-tooltip")
+      .style("left", `${event.pageX + 10}px`)
+      .style("top", `${event.pageY + 10}px`);
+  });

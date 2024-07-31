@@ -104,17 +104,17 @@
               <div class="tooltip-title">${d.city}</div>
               <table class="tooltip-content">
                 <tr>
-                  <td>Year:</td>
+                  <td>Year</td>
                   <td class="value">${d.key}</td>
                 </tr>
                 <tr>
-                  <td>Population:</td>
+                  <td>Population</td>
                   <td class="value">${formatNumber(d.value)}</td>
                 </tr>
               </table>
               <table class="tooltip-total">
               <tr>
-                  <td>Population Change:</td>
+                  <td>Population Change</td>
                   <td class="value" style="color: ${percentChangeColor};">
                     <strong>${d.percentChange}%</strong>
                   </td>
