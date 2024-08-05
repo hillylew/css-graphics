@@ -1,9 +1,18 @@
 (function () {
+    /* ----------------------- Create Tooltip ------------------------ */
+    const container = document.getElementById("environmental-justice-bar-chart");
+
+   const tooltipDiv = document.createElement("div");
+   tooltipDiv.id = "tooltip";
+   tooltipDiv.className = "tooltip";
+   container.appendChild(tooltipDiv);
+   
+   const tooltip = d3.select(container).select("#tooltip");
+
     /* ----------------------- Dynamic dimensions ----------------------- */
     const aspectRatio = 0.7;
 
     // Get the container and its dimensions
-    const container = document.getElementById("environmental-justice-bar-chart");
     const containerWidth = container.offsetWidth; // Use offsetWidth for full element width
     const containerHeight = containerWidth * aspectRatio; // Calculate the height based on the width and aspect ratio
 
@@ -47,8 +56,6 @@
             .tickFormat(d => `${d}%`));
     const yAxis = (g) =>
         g.call(d3.axisLeft(yScale).tickSizeOuter(0).tickSizeInner(0).tickPadding(10));
-
-    const tooltip = d3.select('#tooltip');
 
     /* ----------------------- Loading and processing data ----------------------- */
     d3.csv("../../data/sustainability-indicators/environmental-justice/environmental-justice3.csv", (d) => ({

@@ -1,8 +1,17 @@
 (function () {
+   /* ----------------------- Create Tooltip ------------------------ */
+   const container = document.getElementById("biofuels-bar-chart3");
+
+   const tooltipDiv = document.createElement("div");
+   tooltipDiv.id = "tooltip";
+   tooltipDiv.className = "tooltip";
+   container.appendChild(tooltipDiv);
+ 
+   const tooltip = d3.select(container).select("#tooltip");
+
   /* ----------------------- Dynamic dimensions ----------------------- */
   const aspectRatio = 0.7;
 
-  const container = document.getElementById("biofuels-bar-chart3");
   const containerWidth = container.offsetWidth || 960; // Set a default width if offsetWidth is zero
   const containerHeight = containerWidth * aspectRatio;
 
@@ -28,8 +37,6 @@
   const y1 = d3.scaleBand().padding(0.05);
   const x = d3.scaleLinear().rangeRound([0, width]);
   const color = d3.scaleOrdinal().range(["#FED679", "#ED974A", "#8FC8E5", "#3167A4"]);
-
-  const tooltip = d3.select('#tooltip');
 
   /* ----------------------- Loading and processing data ----------------------- */
   d3.csv("../../data/energy/biofuels/biofuels5.csv").then((data) => {

@@ -1,9 +1,18 @@
 (function () {
+    /* ----------------------- Create Tooltip ------------------------ */
+    const container = document.getElementById("grid-energy-range-chart");
+
+   const tooltipDiv = document.createElement("div");
+   tooltipDiv.id = "tooltip";
+   tooltipDiv.className = "tooltip";
+   container.appendChild(tooltipDiv);
+   
+   const tooltip = d3.select(container).select("#tooltip");
+
     /* ----------------------- Dynamic dimensions ----------------------- */
     const aspectRatio = 0.7;
 
     // Get the container and its dimensions
-    const container = document.getElementById("grid-energy-range-chart");
     const containerWidth = container.offsetWidth; // Use offsetWidth for full element width
     const containerHeight = containerWidth * aspectRatio; // Calculate the height based on the width and aspect ratio
 
@@ -32,21 +41,13 @@
     const x = d3.scaleLinear().range([0, width]);
     const y = d3.scaleBand().range([0, height]).padding(0.1);
 
-    const xAxis = d3.axisBottom(x);
+    // Update the xAxis to increment by 10
+    const xAxis = d3.axisBottom(x).ticks(width / 80).tickFormat(d3.format("d"));
     const yAxis = d3.axisLeft(y);
 
     const colorScale = d3.scaleOrdinal().range(["#1f77b4"]);
 
     /* ----------------------- Create Tooltip ----------------------- */
-    const tooltip = d3
-        .select("body")
-        .append("div")
-        .attr("id", "tooltip")
-        .attr("class", "tooltip")
-        .style("position", "absolute")
-        .style("opacity", 0)
-        .style("pointer-events", "none");
-
     function onMouseMove(event, d) {
         // Position tooltip
         tooltip
@@ -81,8 +82,10 @@
         });
 
         // Update the scales' domains
-        x.domain([0, d3.max(data, (d) => d.val2)]);
+        const maxXValue = Math.ceil(d3.max(data, d => d.val2) / 10) * 10;
+        x.domain([0, maxXValue]);
         y.domain(data.map((d) => d.Technology));
+        
 
         // Draw the X-axis
         svg

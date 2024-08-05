@@ -17,6 +17,23 @@
       href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
       rel="stylesheet"
     />
+
+    <style>
+      #carbon-footprint-pie-chart {
+          position: relative;
+      }
+      .fork, .knife {
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+      }
+      .fork {
+          left: 10px;
+      }
+      .knife {
+          right: 10px;
+      }
+  </style>
   </head>
   <body>
     <header>
@@ -33,6 +50,13 @@
         <div id="carbon-footprint-donut-chart" class="chart"></div>
     </div>
 
+    <!-- <div class="CaptionedChart">
+      <div class="HeaderHTML">
+          <span>Greenhouse Gases Contribution by Food Type in Average Diet</span>
+      </div>
+      <div id="carbon-footprint-pie-chart"></div>
+  </div> -->
+
     <!-- Figure 2 -->
     <div class="CaptionedChart">
         <div class="HeaderHTML">
@@ -40,9 +64,6 @@
         </div>
         <div id="carbon-footprint-bar-chart" class="chart"></div>
     </div>
-
-    <!-- tooltip -->
-    <div id="tooltip" class="tooltip"></div>
 
     <!-- D3.js -->
     <script src="https://d3js.org/d3.v7.min.js"></script>
@@ -52,6 +73,7 @@
 
     <!-- js files-->
     <script src="../../js/sustainability-indicators/carbon-footprint/carbon-footprint-donut-chart.js"></script>
+    <script src="../../js/sustainability-indicators/carbon-footprint/carbon-footprint-pie-chart.js"></script>
     <script src="../../js/sustainability-indicators/carbon-footprint/carbon-footprint-bar-chart.js"></script>
   </body>
 </html>

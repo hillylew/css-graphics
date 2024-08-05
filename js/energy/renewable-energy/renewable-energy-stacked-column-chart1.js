@@ -1,9 +1,18 @@
 (function () {
+    /* ----------------------- Create Tooltip ------------------------ */
+    const container = document.getElementById("renewable-energy-stacked-column-chart1");
+
+    const tooltipDiv = document.createElement("div");
+    tooltipDiv.id = "tooltip";
+    tooltipDiv.className = "tooltip";
+    container.appendChild(tooltipDiv);
+    
+    const tooltip = d3.select(container).select("#tooltip");
+
     /* ----------------------- Dynamic dimensions ----------------------- */
     const aspectRatio = 0.7;
 
     // Get the container and its dimensions
-    const container = document.getElementById("renewable-energy-stacked-column-chart1");
     const containerWidth = container.offsetWidth; // Use offsetWidth for full element width
     const containerHeight = containerWidth * aspectRatio; // Calculate the height based on the width and aspect ratio
 
@@ -39,9 +48,6 @@
         .scaleOrdinal()
         .domain(["Annual Additions","Cumulative Capacity"])
         .range(["#1C476D", "#8CC9F2"]);
-        
-
-    const tooltip = d3.select("#tooltip");
 
     /* ----------------------- Load and process the CSV data ----------------------- */
 

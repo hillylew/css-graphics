@@ -1,8 +1,17 @@
 (function () {
+    /* ----------------------- Create Tooltip ------------------------ */
+    const container = document.getElementById("wind-energy-line-chart");
+
+    const tooltipDiv = document.createElement("div");
+    tooltipDiv.id = "tooltip";
+    tooltipDiv.className = "tooltip";
+    container.appendChild(tooltipDiv);
+    
+    const tooltip = d3.select(container).select("#tooltip");
+
   const aspectRatio = 0.7; // Define an aspect ratio for the chart
 
   // Get the container and its dimensions
-  const container = document.getElementById("wind-energy-line-chart");
   const containerWidth = container.offsetWidth; // Use offsetWidth for full element width
   const containerHeight = containerWidth * aspectRatio; // Calculate the height based on the width and aspect ratio
 
@@ -34,8 +43,6 @@
   // Define the axes
   const xAxis = d3.axisBottom(x).tickFormat(d3.timeFormat("%Y")).ticks(d3.timeYear.every(2));
   const yAxis = d3.axisLeft(y).tickFormat(d3.format("$")).ticks(4); 
-
-  const tooltip = d3.select("#tooltip");
 
   // Load and process the CSV data
   d3.csv("../../data/energy/wind-energy/wind-energy1.csv").then((data) => {

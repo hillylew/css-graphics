@@ -1,7 +1,16 @@
 (function () {
+    /* ----------------------- Create Tooltip ------------------------ */
+    const container = document.getElementById("us-cities-bar-chart2");
+
+    const tooltipDiv = document.createElement("div");
+    tooltipDiv.id = "tooltip";
+    tooltipDiv.className = "tooltip";
+    container.appendChild(tooltipDiv);
+
+    const tooltip = d3.select(container).select("#tooltip");
+  
     /* ----------------------- Dynamic dimensions ----------------------- */
     const aspectRatio = 0.7;
-    const container = document.getElementById("us-cities-bar-chart2");
     const containerWidth = container.offsetWidth;
     const containerHeight = containerWidth * aspectRatio;
   
@@ -26,14 +35,12 @@
     /* ----------------------- Scales, axes, and color ----------------------- */
     const yScale = d3.scaleBand().range([height, 0]).padding(0.1);
     const xScale = d3.scaleLinear().range([0, width]);
-    const colorScale = d3.scaleOrdinal().domain(["2000", "2022"]).range(["#FED679", "#3167A4"]);
+    const colorScale = d3.scaleOrdinal().domain(["2000", "2022"]).range(["#8FC8E5", "#3167A4"]);
     const formatDecimal = d3.format(".0f");
   
     const xAxis = (g) =>
       g.call(d3.axisBottom(xScale).tickFormat((d) => d));
     const yAxis = (g) => g.call(d3.axisLeft(yScale).tickSize(0).tickPadding(10));
-  
-    const tooltip = d3.select("#tooltip");
   
     /* ----------------------- Loading and processing data ----------------------- */
     d3.csv(
@@ -135,7 +142,7 @@
         .attr("transform", `translate(${width - dynamicMargin.right * 2}, ${height * 0.8})`);
   
       const legendData = [
-        { label: "Population in 2000", color: "#FED679" },
+        { label: "Population in 2000", color: "#8FC8E5" },
         { label: "Population in 2022", color: "#3167A4" },
       ];
   
@@ -164,4 +171,3 @@
       });
     });
   })();
-  

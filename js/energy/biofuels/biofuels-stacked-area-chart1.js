@@ -1,9 +1,19 @@
 (function () {
+
+    /* ----------------------- Create Tooltip ------------------------ */
+    const container = document.getElementById("biofuels-stacked-area-chart1");
+
+    const tooltipDiv = document.createElement("div");
+    tooltipDiv.id = "tooltip";
+    tooltipDiv.className = "tooltip";
+    container.appendChild(tooltipDiv);
+    
+    const tooltip = d3.select(container).select("#tooltip");
+
     /* ----------------------- Dynamic dimensions ----------------------- */
     const aspectRatio = 0.5;
   
     // Get the container and its dimensions
-    const container = document.getElementById("biofuels-stacked-area-chart1");
     const containerWidth = container.offsetWidth; // Use offsetWidth for full element width
     const containerHeight = containerWidth * aspectRatio; // Calculate the height based on the width and aspect ratio
   
@@ -38,16 +48,8 @@
     const colorScale = d3
       .scaleOrdinal()
       .domain(["U.S.", "European Union", "Brazil", "India"])
-      // .range(["#eb5250", "#6298c6", "#75bf70", "#f38f53"]);
-      // .range(["#00274c", "#1d476d", "#3167a4", "#8fc8e5", "#d8d8d8"]);
-      // .range(["#1d476d", "#3167a4", "#8fc8e5", "#386660", "#e2e27a"]);
-      // .range(["#1d476d", "#3167a4", "#8fc8e5", "#ffcb03", "#ffd579"]);
-  
-      // .range(["#1d476d", "#4084bc", "#73b9e0", "#aedbed", "#d8d8d8"]);
-      // .range(["#1d476d", "#4084bc", "#aedbed", "#386660", "#e2e27a"]);
       .range(["#1d476d", "#4084bc", "#8cc9f2", "#ffcb03", "#ffe07d"]);
-  
-    const tooltip = d3.select("#tooltip");
+
   
     /* ----------------------- Load and process the CSV data ----------------------- */
     d3.csv("../../data/energy/biofuels/biofuels1.csv").then((data) => {

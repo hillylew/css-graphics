@@ -1,8 +1,17 @@
 (function () {
+       /* ----------------------- Create Tooltip ------------------------ */
+       const container = document.getElementById("biofuels-column-chart");
+
+        const tooltipDiv = document.createElement("div");
+        tooltipDiv.id = "tooltip";
+        tooltipDiv.className = "tooltip";
+        container.appendChild(tooltipDiv);
+        
+        const tooltip = d3.select(container).select("#tooltip");
+
     /* ----------------------- Dynamic dimensions ----------------------- */
     const aspectRatio = 0.7;
 
-    const container = document.getElementById("biofuels-column-chart");
     const containerWidth = container.offsetWidth; // Use offsetWidth for full element width
     const containerHeight = containerWidth * aspectRatio; // Calculate the height based on the width and aspect ratio
 

@@ -1,18 +1,27 @@
 (function () {
+    /* ----------------------- Create Tooltip ------------------------ */
+    const container = document.getElementById("carbon-footprint-donut-chart");
+
+   const tooltipDiv = document.createElement("div");
+   tooltipDiv.id = "tooltip";
+   tooltipDiv.className = "tooltip";
+   container.appendChild(tooltipDiv);
+   
+   const tooltip = d3.select(container).select("#tooltip");
+
     // Dynamic dimensions
-    const aspectRatio = 0.8; // Donut chart is usually square
+    const aspectRatio = 1; // Donut chart is usually square
 
     // Get the container and its dimensions
-    const container = document.getElementById("carbon-footprint-donut-chart");
     const containerWidth = container.offsetWidth;
     const containerHeight = containerWidth * aspectRatio;
 
     // Calculate the dynamic margins
     const dynamicMargin = {
-        top: containerHeight * 0.1,
+        top: containerHeight * 0.05,
         right: containerWidth * 0.15,
-        bottom: containerHeight * 0.1,
-        left: containerWidth * 0.2,
+        bottom: containerHeight * 0.05,
+        left: containerWidth * 0.1,
     };
 
     // Calculate the width and height for the inner drawing area
@@ -46,7 +55,7 @@
         .style("font-size", "1.5em");
 
     // Load data from CSV
-    d3.csv("../../data/sustainability-indicators/carbon-footprint/carbon-footprint3.csv").then((data) => {
+    d3.csv("../../data/sustainability-indicators/carbon-footprint/carbon-footprint1.csv").then((data) => {
         // Convert the Percentage values to numerical format
         data.forEach(d => d.Percentage = +d.Percentage);
 
@@ -140,7 +149,7 @@
             .enter()
             .append('text')
             .attr("class", "chart-labels")
-            .text(d => `${d.data.Food} ${d.data.Percentage}%`) 
+            .text(d => `${d.data.Food}`) 
             .attr('transform', d => {
                 const pos = outerArc.centroid(d);
                 const midangle = d.startAngle + (d.endAngle - d.startAngle) / 2;

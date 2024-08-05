@@ -1,9 +1,18 @@
 (function () {
+  /* ----------------------- Create Tooltip ------------------------ */
+  const container = document.getElementById("environmental-justice-bar-chart2");
+
+  const tooltipDiv = document.createElement("div");
+  tooltipDiv.id = "tooltip";
+  tooltipDiv.className = "tooltip";
+  container.appendChild(tooltipDiv);
+  
+  const tooltip = d3.select(container).select("#tooltip");
+  
     /* ----------------------- Dynamic dimensions ----------------------- */
     const aspectRatio = 0.4;
   
     // Get the container and its dimensions
-    const container = document.getElementById("environmental-justice-bar-chart2");
     const containerWidth = container.offsetWidth; // Use offsetWidth for full element width
     const containerHeight = containerWidth * aspectRatio; // Calculate the height based on the width and aspect ratio
   

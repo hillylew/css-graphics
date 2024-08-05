@@ -1,9 +1,18 @@
 (function () {
+   /* ----------------------- Create Tooltip ------------------------ */
+   const container = document.getElementById("wind-energy-stacked-area-chart");
+
+   const tooltipDiv = document.createElement("div");
+   tooltipDiv.id = "tooltip";
+   tooltipDiv.className = "tooltip";
+   container.appendChild(tooltipDiv);
+   
+   const tooltip = d3.select(container).select("#tooltip");
+
   /* ----------------------- Dynamic dimensions ----------------------- */
   const aspectRatio = 0.7;
 
   // Get the container and its dimensions
-  const container = document.getElementById("wind-energy-stacked-area-chart");
   const containerWidth = container.offsetWidth; // Use offsetWidth for full element width
   const containerHeight = containerWidth * aspectRatio; // Calculate the height based on the width and aspect ratio
 
@@ -38,10 +47,7 @@
   const colorScale = d3
     .scaleOrdinal()
     .domain(["Rest of the World", "China", "U.S.", "Germany", "India"])
-    .range(["#eb5250", "#6298c6", "#75bf70", "#ae71b6", "#f38f53"]);
-  // .range(["#1d476d", "#3167a4", "#8fc8e5", "#ffcb03", "#ffd579"]);
-
-  const tooltip = d3.select("#tooltip");
+    .range(["#1d476d", "#4084bc", "#aedbed", "#386660", "#e2e27a"]);
 
   /* ----------------------- Load and process the CSV data ----------------------- */
   d3.csv("../../data/energy/wind-energy/wind-energy2.csv").then((data) => {

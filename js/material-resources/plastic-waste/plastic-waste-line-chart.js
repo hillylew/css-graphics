@@ -38,12 +38,12 @@
   const colorScale = d3
     .scaleOrdinal()
     .domain([
-      "Combustion with Energy Recovery",
       "Generation",
       "Recycled",
+      "Combustion with Energy Recovery",
       "Landfill",
     ])
-    .range(["#e41a1c", "#377eb8", "#4daf4a", "#984ea3"]);
+    .range(["#3167A4", "#ED974A", "#CE5845", "#4084BC",]);
 
   const tooltip = d3.select("#tooltip");
 

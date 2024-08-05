@@ -1,8 +1,17 @@
 (function () {
+  /* ----------------------- Create Tooltip ------------------------ */
+  const container = document.getElementById("renewable-energy-line-chart");
+
+  const tooltipDiv = document.createElement("div");
+  tooltipDiv.id = "tooltip";
+  tooltipDiv.className = "tooltip";
+  container.appendChild(tooltipDiv);
+  
+  const tooltip = d3.select(container).select("#tooltip");
+
   const aspectRatio = 0.7; // Define an aspect ratio for the chart
 
   // Get the container and its dimensions
-  const container = document.getElementById("renewable-energy-line-chart");
   const containerWidth = container.offsetWidth; // Use offsetWidth for full element width
   const containerHeight = containerWidth * aspectRatio; // Calculate the height based on the width and aspect ratio
 
@@ -65,8 +74,6 @@
       "#ed974a", // Wind-Onshore
       "#ffcb03", // Solar PV-Utility
     ]);
-
-  const tooltip = d3.select("#tooltip");
 
   // Load and process the CSV data
   d3.csv("../../data/energy/renewable-energy/renewable-energy2.csv").then((data) => {

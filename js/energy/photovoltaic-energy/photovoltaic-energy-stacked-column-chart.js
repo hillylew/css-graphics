@@ -1,9 +1,18 @@
 (function () {
+     /* ----------------------- Create Tooltip ------------------------ */
+     const container = document.getElementById("photovoltaic-energy-stacked-column-chart");
+
+    const tooltipDiv = document.createElement("div");
+    tooltipDiv.id = "tooltip";
+    tooltipDiv.className = "tooltip";
+    container.appendChild(tooltipDiv);
+    
+    const tooltip = d3.select(container).select("#tooltip");
+
     /* ----------------------- Dynamic dimensions ----------------------- */
     const aspectRatio = 0.7;
 
     // Get the container and its dimensions
-    const container = document.getElementById("photovoltaic-energy-stacked-column-chart");
     const containerWidth = container.offsetWidth; // Use offsetWidth for full element width
     const containerHeight = containerWidth * aspectRatio; // Calculate the height based on the width and aspect ratio
 
@@ -39,8 +48,6 @@
         .scaleOrdinal()
         .domain(["U.S.", "Rest of World"])
         .range(["#CE5845", "#ED974A"]);
-
-    const tooltip = d3.select("#tooltip");
 
     /* ----------------------- Load and process the CSV data ----------------------- */
     d3.csv("../../data/energy/photovoltaic-energy/photovoltaic-energy4.csv").then((data) => {

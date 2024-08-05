@@ -1,7 +1,16 @@
 (function () {
+  /* ----------------------- Create Tooltip ------------------------ */
+  const container = document.getElementById("photovoltaic-energy-line-chart2");
+
+  const tooltipDiv = document.createElement("div");
+  tooltipDiv.id = "tooltip";
+  tooltipDiv.className = "tooltip";
+  container.appendChild(tooltipDiv);
+  
+  const tooltip = d3.select(container).select("#tooltip");
+
   const aspectRatio = 0.65; // Define an aspect ratio for the chart
   // Get the container and its dimensions
-  const container = document.getElementById("photovoltaic-energy-line-chart2");
   const containerWidth = container.offsetWidth; // Use offsetWidth for full element width
   const containerHeight = containerWidth * aspectRatio; // Calculate the height based on the width and aspect ratio
 
@@ -39,8 +48,6 @@
       "100 MW Utility-Scale PV, One Axis Tracker",
     ])
     .range(["#1d476d", "#4084bc", "#ED974A", "#CE5845"]);
-
-  const tooltip = d3.select("#tooltip");
 
   d3.csv("../../data/energy/photovoltaic-energy/photovoltaic-energy3.csv").then((data) => {
     // Parse years and convert string values to numbers

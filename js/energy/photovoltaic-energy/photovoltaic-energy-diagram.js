@@ -263,7 +263,7 @@
     .append("g")
     .attr(
       "transform",
-      `translate(${arrayXCenter * 0.5},${arrayYCenter * 1.5})`
+      `translate(${arrayXCenter * 0.3},${arrayYCenter * 1.5})`
     );
 
   drawArray(arrayGroup);
@@ -276,8 +276,8 @@
   const sunRayStartPoint1 = { x: sunCenterX - sunRadius, y: sunCenterY }; // Left end of the sun diameter
   const sunRayStartPoint2 = { x: sunCenterX + sunRadius, y: sunCenterY }; // Right end of the sun diameter
 
-  const pvSystemBottomLeft = {x: arrayXCenter * 0.5, y: arrayYCenter * 1.5 + arrayHeight}; // Bottom left corner of the PV system array
-  const pvSystemTopRight = { x: arrayXCenter * 0.5 + arrayWidth, y: arrayYCenter * 1.5}; // Top right corner of the PV system array
+  const pvSystemBottomLeft = {x: arrayXCenter * 0.3, y: arrayYCenter * 1.5 + arrayHeight}; // Bottom left corner of the PV system array
+  const pvSystemTopRight = { x: arrayXCenter * 0.3 + arrayWidth, y: arrayYCenter * 1.5}; // Top right corner of the PV system array
 
   // Draw sun ray area
   const sunRayArea = svg
@@ -293,7 +293,7 @@
   /* ----------------------- Draw Inverter ----------------------- */
   const inverterWidth = arrayWidth * 0.3;
   const inverterHeight = arrayHeight * 0.3;
-  const inverterX = arrayXCenter * 0.5 + arrayWidth * 1.25;
+  const inverterX = arrayXCenter * 0.3 + arrayWidth * 1.4;
   const inverterY = arrayYCenter * 1.5 + (arrayHeight - inverterHeight) / 2;
 
   svg.append("rect")
@@ -306,6 +306,7 @@
     .attr("fill", "#cccc")
     .attr("stroke", "white")
     .attr("stroke-width", 2);
+    
 
   svg.append("text")
     .attr("x", inverterX + inverterWidth / 2)
@@ -317,13 +318,50 @@
     .attr("fill", "white");
 
   svg.append("text")
-    .attr("x", inverterX - inverterWidth * 0.1)
+    .attr("x", inverterX - inverterWidth * 0.3)
     .attr("y", inverterY + inverterHeight / 4)
-    .attr("text-anchor", "end")
-    .attr("alignment-baseline", "middle")
     .text("DC")
     .attr("class", "diagram-labels")
-    .attr("fill", "white");
+      .attr("text-anchor", "middle")
+      .attr("alignment-baseline", "middle")
+      .attr("fill", "red");
+
+  // Adding text "average conversion efficiency 21%" to the diagram with adjusted spacing
+  svg.append("text")
+    .attr("x", inverterX - inverterWidth * 0.3)
+    .attr("y", inverterY - inverterHeight * 2)
+    .text("Average")
+    .attr("class", "diagram-labels")
+      .attr("text-anchor", "middle")
+      .attr("alignment-baseline", "middle")
+      .attr("fill", "white");
+
+  svg.append("text")
+    .attr("x", inverterX - inverterWidth * 0.3)
+    .attr("y", inverterY - inverterHeight * 1.5)
+    .text("Conversion")
+    .attr("class", "diagram-labels")
+      .attr("text-anchor", "middle")
+      .attr("alignment-baseline", "middle")
+      .attr("fill", "white");
+
+  svg.append("text")
+    .attr("x", inverterX - inverterWidth * 0.3)
+    .attr("y", inverterY - inverterHeight * 1)
+    .text("Efficiency")
+    .attr("class", "diagram-labels")
+      .attr("text-anchor", "middle")
+      .attr("alignment-baseline", "middle")
+      .attr("fill", "white");
+
+  svg.append("text")
+    .attr("x", inverterX - inverterWidth * 0.3)
+    .attr("y", inverterY - inverterHeight * 0.5)
+    .text("21%")
+    .attr("class", "diagram-labels")
+      .attr("text-anchor", "middle")
+      .attr("alignment-baseline", "middle")
+      .attr("fill", "white");
 
   svg.append("text")
     .attr("x", inverterX + inverterWidth + inverterWidth * 0.1)
@@ -332,14 +370,14 @@
     .attr("alignment-baseline", "middle")
     .text("AC")
     .attr("class", "diagram-labels")
-    .attr("fill", "white");
+    .attr("fill", "red");
 
   /* ----------------------- Draw Conversion Efficiency (Light Bulb) ----------------------- */
 
    /* ----------------------- Texts for Diagram ----------------------- */
   svg
     .append("text")
-    .attr("x", arrayXCenter - arraySpacing * 2)
+    .attr("x", arrayXCenter - arraySpacing * 3)
     .attr("y", arrayYCenter)
     .text("100%")
     .attr("class", "diagram-labels")
@@ -421,45 +459,6 @@
       .attr("fill", "white")
       .attr("opacity", 0.6);
 
-    svg
-      .append("text")
-      .attr("x", lightBulbCenterX)
-      .attr("y", height * 0.15)
-      .text("Average")
-      .attr("class", "diagram-labels")
-      .attr("text-anchor", "middle")
-      .attr("alignment-baseline", "middle")
-      .attr("fill", "white");
-
-    svg
-      .append("text")
-      .attr("x", lightBulbCenterX)
-      .attr("y", height * 0.2)
-      .text("Conversion")
-      .attr("class", "diagram-labels")
-      .attr("text-anchor", "middle")
-      .attr("alignment-baseline", "middle")
-      .attr("fill", "white");
-
-    svg
-      .append("text")
-      .attr("x", lightBulbCenterX)
-      .attr("y", height * 0.25)
-      .text("Efficiency")
-      .attr("class", "diagram-labels")
-      .attr("text-anchor", "middle")
-      .attr("alignment-baseline", "middle")
-      .attr("fill", "white");
-
-    svg
-      .append("text")
-      .attr("x", lightBulbCenterX)
-      .attr("y", height * 0.3)
-      .text("21%")
-      .attr("class", "diagram-labels")
-      .attr("text-anchor", "middle")
-      .attr("alignment-baseline", "middle")
-      .attr("fill", "white");
 
     /* ----------------------- Draw Chord ----------------------- */
     const pvArrayAttachX = inverterX + inverterWidth;
@@ -503,7 +502,7 @@
       .attr("fill", "none");
 
     // Draw a straight chord from the panel center to the inverter
-    const panelCenterX = arrayXCenter * 0.5 + arrayWidth + arraySpacing;
+    const panelCenterX = arrayXCenter * 0.3 + arrayWidth + arraySpacing;
     const panelCenterY = arrayYCenter * 1.5 + arrayHeight / 2;
     
     svg.append("line")

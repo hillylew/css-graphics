@@ -1,9 +1,19 @@
 (function () {
+
+      /* ----------------------- Create Tooltip ------------------------ */
+      const container = document.getElementById("greenhouse-gases-stacked-column-chart");
+
+        const tooltipDiv = document.createElement("div");
+        tooltipDiv.id = "tooltip";
+        tooltipDiv.className = "tooltip";
+        container.appendChild(tooltipDiv);
+
+        const tooltip = d3.select(container).select("#tooltip");
+
     /* ----------------------- Dynamic dimensions ----------------------- */
     const aspectRatio = 0.7;
 
     // Get the container and its dimensions
-    const container = document.getElementById("greenhouse-gases-stacked-column-chart");
     const containerWidth = container.offsetWidth; // Use offsetWidth for full element width
     const containerHeight = containerWidth * aspectRatio; // Calculate the height based on the width and aspect ratio
 
@@ -39,8 +49,7 @@
         .scaleOrdinal()
         .domain(["CO2", "CH4", "N2O", "HFC, PFC, SF6, NF*"])
         .range(["#eb5250", "#6298c6", "#75bf70", "#ae71b6"]);
-        
-    const tooltip = d3.select("#tooltip");
+    
 
     /* ----------------------- Load and process the CSV data ----------------------- */
     d3.csv("./data/greenhouse-gases/greenhouse-gases2.csv").then((data) => {

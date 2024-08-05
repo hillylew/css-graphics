@@ -1,5 +1,15 @@
 (function() {
+    /* ----------------------- Create Tooltip ------------------------ */
     const container = document.getElementById("water-supply-stacked-column-chart");
+
+  const tooltipDiv = document.createElement("div");
+  tooltipDiv.id = "tooltip";
+  tooltipDiv.className = "tooltip";
+  container.appendChild(tooltipDiv);
+  
+  const tooltip = d3.select(container).select("#tooltip");
+
+    
     const containerWidth = container.offsetWidth; // Use offsetWidth for full element width
     const aspectRatio = 0.7; // Example aspect ratio
     const containerHeight = containerWidth * aspectRatio; // Calculate the height based on the width and aspect ratio
@@ -44,8 +54,6 @@
 
     svg.selectAll(".tick line").remove(); // Remove x-axis ticks
     
-
-    const tooltip = d3.select('#tooltip');
 
     // Load CSV data and build chart
     d3.csv("../../data/water/water-supply/water-supply1.csv", d3.autoType).then(function(data) {

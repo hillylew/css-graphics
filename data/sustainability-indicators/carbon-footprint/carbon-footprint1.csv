@@ -1,2 +1,10 @@
-Food,Meats,Dairy,Beverages,Fish and Seafood,Eggs,Vegetables,Grain products,Fruits,Other
-Percentage,56.6,18.3,5.9,5.8,2.8,2.6,2.1,1.6,4.3
+Food,Percentage
+Other,4.3
+Fruits,1.6
+Grain,2.1
+Vegetables,2.6
+Eggs,2.8
+seafood,5.8
+Beverages,5.9
+Dairy,18.3
+Meats,56.6

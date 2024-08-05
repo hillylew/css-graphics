@@ -1,7 +1,16 @@
 (function () {
+   /* ----------------------- Create Tooltip ------------------------ */
+   const container = document.getElementById("biofuels-bar-chart2");
+
+   const tooltipDiv = document.createElement("div");
+   tooltipDiv.id = "tooltip";
+   tooltipDiv.className = "tooltip";
+   container.appendChild(tooltipDiv);
+ 
+   const tooltip = d3.select(container).select("#tooltip");
+
   /* ----------------------- Dynamic dimensions ----------------------- */
   const aspectRatio = 0.7;
-  const container = document.getElementById("biofuels-bar-chart2");
   const containerWidth = container.offsetWidth;
   const containerHeight = containerWidth * aspectRatio;
 
@@ -33,7 +42,7 @@
   const xAxis = (g) => g
     .call(d3.axisBottom(xScale).tickValues([0, 50, 100, 150, 200]))
     .call(g => g.select(".domain").attr("stroke", "none"))  // This removes the x-axis line
-    .call(g => g.selectAll(".tick line").attr("stroke", "#aaaaaa").attr("stroke-width", "0.5"))  // Make tick lines light grey
+    .call(g => g.selectAll(".tick line").attr("stroke", "#aaaaaa").attr("stroke-width", "0.2"))  // Make tick lines light grey
     .call(g => g.selectAll(".tick text").attr("class", "chart-labels").attr("fill", "#000"));  // Make tick texts light grey
 
   const yAxis = (g) => g.call(d3.axisLeft(yScale).tickSizeOuter(0).tickSizeInner(0).tickPadding(10));
@@ -45,8 +54,6 @@
     .attr("text-anchor", "middle")
     .attr("fill", "#000")
     .text("Biofuel Yield (GJ/ha)");
-
-  const tooltip = d3.select('#tooltip');
 
   /* ----------------------- Loading and processing data ----------------------- */
   d3.csv("../../data/energy/biofuels/biofuels3.csv", (d) => ({
@@ -84,7 +91,7 @@
       .attr("y2", height)
       .attr("stroke", "#aaaaaa")
       .attr("stroke-width", "1")
-      .attr("stroke-width", "0.5");
+      .attr("stroke-width", "0.2");
 
     const feedstockGroups = svg
       .selectAll(".feedstock-group")

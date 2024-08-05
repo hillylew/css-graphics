@@ -1,9 +1,18 @@
 (function () {
+    /* ----------------------- Create Tooltip ------------------------ */
+    const container = document.getElementById("renewable-energy-stacked-column-chart2");
+
+    const tooltipDiv = document.createElement("div");
+    tooltipDiv.id = "tooltip";
+    tooltipDiv.className = "tooltip";
+    container.appendChild(tooltipDiv);
+    
+    const tooltip = d3.select(container).select("#tooltip");
+
     /* ----------------------- Dynamic dimensions ----------------------- */
     const aspectRatio = 0.7;
 
     // Get the container and its dimensions
-    const container = document.getElementById("renewable-energy-stacked-column-chart2");
     const containerWidth = container.offsetWidth; // Use offsetWidth for full element width
     const containerHeight = containerWidth * aspectRatio; // Calculate the height based on the width and aspect ratio
 
@@ -11,7 +20,7 @@
     const dynamicMargin = {
         top: containerHeight * 0.1,
         right: containerWidth * 0.17,
-        bottom: containerHeight * 0.1,
+        bottom: containerHeight * 0.05,
         left: containerWidth * 0.05,
     };
 
@@ -42,9 +51,6 @@
         // .range(["#1d476d", "#4084bc", "#aedbed", "#386660", "#e2e27a"]);
         .range(["#1d476d", "#3167a4", "#8cc9f2", "#ffcb03", "#ffe07d"]);
 
-        
-
-    const tooltip = d3.select("#tooltip");
 
     /* ----------------------- Load and process the CSV data ----------------------- */
     d3.csv("../../data/energy/renewable-energy/renewable-energy4.csv").then((data) => {

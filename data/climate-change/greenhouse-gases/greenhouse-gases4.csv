@@ -1,8 +1,7 @@
 Category,End Use,Annual CO2 Emission (lbs)
 Electricity,Space heating,2034
-Electricity,Pool pumps,1950
-Electricty,Pool heaters,0
 Gas,Pool heaters,4602
+Electricity,Pool pumps,1950
 Electricity,EV charging,1933
 Electricity,AC,1897
 Electricity,Refrigerators,686
@@ -14,6 +13,6 @@ Electricity,Ceiling fans,185
 Electricity,Dishwashers,91
 Electricity,Microwaves,86
 Electricity,Clothes washer,55
-Gas,Space heating,5252
-Gas,Clothes dryers,241
 Gas,Cooking,236
+Gas,Clothes dryers,241
+Gas,Space heating,5252

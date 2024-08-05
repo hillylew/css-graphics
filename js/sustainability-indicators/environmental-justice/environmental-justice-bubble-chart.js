@@ -1,9 +1,18 @@
 (function () {
+    /* ----------------------- Create Tooltip ------------------------ */
+    const container = document.getElementById("environmental-justice-bubble-chart");
+
+  const tooltipDiv = document.createElement("div");
+  tooltipDiv.id = "tooltip";
+  tooltipDiv.className = "tooltip";
+  container.appendChild(tooltipDiv);
+  
+  const tooltip = d3.select(container).select("#tooltip");
+
     // Dynamic dimensions
     const aspectRatio = 0.5;
 
     // Get the container and its dimensions
-    const container = document.getElementById("environmental-justice-bubble-chart");
     const containerWidth = container.offsetWidth;
     const containerHeight = containerWidth * aspectRatio;
 
@@ -26,8 +35,6 @@
         .attr("preserveAspectRatio", "xMinYMin meet")
         .append("g")
         .attr("transform", `translate(${dynamicMargin.left},${dynamicMargin.top})`);
-
-    const tooltip = d3.select("#tooltip");
 
     // Load data from CSV
     d3.csv("../../data/sustainability-indicators/environmental-justice/environmental-justice5.csv")

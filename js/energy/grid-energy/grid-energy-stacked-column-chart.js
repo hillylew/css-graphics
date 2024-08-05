@@ -1,25 +1,29 @@
 (function () {
-    /* ----------------------- Dynamic dimensions ----------------------- */
-    const aspectRatio = 0.8;
-
-    // Get the container and its dimensions
+    /* ----------------------- Create Tooltip ------------------------ */
     const container = document.getElementById("grid-energy-stacked-column-chart");
-    const containerWidth = container.offsetWidth; // Use offsetWidth for full element width
-    const containerHeight = containerWidth * aspectRatio; // Calculate the height based on the width and aspect ratio
 
-    // Calculate the dynamic margins
+    const tooltipDiv = document.createElement("div");
+    tooltipDiv.id = "tooltip";
+    tooltipDiv.className = "tooltip";
+    container.appendChild(tooltipDiv);
+
+    const tooltip = d3.select(container).select("#tooltip");
+
+    /* ----------------------- Dynamic dimensions ----------------------- */
+    const aspectRatio = 0.7;
+    const containerWidth = container.offsetWidth;
+    const containerHeight = containerWidth * aspectRatio;
+
     const dynamicMargin = {
-        top: containerHeight * 0.1,
-        right: containerWidth * 0.17,
-        bottom: containerHeight * 0.2,
-        left: containerWidth * 0.05,
+        top: containerHeight * 0.02,
+        right: containerWidth * 0.1,
+        bottom: containerHeight * 0.1,  // Increased margin for x-axis label
+        left: containerWidth * 0.15,
     };
 
-    // Calculate the width and height for the inner drawing area
     const width = containerWidth - dynamicMargin.left - dynamicMargin.right;
     const height = containerHeight - dynamicMargin.top - dynamicMargin.bottom;
 
-    // Append SVG object
     const svg = d3
         .select("#grid-energy-stacked-column-chart")
         .append("svg")
@@ -28,81 +32,60 @@
         .append("g")
         .attr("transform", `translate(${dynamicMargin.left},${dynamicMargin.top})`);
 
-    /* ----------------------- X and Y Scales ----------------------- */
-    const x = d3.scaleBand().range([0, width]).padding(0.1);
-    const y = d3.scaleLinear().range([height, 0]);
+    /* ----------------------- Scales, axes, and color ----------------------- */
+    const xScale = d3.scaleLinear().range([0, width]);
+    const yScale = d3.scaleBand().range([height, 0]).padding(0.1);
+    const colorScale = d3.scaleOrdinal().domain(["Non-PHS", "PHS"]).range(["#3167A4", "#8FC8E5"]);
+    const formatNumber = d3.format(",");
 
-    const xAxis = d3.axisBottom(x);
-    const yAxis = d3.axisLeft(y).tickFormat((d) => d / 1000);
+    const xAxis = (g) =>
+        g.call(d3.axisBottom(xScale)
+            .tickValues(d3.range(0, xScale.domain()[1] + 1, 2000))
+            .tickFormat((d) => formatNumber(d / 1000)))
+        .call(g => g.select(".domain"))
+        .call(g => g.selectAll(".tick text").attr("class", "chart-labels").attr("fill", "#000"));
 
-    const colorScale = d3
-        .scaleOrdinal()
-        .domain(["Non-PHS", "PHS"])
-        .range(["#1d476d", "#ffcb03"]);
+    const yAxis = (g) =>
+        g.call(d3.axisLeft(yScale).tickSizeOuter(0).tickSizeInner(0).tickPadding(10))
+        .call(g => g.select(".domain").remove()) // Remove y-axis line
+        .call(g => g.selectAll(".tick text").attr("class", "chart-labels").attr("fill", "#000").style("font-weight", "bold"));
 
-    // Create Tooltip element
-    const tooltip = d3.select("body").append("div")
-        .attr("id", "tooltip")
-        .attr("class", "tooltip")
-        .style("position", "absolute")
-        .style("pointer-events", "none")
-        .style("opacity", 0);
-
-    /* ----------------------- Load and process the CSV data ----------------------- */
+    /* ----------------------- Loading and processing data ----------------------- */
     d3.csv("../../data/energy/grid-energy/grid-energy2.csv").then((data) => {
-        // Parse data and convert string values to numbers
         data.forEach((d) => {
             for (let prop in d) {
                 if (prop !== "State") d[prop] = +d[prop];
             }
         });
 
-        // Stack the data
         const stack = d3.stack().keys(["Non-PHS", "PHS"]);
         const stackedData = stack(data);
 
-        /* ----------------------- Update the scale domains with the processed data ----------------------- */
-        x.domain(data.map((d) => d.State));
-        const maxYValue =
-            Math.ceil(
-                d3.max(stackedData, (layer) => d3.max(layer, (d) => d[1])) / 2000
-            ) * 2000;
-        y.domain([0, maxYValue]);
+        yScale.domain(data.map((d) => d.State).reverse());
 
-        // Draw the X-axis
-        const xTickValues = x.domain();
-        xAxis.tickValues(xTickValues);
+        const maxXValue = Math.ceil(d3.max(stackedData, (layer) => d3.max(layer, (d) => d[1])) / 2000) * 2000;
+        xScale.domain([0, maxXValue]);
 
-        const xAxisGroup = svg
+        svg
             .append("g")
-            .attr("transform", `translate(0,${height})`)
-            .call(xAxis);
-
-        xAxisGroup
-            .selectAll(".tick text")
-            .attr("class", "chart-labels")
-            .style("text-anchor", "end")
-            .attr("transform", "rotate(-45)")
-            .attr("dy", ".35em")
-            .attr("dx", "-.8em");  // Adjust this value to fine-tune the centering
-
-        // Draw the Y-axis
-        const yAxisGroup = svg
-            .append("g")
-            .call(yAxis)
+            .attr("transform", `translate(0, ${height})`)
+            .call(xAxis)
             .attr("class", "chart-labels");
 
-        // y-axis label
-        yAxisGroup
-            .append("text")
+        // Add x-axis label
+        svg.append("text")
             .attr("class", "chart-labels")
             .attr("text-anchor", "middle")
-            .attr("transform", `translate(0, -${dynamicMargin.top / 2})`)
-            .style("fill", "#000")
-            .text("GW");
+            .attr("x", width / 2)
+            .attr("y", height + dynamicMargin.bottom * 0.8)
+            .text("Energy Storage Capacity (GW)");
 
-        /* ----------------------- Draw the chart ----------------------- */
-        // Use categoryGroups instead of bars for the rectangles to capture mouseover with the proper context
+        svg
+            .append("g")
+            .call(yAxis)
+            .attr("class", "chart-labels")
+            .style("font-weight", "bold");
+
         const categoryGroups = svg.selectAll(".category-group")
             .data(stackedData)
             .enter()
@@ -114,107 +97,101 @@
             .data((d) => d)
             .enter()
             .append("rect")
-            .attr("x", (d) => x(d.data.State))
-            .attr("y", (d) => y(d[1]))
-            .attr("height", (d) => y(d[0]) - y(d[1]))
-            .attr("width", x.bandwidth())
+            .attr("x", (d) => xScale(d[0]))
+            .attr("y", (d) => yScale(d.data.State))
+            .attr("height", yScale.bandwidth())
+            .attr("width", (d) => xScale(d[1]) - xScale(d[0]))
             .on("mouseover", function (event, d) {
-                // Highlight all bars in this category
                 highlightCategory(d3.select(this.parentNode).datum().key);
             })
             .on("mouseout", resetCategoryHighlight);
 
-        /* ----------------------- Highlight ----------------------- */
         function highlightCategory(category) {
-            svg.selectAll(".category-group").style("fill-opacity", 0.2); // Mute all other categories
+            svg.selectAll(".category-group").style("fill-opacity", 0.2);
             svg.selectAll(".category-group")
                 .filter((d) => d.key === category)
-                .style("fill-opacity", 1); // Highlight the current category
+                .style("fill-opacity", 1);
         }
 
         function resetCategoryHighlight() {
-            svg.selectAll(".category-group").style("fill-opacity", 1); // Reset opacity to default
+            svg.selectAll(".category-group").style("fill-opacity", 1);
         }
 
-        /* ----------------------- Legend & hover effect ----------------------- */
-        const legend = svg
-            .selectAll(".legend")
-            .data(stackedData)
-            .enter()
-            .append("g")
-            .attr("transform", (d) => {
-                const lastPoint = d[d.length - 1];
-                const yPosition =
-                    y(lastPoint[0]) + (y(lastPoint[1]) - y(lastPoint[0])) / 2;
-                return `translate(${width},${yPosition})`;
-            });
+        const legend = svg.append("g")
+            .attr("transform", `translate(${width - dynamicMargin.right * 2}, ${height * 0.8})`);
 
-        legend
-            .append("text")
-            .attr("class", "chart-labels")
-            .attr("x", 5)
-            .attr("y", 0)
-            .style("text-anchor", "start")
-            .style("alignment-baseline", "middle")
-            .style("fill", (d) => colorScale(d.key))
-            .text((d) => d.key);
+        const legendData = [
+            { label: "Non-PHS", color: "#3167A4" },
+            { label: "PHS", color: "#8FC8E5" },
+        ];
 
-        // Bind the legend to the same highlight logic
-        legend.on("mouseover", function (event, d) {
-            highlightCategory(d.key);
-        }).on("mouseout", resetCategoryHighlight);
+        const legendItemSize = width * 0.04;
+        const gap = width * 0.01;
 
-        /* ----------------------- Mouseover event ----------------------- */
+        legendData.forEach((d, i) => {
+            legend
+                .append("rect")
+                .attr("x", 0)
+                .attr("y", i * (legendItemSize + gap))
+                .attr("width", legendItemSize)
+                .attr("height", legendItemSize)
+                .style("fill", d.color)
+                .attr("rx", 3)
+                .attr("ry", 3)
+                .attr("class", "legend-rect");
+
+            legend
+                .append("text")
+                .attr("x", legendItemSize + gap)
+                .attr("y", i * (legendItemSize + gap) + legendItemSize / 2)
+                .attr("alignment-baseline", "middle")
+                .text(d.label)
+                .attr("class", "chart-labels");
+        });
+
         function onMouseMove(event) {
             const [xPos, yPos] = d3.pointer(event, this);
-            const hoveredState = x.domain().find((state) => x(state) <= xPos && xPos < x(state) + x.bandwidth());
+            const hoveredState = yScale.domain().find((state) => yScale(state) <= yPos && yPos < yScale(state) + yScale.bandwidth());
             const hoverData = data.find((d) => d.State === hoveredState);
 
-            // Position tooltip
-            tooltip
-                .style("opacity", 0.9)
-                .style("left", `${event.pageX + dynamicMargin.left / 4}px`)
-                .style("top", `${event.pageY}px`);
+            tooltip.transition().duration(200).style("opacity", 0.9);
+            tooltip.style("left", `${event.pageX + 5}px`).style("top", `${event.pageY - 28}px`);
 
-            const formatNumber = d3.format(",");
             if (hoverData) {
                 tooltip.html(`
                     <div class="tooltip-title">${hoverData.State}</div>
-                    <table class="tooltip-content">  
-                    <tr>
-                        <td><span class="color-legend" style="background-color: ${colorScale("Non-PHS")};"></span>Non-PHS</td>
-                        <td class="value">${formatNumber(hoverData["Non-PHS"])}</td>
-                    </tr>
-                    <tr>
-                        <td><span class="color-legend" style="background-color: ${colorScale("PHS")};"></span>PHS</td>
-                        <td class="value">${formatNumber(hoverData.PHS)}</td>
-                    </tr>
+                    <table class="tooltip-content">
+                        <tr>
+                            <td><span class="color-legend" style="background-color: ${colorScale("Non-PHS")};"></span>Non-PHS</td>
+                            <td class="value">${formatNumber(hoverData["Non-PHS"])}</td>
+                        </tr>
+                        <tr>
+                            <td><span class="color-legend" style="background-color: ${colorScale("PHS")};"></span>PHS</td>
+                            <td class="value">${formatNumber(hoverData["PHS"])}</td>
+                        </tr>
                     </table>
                     <table class="tooltip-total">
                         <tr>
                             <td><strong>Total</strong></td>
-                            <td class="value">${formatNumber(hoverData["Non-PHS"] + hoverData.PHS)}</td>
+                            <td class="value">${formatNumber(hoverData["Non-PHS"] + hoverData["PHS"])}</td>
                         </tr>
                     </table>
                 `);
             }
         }
 
-        // Create a rect for listening to mouse events
-        svg
-            .append("rect")
+        svg.append("rect")
             .attr("class", "listening-rect")
             .attr("width", width + dynamicMargin.left / 4)
             .attr("height", height)
             .attr("fill", "none")
             .attr("pointer-events", "all")
             .on("mousemove", onMouseMove)
-            .on("mouseover", function () {
+            .on("mouseover", () => {
                 tooltip.style("opacity", 0.9);
             })
-            .on("mouseout", function () {
+            .on("mouseout", () => {
                 tooltip.style("opacity", 0);
             });
-
     });
 })();

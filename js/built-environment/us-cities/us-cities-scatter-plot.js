@@ -1,9 +1,19 @@
 (function () {
+
+    /* ----------------------- Create Tooltip ------------------------ */
+    const container = document.getElementById("us-cities-scatter-plot");
+
+    const tooltipDiv = document.createElement("div");
+    tooltipDiv.id = "tooltip";
+    tooltipDiv.className = "tooltip";
+    container.appendChild(tooltipDiv);
+
+    const tooltip = d3.select(container).select("#tooltip");
+
   /* ----------------------- Dynamic dimensions ----------------------- */
   const aspectRatio = 0.7;
 
   // Get the container and its dimensions
-  const container = document.getElementById("us-cities-scatter-plot");
   const containerWidth = container.offsetWidth; // Use offsetWidth for full element width
   const containerHeight = containerWidth * aspectRatio; // Calculate the height based on the width and aspect ratio
 
@@ -40,8 +50,6 @@
     .scaleOrdinal()
     .domain(["North America", "Europe", "Asia", "Australia"])
     .range(["#8FC7E5", "#386660", "#3167A3", "#1D476D"]);
-
-  const tooltip = d3.select("#tooltip");
 
   /* ----------------------- Load and process the CSV data ----------------------- */
   d3.csv("../../data/built-environment/us-cities/us-cities2.csv").then(
