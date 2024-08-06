@@ -112,11 +112,12 @@
                               </tr>
                           </table>`
                     )
-                        .style("left", event.pageX + "px")
-                        .style("top", event.pageY - 28 + "px");
+                    .style("left", `${event.pageX + dynamicMargin.left / 4}px`)
+                    .style("top", `${event.pageY}px`);
                 })
                 .on("mousemove", function (event, d) {
-                    tooltip.style("left", event.pageX + "px").style("top", event.pageY - 28 + "px");
+                    tooltip.style("left", `${event.pageX + dynamicMargin.left / 4}px`)
+                        .style("top", `${event.pageY}px`);
                 })
                 .on("mouseout", function (event, d) {
                     tooltip.transition().duration(500).style("opacity", 0);

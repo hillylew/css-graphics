@@ -526,6 +526,6 @@
   // Update the tooltip position based on mouse movement
   document.addEventListener("mousemove", function (event) {
     d3.select("#diagram-tooltip")
-      .style("left", `${event.pageX + 10}px`)
-      .style("top", `${event.pageY + 10}px`);
+      .style("left", `${event.pageX + dynamicMargin.left / 4}px`)
+      .style("top", `${event.pageY}px`);
   });

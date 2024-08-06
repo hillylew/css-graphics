@@ -32,7 +32,7 @@
         .attr("preserveAspectRatio", "xMinYMin meet")
         .append("g")
         .attr("transform", `translate(${dynamicMargin.left},${dynamicMargin.top})`);
-        
+
 
     const categories = ['Landfill', 'Recycled', 'Combustion', 'Composted', 'Other'];
 
@@ -105,8 +105,8 @@
                         ${tooltipData}
                     </table>`
                 )
-                .style("left", (event.pageX + 10) + "px")
-                .style("top", (event.pageY - 28) + "px");
+                .style("left", `${event.pageX + dynamicMargin.left / 4}px`)
+                .style("top", `${event.pageY}px`);
             })
             .on("mouseout", function () {
                 // d3.select(this).style("fill", d3.select(this).attr('data-original-color'));

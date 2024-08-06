@@ -52,8 +52,8 @@
         // Position tooltip
         tooltip
             .style("opacity", 0.9)
-            .style("left", `${event.pageX + 10}px`)
-            .style("top", `${event.pageY - 28}px`)
+            .style("left", `${event.pageX + dynamicMargin.left / 4}px`)
+            .style("top", `${event.pageY}px`)
             .html(`
                 <div class="tooltip-title">${d.Technology}</div>
                 <table class="tooltip-content">  

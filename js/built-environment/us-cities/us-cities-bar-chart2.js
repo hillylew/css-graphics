@@ -129,8 +129,8 @@
             </table>
             `
             )
-            .style("left", `${event.pageX + 5}px`)
-            .style("top", `${event.pageY - 28}px`);
+            .style("left", `${event.pageX + dynamicMargin.left / 4}px`)
+            .style("top", `${event.pageY}px`);
         })
         .on("mouseout", () => {
           tooltip.transition().duration(500).style("opacity", 0);

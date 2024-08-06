@@ -107,8 +107,8 @@
                         ${tooltipData}
                     </table>`
                 )
-                .style("left", (event.pageX + 10) + "px")
-                .style("top", (event.pageY + 10) + "px");
+                .style("left", `${event.pageX + dynamicMargin.left / 4}px`)
+                .style("top", `${event.pageY}px`);
             })
             .on("mouseout", function () {
                 d3.select(this).style("opacity", 1);

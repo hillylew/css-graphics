@@ -205,8 +205,8 @@ data.forEach((d) => {
         </table>`
       )
         .style("opacity", 0.9)
-        .style("left", event.pageX + 15 + "px")
-        .style("top", event.pageY - 28 + "px");
+        .style("left", `${event.pageX + dynamicMargin.left / 4}px`)
+        .style("top", `${event.pageY}px`);
     })
     .on("mouseout", function () {
       // Hide the tooltip

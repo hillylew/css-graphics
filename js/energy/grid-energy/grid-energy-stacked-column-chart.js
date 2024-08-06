@@ -155,7 +155,8 @@
             const hoverData = data.find((d) => d.State === hoveredState);
 
             tooltip.transition().duration(200).style("opacity", 0.9);
-            tooltip.style("left", `${event.pageX + 5}px`).style("top", `${event.pageY - 28}px`);
+            tooltip.style("left", `${event.pageX + dynamicMargin.left / 4}px`)
+                .style("top", `${event.pageY}px`);
 
             if (hoverData) {
                 tooltip.html(`
