@@ -10,7 +10,7 @@
     const tooltip = d3.select(container).select("#tooltip");
 
     /* ----------------------- Dynamic Dimensions ----------------------- */
-    const aspectRatio = 0.5;
+    const aspectRatio = 0.4;
 
     // Get the container and its dimensions
     const containerWidth = container.offsetWidth; // Full element width
@@ -18,9 +18,9 @@
 
     // Calculate dynamic margins
     const dynamicMargin = {
-        top: containerHeight * 0.05,
+        top: containerHeight * 0.02,
         right: containerWidth * 0.05,
-        bottom: containerHeight * 0.15,
+        bottom: containerHeight * 0.2,
         left: containerWidth * 0.25,
     };
 
@@ -120,7 +120,7 @@
 
         /* ----------------------- Legend ----------------------- */
         const legend = svg.append("g")
-            .attr("transform", `translate(${width - dynamicMargin.right * 4}, ${height * 0.7})`);
+            .attr("transform", `translate(${width - dynamicMargin.right * 4}, ${height * 0.6})`);
 
         const legendData = [
             { label: "Proposed", color: "#CE5845" },
