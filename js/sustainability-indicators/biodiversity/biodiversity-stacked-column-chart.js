@@ -1,9 +1,18 @@
 (function () {
+  /* ----------------------- Create Tooltip ------------------------ */
+  const container = document.getElementById("biodiversity-stacked-column-chart");
+
+  const tooltipDiv = document.createElement("div");
+  tooltipDiv.id = "tooltip";
+  tooltipDiv.className = "tooltip";
+  container.appendChild(tooltipDiv);
+  
+  const tooltip = d3.select(container).select("#tooltip");
+
   // Dynamic dimensions
   const aspectRatio = 0.6;
 
   // Get the container and its dimensions
-  const container = document.getElementById("biodiversity-stacked-column-chart");
   const containerWidth = container.offsetWidth;
   const containerHeight = containerWidth * aspectRatio;
 

@@ -1,0 +1,9 @@
+Mode,Intensity (BTU/passenger-mile),Load Factor (persons/vehicle)
+Transit Bus,4634,7.5
+Personal Truck,3212,1.8
+Car,2787,1.5
+Motorcycle,2370,1.2
+Air,2243,120.4
+Commuter Rail,1583,33.9
+Intercity Rail,1506,23.2
+Transit Rail,851,23.6

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CSS Graphics</title>
+    <link rel="stylesheet" href="../../css/stylesheet.css" />
+
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header>
+      <a id="name" href="personal-transportation.html"> Personal Transportation Factsheet </a>
+      <a id="name" href="../index.html"> &lt; Go Back </a>
+    </header>
+
+    <!-- Personal Transportation Vehicles-->
+    <!-- Figure 1 -->
+    <div class="CaptionedChart">
+      <div class="HeaderHTML">
+        <span>Miles Per Gallon (MPG) by Model Year, 1975-2022</span>
+      </div>
+
+      <div id="personal-transportation-line-chart" class="chart"></div>
+    </div>
+
+    <!-- Figure 2 -->
+    <div class="CaptionedChart">
+        <div class="HeaderHTML">
+          <span>Market Share by Vehicle Type, 1975-2022</span>
+        </div>
+  
+        <div id="personal-transportation-area-chart" class="chart"></div>
+    </div>
+
+    <!-- Figure 3 -->
+    <div class="CaptionedChart">
+        <div class="HeaderHTML">
+          <span>U.S. Modes of Transportation to Work, 2020</span>
+        </div>
+  
+        <div id="personal-transportation-bar-chart" class="chart"></div>
+    </div>
+
+    <!-- Figure 4 -->
+    <div class="CaptionedChart">
+        <div class="HeaderHTML">
+          <span>Energy Intensity of U.S. Passenger Travel, 2019</span>
+        </div>
+  
+        <div id="personal-transportation-bar-chart2" class="chart"></div>
+    </div>
+
+
+ 
+
+    <!-- tooltip -->
+    <div id="tooltip" class="tooltip"></div>
+
+    <!-- D3.js -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+
+    <!-- D3.js Map Library -->
+    <script src="https://d3js.org/topojson.v3.min.js"></script>
+
+    <!-- js files-->
+    <script src="../../js/mobility/personal-transportation/personal-transportation-line-chart.js"></script>
+    <script src="../../js/mobility/personal-transportation/personal-transportation-area-chart.js"></script>
+    <script src="../../js/mobility/personal-transportation/personal-transportation-bar-chart.js"></script>
+    <script src="../../js/mobility/personal-transportation/personal-transportation-bar-chart2.js"></script>
+  </body>
+</html>

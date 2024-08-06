@@ -1,11 +1,11 @@
-Region,EPA Region,Landfill,Recycling,Waste to Energy,Compost
-"CO, MT, ND, SD, UT, WY",8,79,9,2,10
-"AR, LA, NM, OK, TX",6,78,11,0,11
-"IA, KS, MO, NE",7,76,22,0,2
-"IL, IN, MI, MN, OH, WI",5,76,15,4,5
-"AL, FL, GA, KY, MS, NC, SC, TN",4,73,19,6,2
-"AK, ID, OR, WA, 271 Native Tribes",10,55,32,3,10
-"DE, DC, MD, PA, VA, WV",3,54,24,17,5
-"NJ, NY, Puerto Rico, U.S Virgin Islands",2,52,23,21,4
-"AZ, CA, HI, NV, American Samoa, Commonwealth of Northern Mariana Islands, Republic of Palau",9,51,37,2,10
-"CT, ME, MA, NH, RI, VT",1,24,27,41,8
+epaRegion,Region,Landfill,Recycling,"Waste To Energy",Compost
+1,"CT, ME, MA, NH, RI, VT",24,27,41,8
+2,"NJ, NY, Puerto Rico, U.S Virgin Islands",52,23,21,4
+3,"DE, DC, MD, PA, VA, WV",54,24,17,5
+4,"AL, FL, GA, KY, MS, NC, SC, TN",73,19,6,2
+5,"IL, IN, MI, MN, OH, WI",76,15,4,5
+6,"AR, LA, NM, OK, TX",78,11,0,11
+7,"IA, KS, MO, NE",76,22,0,2
+8,"CO, MT, ND, SD, UT, WY",79,9,2,10
+9,"AZ, CA, HI, NV",51,37,2,10
+10,"AK, ID, OR, WA",55,32,3,10
