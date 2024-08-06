@@ -293,7 +293,7 @@
   /* ----------------------- Draw Inverter ----------------------- */
   const inverterWidth = arrayWidth * 0.3;
   const inverterHeight = arrayHeight * 0.3;
-  const inverterX = arrayXCenter * 0.3 + arrayWidth * 1.4;
+  const inverterX = arrayXCenter * 0.3 + arrayWidth * 1.3;
   const inverterY = arrayYCenter * 1.5 + (arrayHeight - inverterHeight) / 2;
 
   svg.append("rect")
@@ -324,39 +324,39 @@
     .attr("class", "diagram-labels")
       .attr("text-anchor", "middle")
       .attr("alignment-baseline", "middle")
-      .attr("fill", "red");
+      .attr("fill", "white");
 
   // Adding text "average conversion efficiency 21%" to the diagram with adjusted spacing
-  svg.append("text")
-    .attr("x", inverterX - inverterWidth * 0.3)
-    .attr("y", inverterY - inverterHeight * 2)
-    .text("Average")
-    .attr("class", "diagram-labels")
-      .attr("text-anchor", "middle")
-      .attr("alignment-baseline", "middle")
-      .attr("fill", "white");
+  // svg.append("text")
+  //   .attr("x", inverterX - inverterWidth * 0.3)
+  //   .attr("y", inverterY - inverterHeight * 2)
+  //   .text("Average")
+  //   .attr("class", "diagram-labels")
+  //     .attr("text-anchor", "middle")
+  //     .attr("alignment-baseline", "middle")
+  //     .attr("fill", "white");
+
+  // svg.append("text")
+  //   .attr("x", inverterX - inverterWidth * 0.3)
+  //   .attr("y", inverterY - inverterHeight * 1.5)
+  //   .text("Conversion")
+  //   .attr("class", "diagram-labels")
+  //     .attr("text-anchor", "middle")
+  //     .attr("alignment-baseline", "middle")
+  //     .attr("fill", "white");
+
+  // svg.append("text")
+  //   .attr("x", inverterX - inverterWidth * 0.3)
+  //   .attr("y", inverterY - inverterHeight * 1)
+  //   .text("Efficiency")
+  //   .attr("class", "diagram-labels")
+  //     .attr("text-anchor", "middle")
+  //     .attr("alignment-baseline", "middle")
+  //     .attr("fill", "white");
 
   svg.append("text")
     .attr("x", inverterX - inverterWidth * 0.3)
-    .attr("y", inverterY - inverterHeight * 1.5)
-    .text("Conversion")
-    .attr("class", "diagram-labels")
-      .attr("text-anchor", "middle")
-      .attr("alignment-baseline", "middle")
-      .attr("fill", "white");
-
-  svg.append("text")
-    .attr("x", inverterX - inverterWidth * 0.3)
-    .attr("y", inverterY - inverterHeight * 1)
-    .text("Efficiency")
-    .attr("class", "diagram-labels")
-      .attr("text-anchor", "middle")
-      .attr("alignment-baseline", "middle")
-      .attr("fill", "white");
-
-  svg.append("text")
-    .attr("x", inverterX - inverterWidth * 0.3)
-    .attr("y", inverterY - inverterHeight * 0.5)
+    .attr("y", inverterY - inverterHeight * 0.3)
     .text("21%")
     .attr("class", "diagram-labels")
       .attr("text-anchor", "middle")
@@ -370,7 +370,16 @@
     .attr("alignment-baseline", "middle")
     .text("AC")
     .attr("class", "diagram-labels")
-    .attr("fill", "red");
+    .attr("fill", "white");
+
+  svg.append("text")
+    .attr("x", inverterX + inverterWidth + inverterWidth * 0.3)
+    .attr("y", inverterY - inverterHeight * 0.3)
+    .text("20.1%")
+    .attr("class", "diagram-labels")
+      .attr("text-anchor", "middle")
+      .attr("alignment-baseline", "middle")
+      .attr("fill", "white");
 
   /* ----------------------- Draw Conversion Efficiency (Light Bulb) ----------------------- */
 
@@ -478,7 +487,7 @@
     // Bezier curve for first curve (leftward arc)
     chordPath.bezierCurveTo(
       chordStartX, chordStartY * 1.1,
-      chordStartX * 0.9, chordStartY * 1.2,
+      chordStartX * 0.95, chordStartY * 1.2,
       chordStartX, chordStartY * 1.3
     );
     // Bezier curve for second curve (rightward arc)
