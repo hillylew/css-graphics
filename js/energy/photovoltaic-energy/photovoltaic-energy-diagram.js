@@ -375,7 +375,7 @@
   svg.append("text")
     .attr("x", inverterX + inverterWidth + inverterWidth * 0.3)
     .attr("y", inverterY - inverterHeight * 0.3)
-    .text("20.1%")
+    .text("20%")
     .attr("class", "diagram-labels")
       .attr("text-anchor", "middle")
       .attr("alignment-baseline", "middle")
