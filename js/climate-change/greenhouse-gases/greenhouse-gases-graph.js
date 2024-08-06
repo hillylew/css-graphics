@@ -16,8 +16,8 @@
     // Adjust the left margin here
     const dynamicMargin = {
         top: containerHeight * 0.02, // Increased top margin to accommodate wrapped text
-        right: containerWidth * 0.05,
-        bottom: containerHeight * 0.1,
+        right: containerWidth * 0.1,
+        bottom: containerHeight * 0.15, // Increased bottom margin to accommodate footnote
         left: containerWidth * 0.01, // Reduced left margin to shift table left
     };
 
@@ -159,5 +159,15 @@
     // Adjust the position and size of text labels
     d3.selectAll(".chart-labels text")
         .attr("dy", ".35em"); // Adjust the vertical offset
+
+    // Add footnote at the bottom of the SVG
+    svg.append("text")
+        .attr("x", 0) 
+        .attr("y", height + dynamicMargin.bottom * 0.7) // Position below the last row
+        .attr("dy", ".3em")
+        .attr("class", "footnote")
+        .style("font-family", "Arial, sans-serif")
+        .style("font-size", "0.8em")
+        .text("*Concentration in 2022, **GWP = 100-year global warming potential.");
 
 })();

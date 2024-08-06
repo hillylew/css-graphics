@@ -2,15 +2,15 @@
     /* ----------------------- Create Tooltip ------------------------ */
     const container = document.getElementById("environmental-justice-bar-chart");
 
-   const tooltipDiv = document.createElement("div");
-   tooltipDiv.id = "tooltip";
-   tooltipDiv.className = "tooltip";
-   container.appendChild(tooltipDiv);
-   
-   const tooltip = d3.select(container).select("#tooltip");
+    const tooltipDiv = document.createElement("div");
+    tooltipDiv.id = "tooltip";
+    tooltipDiv.className = "tooltip";
+    container.appendChild(tooltipDiv);
+
+    const tooltip = d3.select(container).select("#tooltip");
 
     /* ----------------------- Dynamic dimensions ----------------------- */
-    const aspectRatio = 0.7;
+    const aspectRatio = 0.55;
 
     // Get the container and its dimensions
     const containerWidth = container.offsetWidth; // Use offsetWidth for full element width
@@ -20,8 +20,8 @@
     const dynamicMargin = {
         top: containerHeight * 0.02,
         right: containerWidth * 0.05, // Adjust right margin if labels are too long
-        bottom: containerHeight * 0.05,
-        left: containerWidth * 0.25, // Increase left margin to fit labels in horizontal orientation
+        bottom: containerHeight * 0.1,
+        left: containerWidth * 0.23, // Increase left margin to fit labels in horizontal orientation
     };
 
     // Calculate the width and height for the inner drawing area
@@ -43,10 +43,9 @@
     const colorScale = d3
         .scaleOrdinal()
         .range([
-            "#75bf70",
-            "#f38f53",
-            "#e16674",
-            "#c1824b",
+            "#ED974A",
+            "#FFCB05",
+            "#CE5845",
         ]); // Updated color range for categories
     const formatDecimal = d3.format(".0f"); // Formatter to round to one decimal place
 
@@ -118,10 +117,7 @@
             .attr("fill", (d, i) => colorScale(d.category)) // Assign color based on category
             .on('mouseover', function(event, d) {
                 // Highlight the active bar
-                d3.select(this).attr("class", "bar active");
-
-                // Reduce the opacity of the other bars
-                // svg.selectAll(".bar").filter(e => e !== d).style("opacity", 0.1);
+                d3.select(this).attr("opacity", 0.7);
 
                 // Show and populate the tooltip
                 tooltip.html(`
@@ -145,12 +141,8 @@
                     .style("top", (event.pageY) + "px");
             })
             .on("mouseout", function () {
-                // Hide tooltip
-                d3.select(this).attr("class", "bar");
-
-                // Reset the opacity of the other bars
-                // svg.selectAll(".bar").style("opacity", 1);
-
+                // Reset bar opacity
+                d3.select(this).attr("opacity", 1);
                 // Hide the tooltip
                 tooltip.style('opacity', '0');
             });

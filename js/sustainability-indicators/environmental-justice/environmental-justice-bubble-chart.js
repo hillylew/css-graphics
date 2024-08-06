@@ -2,15 +2,15 @@
     /* ----------------------- Create Tooltip ------------------------ */
     const container = document.getElementById("environmental-justice-bubble-chart");
 
-  const tooltipDiv = document.createElement("div");
-  tooltipDiv.id = "tooltip";
-  tooltipDiv.className = "tooltip";
-  container.appendChild(tooltipDiv);
-  
-  const tooltip = d3.select(container).select("#tooltip");
+    const tooltipDiv = document.createElement("div");
+    tooltipDiv.id = "tooltip";
+    tooltipDiv.className = "tooltip";
+    container.appendChild(tooltipDiv);
+
+    const tooltip = d3.select(container).select("#tooltip");
 
     // Dynamic dimensions
-    const aspectRatio = 0.5;
+    const aspectRatio = 0.6;
 
     // Get the container and its dimensions
     const containerWidth = container.offsetWidth;
@@ -72,11 +72,6 @@
             // Fixed radius for all circles
             const fixedRadius = 5;
 
-            // Correctly bind the range of bubbles sizes to GDP values
-            const radius = d3.scaleSqrt()
-                .domain([0, d3.max(data, (d) => +d["GDP per capita (current US$)"])])
-                .range([1, 15]);
-
             const formatNumber = d3.format(",.0f");
 
             // Add circles
@@ -85,6 +80,7 @@
                 .data(data)
                 .enter()
                 .append("circle")
+                .attr("class", "bubble") // Add class for easier selection
                 .attr("cx", (d) => x(+d["Cummulative emissions per capita (t)"]))
                 .attr("cy", (d) => y(+d["Climate vulnability"]))
                 .attr("r", fixedRadius) // Fixed radius for all circles
@@ -112,8 +108,14 @@
                               </tr>
                           </table>`
                     )
-                    .style("left", `${event.pageX + dynamicMargin.left / 4}px`)
-                    .style("top", `${event.pageY}px`);
+                        .style("left", `${event.pageX + dynamicMargin.left / 4}px`)
+                        .style("top", `${event.pageY}px`);
+
+                    // Highlight corresponding circles
+                    d3.selectAll(".bubble")
+                        .style("opacity", 0.1)
+                        .filter((circleData) => color(+circleData["GDP per capita (current US$)"]) === color(+d["GDP per capita (current US$)"]))
+                        .style("opacity", 1);
                 })
                 .on("mousemove", function (event, d) {
                     tooltip.style("left", `${event.pageX + dynamicMargin.left / 4}px`)
@@ -121,6 +123,7 @@
                 })
                 .on("mouseout", function (event, d) {
                     tooltip.transition().duration(500).style("opacity", 0);
+                    d3.selectAll(".bubble").style("opacity", 1); // reset circle opacity
                 });
 
             // Add text labels for specific countries
@@ -193,7 +196,18 @@
                 .attr("y", (d, i) => i * 20)
                 .attr("width", 18)
                 .attr("height", 18)
-                .style("fill", (d) => d.color);
+                .style("fill", (d) => d.color)
+                .attr("rx", 3) // Rounded corners
+                .attr("ry", 3) // Rounded corners
+                .on("mouseover", function (_, d) {
+                    d3.selectAll(".bubble")
+                        .style("opacity", 0.1)
+                        .filter((circleData) => color(+circleData["GDP per capita (current US$)"]) === d.color)
+                        .style("opacity", 1);
+                })
+                .on("mouseout", function () {
+                    d3.selectAll(".bubble").style("opacity", 1); // Reset circles opacity
+                });
 
             legend.selectAll("text")
                 .data(legendData)

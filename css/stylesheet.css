@@ -46,10 +46,6 @@ header a {
   height: auto;
 }
 
-#environmental-justice-bubble-chart {
-  width: 500px;
-}
-
 .HeaderHTML {
   padding: 10px 5px;
   font-family: "IBM Plex Serif", sans-serif;
@@ -193,10 +189,6 @@ table.tooltip-total {
     width: 600px;
   }
 
-  #environmental-justice-bubble-chart {
-    width: 700px;
-  }
-
   .HeaderHTML {
     font-size: 18px;
   }
@@ -236,10 +228,6 @@ table.tooltip-total {
   .CaptionedChart,
   .chart {
     width: 650px;
-  }
-
-  #environmental-justice-bubble-chart, #greenhouse-gases-graph {
-    width: 720px;
   }
 
   .HeaderHTML {

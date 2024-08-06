@@ -10,7 +10,7 @@
     const tooltip = d3.select(container).select("#tooltip");
 
   /* ----------------------- Dynamic dimensions ----------------------- */
-  const aspectRatio = 0.9;
+  const aspectRatio = 0.6;
   
   // Get the container and its dimensions
   const containerWidth = container.offsetWidth;
