@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CSS Graphics</title>
@@ -9,226 +9,63 @@
     <!-- Google Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
-      rel="stylesheet"
-    />
-    <style>  
-
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700&display=swap" rel="stylesheet" />
+    <style>
         @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans&display=swap');
-            body, p {
-              font-family: 'IBM Plex Sans', sans-serif, serif;
-            }
-        
+        body, p {
+            font-family: 'IBM Plex Sans', sans-serif, serif;
+        }
+
         p {
-          font-size: 24px;
-          align-content: center;
+            font-size: 24px;
+            align-content: center;
         }
-        
+
         .container {
-          display: flex;
-          justify-content: left;
-          min-width: 320px;
-          max-width: 844px;
-          margin: auto;
+            display: flex;
+            justify-content: left;
+            min-width: 320px;
+            max-width: 844px;
+            margin: auto;
         }
-        
-        .grid-container {
-          display: grid;
-          grid-template-columns: repeat(5, 1fr);
-          grid-template-rows: repeat(12, 1fr); /* Add an extra row for range data */
-          gap: 10px;
-          width: 100vw; /* Set the width to 100% of the viewport width */
-          height: 90vh; /* Set the height to 100% of the viewport height */
+
+        .chart {
+            width: 100%;
+            height: 90vh;
         }
-        
-        
-        @media (min-width: 449px) {
-          .grid-container {
-            grid-template-columns: repeat(5, 1fr);
-            grid-template-rows: repeat(12, 1fr);
-            gap: 15px;
-            max-width: 650px; /* Increase the maximum width for larger screens */
-          }
-        }
-        
-        @media (min-width: 651px) {
-          .grid-container {
-            grid-template-columns: repeat(5, 1fr);
-            grid-template-rows: repeat(12, 1fr);
-            gap: 20px;
-            max-width: 844px; /* Further increase the maximum width for even larger screens */
-            width: 50%;
-          }
-        }
-        
-        
-        .grid-item {
-          position: relative;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          border: 1px solid #ccc;
-          cursor: pointer;
-          text-align: center; /* Center the text horizontally */
-          flex-direction: column; /* Stack the content vertically */
-          padding: 10px; /* Add padding to prevent text from touching the borders */
-          aspect-ratio: 1; /* Add this line to make the boxes perfect squares */
-        }
-        
-        
-        .range-data {
-          grid-column: 1 / span 2; /* Span 2 columns for Car 1 */
-          grid-row: 12; /* Position it right below Car 1 options */
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          font-size: 18px;
-          text-align: center;
-        }
-        
-        #range-data-car2 {
-          grid-column: 4 / span 2; /* Span 2 columns for Car 2 */
-          grid-row: 12; /* Position it right below Car 2 options */
-        }
-        
-        
-        .grid-item {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          border: 1px solid #ccc;
-          cursor: pointer;
-        }
-        
-        .grid-item-label {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          font-size: medium;
-          /*border: 1px solid #ccc;*/
-          /* Removed cursor pointer to make it non-clickable */
-        }
-        
-        .result {
-          grid-column: 3; 
-          grid-row: 5 / span 2;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          font-size: 24px;
-          font-weight: bold;
-          text-align: center;
-        }
-        
-        
+
         .selected {
-          border: 2px solid #000;
+            stroke: #000;
+            stroke-width: 2px;
         }
-        </style>
-  </head>
-  <body>
+    </style>
+</head>
+<body>
     <header>
-      <a id="name" href="electric-vehicles.html"> Electric Vehicles Factsheet </a>
-      <a id="name" href="../../index.html"> &lt; Go Back </a>
+        <a id="name" href="electric-vehicles.html"> Electric Vehicles Factsheet </a>
+        <a id="name" href="../../index.html"> &lt; Go Back </a>
     </header>
 
-  <!-- Electric Vehicles-->
-  <div class="CaptionedChart">
-    <div class="HeaderHTML">
-      <span>EHG Emissions</span>
+    <!-- Electric Vehicles-->
+    <div class="CaptionedChart">
+        <div class="HeaderHTML">
+            <span>EHG Emissions</span>
+        </div>
+
+        <div id="electric-vehicles-graph" class="chart"></div>
     </div>
 
-    <div id="electric-vehicles-graph" class="chart">
+    <!-- Tooltip for D3.js Graph -->
+    <div id="tooltip" class="tooltip"></div>
 
-       <!-- Container for Car Comparison -->
-  <div class="container">
-    <div class="grid-container">
-      <!-- Car 1 Type Options -->
-      <div class="grid-item-label" style="grid-column: 1 / span 2; grid-row: 1;">
-        Start with Vehicle 1
-      </div>
-      <div class="grid-item-label" style="grid-column: 1 / span 1; grid-row: 2;">
-        Select your vehicle type
-      </div>
-      <div class="grid-item" data-car="1" data-category="type" data-value="Pickup" style="grid-column: 1; grid-row: 3 / span 3;">
-        Pickup
-      </div>
-      <div class="grid-item" data-car="1" data-category="type" data-value="SUV" style="grid-column: 1; grid-row: 6 / span 3;">
-        SUV
-      </div>
-      <div class="grid-item" data-car="1" data-category="type" data-value="Sedan" style="grid-column: 1; grid-row: 9 / span 3;">
-        Sedan
-      </div>
+    <!-- D3.js -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
 
-      <!-- Car 1 EV Options -->
-      <div class="grid-item" data-car="1" data-category="ev" data-value="ICEV" style="grid-column: 2; grid-row: 3 / span 3;">
-        Internal Combustion Engine
-      </div>
-      <div class="grid-item-label" style="grid-column: 2 / span 1; grid-row: 2;">
-        Select battery type
-      </div>
-      <div class="grid-item" data-car="1" data-category="ev" data-value="HEV" style="grid-column: 2; grid-row: 6 / span 3;">
-        Hybrid Electric Vehicle
-      </div>
-      <div class="grid-item" data-car="1" data-category="ev" data-value="BEV" style="grid-column: 2; grid-row: 9 / span 3;">
-        Battery Electric Vehicle
-      </div>
+    <!-- D3.js Map Library -->
+    <script src="https://d3js.org/topojson.v3.min.js"></script>
 
-      <!-- Results Column -->
-      <div class="result" id="result">Select Options to Compare</div>
-
-      <!-- Car 2 Type Options -->
-      <div class="grid-item" data-car="2" data-category="type" data-value="Pickup" style="grid-column: 4; grid-row: 3 / span 3;">
-        Pickup
-      </div>
-      <div class="grid-item" data-car="2" data-category="type" data-value="SUV" style="grid-column: 4; grid-row: 6 / span 3;">
-        SUV
-      </div>
-      <div class="grid-item" data-car="2" data-category="type" data-value="Sedan" style="grid-column: 4; grid-row: 9 / span 3;">
-        Sedan
-      </div>
-
-      <!-- Car 2 EV Options -->
-      <div class="grid-item-label" style="grid-column: 4 / span 2; grid-row: 1;">
-        Compare with Vehicle 2
-      </div>
-      <div class="grid-item" data-car="2" data-category="ev" data-value="ICEV" style="grid-column: 5; grid-row: 3 / span 3;">
-        Internal Combustion Engine
-      </div>
-      <div class="grid-item" data-car="2" data-category="ev" data-value="HEV" style="grid-column: 5; grid-row: 6 / span 3;">
-        Hybrid Electric Vehicle
-      </div>
-      <div class="grid-item" data-car="2" data-category="ev" data-value="BEV" style="grid-column: 5; grid-row: 9 / span 3;">
-        Battery Electric Vehicle
-      </div>
-
-      <!-- Range Data Columns -->
-      <div class="range-data" id="range-data-car1">Car 1 Range</div>
-      <div class="range-data" id="range-data-car2">Car 2 Range</div>
-    </div>
-  </div>
-    </div>
-      
-  </div>
-
-  
-
-  <!-- Tooltip for D3.js Graph -->
-  <div id="tooltip" class="tooltip"></div>
-
-  <!-- D3.js -->
-  <script src="https://d3js.org/d3.v7.min.js"></script>
-
-  <!-- D3.js Map Library -->
-  <script src="https://d3js.org/topojson.v3.min.js"></script>
-
-  <!-- js files-->
-  <script src="../../js/mobility/electric-vehicles/electric-vehicles-graph.js"></script>
-  <script src="EHGEmissions.js"></script>
+    <!-- Updated JavaScript file-->
+    <script src="../../js/mobility/electric-vehicles/electric-vehicles-graph.js"></script>
 </body>
 </html>

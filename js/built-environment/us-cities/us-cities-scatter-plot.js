@@ -180,10 +180,10 @@
             .style("fill", "orange"); // Change the color on hover
 
           // Highlight corresponding continent
-          d3.selectAll(".dot")
-            .style("opacity", 0.1)
-            .filter((circleData) => circleData.Continent === d.Continent)
-            .style("opacity", 1);
+        //   d3.selectAll(".dot")
+        //     .style("opacity", 0.1)
+        //     .filter((circleData) => circleData.Continent === d.Continent)
+        //     .style("opacity", 1);
 
           tooltip
             .style("opacity", 0.9)
@@ -213,7 +213,7 @@
             .style("fill", (d) => colorScale(d.Continent)); // Revert to original color
 
           // Revert the opacity of all circles
-          d3.selectAll(".dot").style("opacity", 1);
+        //   d3.selectAll(".dot").style("opacity", 1);
 
           tooltip.style("opacity", 0);
         });

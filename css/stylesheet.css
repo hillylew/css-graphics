@@ -141,6 +141,13 @@ table.tooltip-total {
 }
 
 
+/* NO POINTER EVENT */
+.no-pointer-events {
+    pointer-events: none;
+}
+
+
+
 /* Map Dropdown */
 #map-dropdown {
   margin-left: 20px;
