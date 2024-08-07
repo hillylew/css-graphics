@@ -1,23 +1,24 @@
-  (function () {
+(function () {
     /* ----------------------- Create Tooltip ------------------------ */
     const container = document.getElementById("us-cities-bar-chart");
-
+  
     const tooltipDiv = document.createElement("div");
     tooltipDiv.id = "tooltip";
     tooltipDiv.className = "tooltip";
     container.appendChild(tooltipDiv);
-
+  
     const tooltip = d3.select(container).select("#tooltip");
+  
     /* ----------------------- Dynamic dimensions ----------------------- */
-    const aspectRatio = 1;
+    const aspectRatio = 0.9;
     const containerWidth = container.offsetWidth;
     const containerHeight = containerWidth * aspectRatio;
   
     const dynamicMargin = {
-      top: containerHeight * 0.02,
-      right: containerWidth * 0.02, // Increased right margin to accommodate subcategory labels
+      top: containerHeight * 0.05,
+      right: containerWidth * 0.15, // Increased right margin to accommodate subcategory labels and legends
       bottom: containerHeight * 0.1,
-      left: containerWidth * 0.52,
+      left: containerWidth * 0.37,
     };
   
     const width = containerWidth - dynamicMargin.left - dynamicMargin.right;
@@ -37,26 +38,24 @@
     const colorScale = d3.scaleOrdinal().range(["#1d476d", "#ffcb03"]);
     const formatDecimal = d3.format(".0f");
   
-    const xAxis = (g) => g
-      .call(d3.axisBottom(xScale)
-        .tickValues(d3.range(0, 101, 20))
-        .tickFormat(d => `${d}%`));
+    const xAxis = (g) =>
+      g.call(d3.axisBottom(xScale).tickValues(d3.range(0, 101, 20)).tickFormat((d) => `${d}%`));
     const yAxis = (g) => g.call(d3.axisLeft(yScale).tickSizeOuter(0).tickSizeInner(0).tickPadding(10));
   
     /* ----------------------- Loading and processing data ----------------------- */
     d3.csv("../../data/built-environment/us-cities/us-cities3.csv", (d) => ({
       category: d.Category,
       subcategory: d.Subcategory,
-      underway: +d["Policies/Activities Underway"],
-      considering: +d["Considering"]
+      underway: +d["Underway"],
+      considering: +d["Considering"],
     })).then((data) => {
       const categories = [...new Set(data.map((d) => d.category))];
       const subcategories = [];
   
-      // Add separator subcategories to create a gap 
-      categories.forEach(category => {
-        const subcat = data.filter(d => d.category === category).map(d => d.subcategory);
-        subcategories.push(...subcat, `${category}_separator`);  // Using a custom separator
+      // Add separator subcategories to create a gap
+      categories.forEach((category) => {
+        const subcat = data.filter((d) => d.category === category).map((d) => d.subcategory);
+        subcategories.push(...subcat, `${category}_separator`); // Using a custom separator
       });
   
       yScale.domain(subcategories.reverse()); // Reverse the order of subcategories
@@ -78,7 +77,7 @@
         .attr("transform", (d) => `translate(0, ${yScale(d.subcategory)})`);
   
       const barHeight = yScale.bandwidth();
-    
+  
       barGroups
         .append("rect")
         .attr("class", "bar underway")
@@ -87,36 +86,40 @@
         .attr("height", barHeight)
         .attr("width", (d) => xScale(d.underway))
         .attr("fill", colorScale(0))
-        .on('mouseover', function (event, d) {
-          d3.select(this).attr("opacity", 0.5);
-          tooltip.html(
-            `<div class="tooltip-title">${d.subcategory}</div>
-             <table class="tooltip-content">
-               <tr>
-                 <td><span class="color-legend" style="background-color: ${colorScale(
-                    "Policies/Activities Underway"
-                  )};"></span>Underway:</td>
-                 <td class="value">${formatDecimal(d.underway)}%</td>
-               </tr>
-               <tr>
-                 <td><span class="color-legend" style="background-color: ${colorScale(
-                    "Considering"
-                  )};"></span>Considering:</td>
-                 <td class="value">${formatDecimal(d.considering)}%</td>
-               </tr>
-             </table>`
-          )
-            .style('opacity', '0.9')
+        .on("mouseover", function (event, d) {
+          const hoveredKey = "underway";
+          tooltip
+            .html(
+              `<div class="tooltip-title">${d.subcategory}</div>
+               <table class="tooltip-content">
+                 <tr style="opacity: ${hoveredKey === "underway" ? 1 : 0.5}; font-weight: ${
+                hoveredKey === "underway" ? "bold" : "normal"
+              };">
+                   <td><span class="color-legend" style="background-color: ${colorScale(0)};"></span>Underway:</td>
+                   <td class="value">${formatDecimal(d.underway)}%</td>
+                 </tr>
+                 <tr style="opacity: ${hoveredKey === "considering" ? 1 : 0.5}; font-weight: ${
+                hoveredKey === "considering" ? "bold" : "normal"
+              };">
+                   <td><span class="color-legend" style="background-color: ${colorScale(1)};"></span>Considering:</td>
+                   <td class="value">${formatDecimal(d.considering)}%</td>
+                 </tr>
+               </table>`
+            )
+            .style("opacity", "0.9")
             .style("left", `${event.pageX + dynamicMargin.left / 4}px`)
             .style("top", `${event.pageY}px`);
+  
+          d3.select(this).attr("opacity", 0.5);
         })
         .on("mousemove", function (event) {
-          tooltip.style("left", `${event.pageX + dynamicMargin.left / 4}px`)
+          tooltip
+            .style("left", `${event.pageX + dynamicMargin.left / 4}px`)
             .style("top", `${event.pageY}px`);
         })
         .on("mouseout", function () {
           d3.select(this).attr("opacity", 1);
-          tooltip.style('opacity', '0');
+          tooltip.style("opacity", "0");
         });
   
       barGroups
@@ -127,36 +130,40 @@
         .attr("height", barHeight)
         .attr("width", (d) => xScale(d.considering))
         .attr("fill", colorScale(1))
-        .on('mouseover', function (event, d) {
-          d3.select(this).attr("opacity", 0.7);
-          tooltip.html(
-            `<div class="tooltip-title">${d.subcategory}</div>
-             <table class="tooltip-content">
-               <tr>
-                 <td><span class="color-legend" style="background-color: ${colorScale(
-                    "Policies/Activities Underway"
-                  )};"></span>Underway:</td>
-                 <td class="value">${formatDecimal(d.underway)}%</td>
-               </tr>
-               <tr>
-                 <td><span class="color-legend" style="background-color: ${colorScale(
-                    "Considering"
-                  )};"></span>Considering:</td>
-                 <td class="value">${formatDecimal(d.considering)}%</td>
-               </tr>
-             </table>`
-          )
-            .style('opacity', '0.9')
+        .on("mouseover", function (event, d) {
+          const hoveredKey = "considering";
+          tooltip
+            .html(
+              `<div class="tooltip-title">${d.subcategory}</div>
+               <table class="tooltip-content">
+                 <tr style="opacity: ${hoveredKey === "underway" ? 1 : 0.5}; font-weight: ${
+                hoveredKey === "underway" ? "bold" : "normal"
+              };">
+                   <td><span class="color-legend" style="background-color: ${colorScale(0)};"></span>Underway:</td>
+                   <td class="value">${formatDecimal(d.underway)}%</td>
+                 </tr>
+                 <tr style="opacity: ${hoveredKey === "considering" ? 1 : 0.5}; font-weight: ${
+                hoveredKey === "considering" ? "bold" : "normal"
+              };">
+                   <td><span class="color-legend" style="background-color: ${colorScale(1)};"></span>Considering:</td>
+                   <td class="value">${formatDecimal(d.considering)}%</td>
+                 </tr>
+               </table>`
+            )
+            .style("opacity", "0.9")
             .style("left", `${event.pageX + dynamicMargin.left / 4}px`)
             .style("top", `${event.pageY}px`);
+  
+          d3.select(this).attr("opacity", 0.5);
         })
         .on("mousemove", function (event) {
-          tooltip.style("left", `${event.pageX + dynamicMargin.left / 4}px`)
+          tooltip
+            .style("left", `${event.pageX + dynamicMargin.left / 4}px`)
             .style("top", `${event.pageY}px`);
         })
         .on("mouseout", function () {
           d3.select(this).attr("opacity", 1);
-          tooltip.style('opacity', '0');
+          tooltip.style("opacity", "0");
         });
   
       // Wrap function for text wrapping inside foreignObject
@@ -175,14 +182,19 @@
   
           let tspan = elem.text(null).append("tspan").attr("x", x).attr("y", y).attr("dy", dy + "em");
   
-          while (word = words.pop()) {
+          while ((word = words.pop())) {
             line.push(word);
             tspan.text(line.join(" "));
             if (tspan.node().getComputedTextLength() > width) {
               line.pop();
               tspan.text(line.join(" "));
               line = [word];
-              tspan = elem.append("tspan").attr("x", x).attr("y", y).attr("dy", `${++lineNumber * lineHeight + dy}em`).text(word);
+              tspan = elem
+                .append("tspan")
+                .attr("x", x)
+                .attr("y", y)
+                .attr("dy", `${++lineNumber * lineHeight + dy}em`)
+                .text(word);
             }
           }
         });
@@ -196,20 +208,61 @@
         .attr("class", "chart-labels")
         .attr("text-anchor", "end")
         .attr("fill", "#000")
-        .text(d => d.subcategory)
-        .each(function() { wrapText(d3.select(this), containerWidth * 0.35); });
+        .text((d) => d.subcategory)
+        .each(function () {
+          wrapText(d3.select(this), containerWidth * 0.35);
+        });
   
       categories.forEach((category) => {
-        const subcategoryData = data.filter(d => d.category === category);
+        const subcategoryData = data.filter((d) => d.category === category);
         svg
           .append("text")
-          .attr("x", -dynamicMargin.left)
-          .attr("y", yScale(subcategoryData[0].subcategory) + barHeight * 0.5)
+          .attr("x", -dynamicMargin.left * 0.03)
+          .attr("y", yScale(subcategoryData[0].subcategory) - barHeight * 0.5)
           .attr("class", "chart-labels")
-          .attr("text-anchor", "start")
+          .attr("text-anchor", "end")
           .attr("fill", "#000")
           .style("font-weight", "bold")
           .text(category);
       });
+  
+      /* ----------------------- Legend ----------------------- */
+      const legend = svg
+        .append("g")
+        .attr("transform", `translate(${width + dynamicMargin.right * 0.1}, ${dynamicMargin.top})`);
+  
+      const legendData = [
+        { key: "Underway", color: "#1d476d" },
+        { key: "Considering", color: "#ffcb03" },
+      ];
+  
+      // Calculate the dimensions for legend items
+      const legendItemSize = width * 0.05; // Set the width and height to be 5% of the container width
+      const gap = height * 0.01; // Gap between legend items
+  
+      const legendGroups = legend
+        .selectAll(".legend-group")
+        .data(legendData)
+        .enter()
+        .append("g")
+        .attr("class", "legend-group")
+        .attr("transform", (d, i) => `translate(0, ${i * (legendItemSize + gap)})`);
+  
+      legendGroups
+        .append("rect")
+        .attr("width", legendItemSize)
+        .attr("height", legendItemSize)
+        .style("fill", (d) => d.color)
+        .attr("rx", 3)
+        .attr("ry", 3)
+        .attr("class", "legend-rect");
+  
+      legendGroups
+        .append("text")
+        .attr("x", legendItemSize + gap)
+        .attr("y", legendItemSize / 2)
+        .attr("alignment-baseline", "middle")
+        .attr("class", "chart-labels")
+        .text((d) => d.key);
     });
   })();
