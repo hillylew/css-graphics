@@ -10,13 +10,13 @@
     const tooltip = d3.select(container).select("#tooltip");
   
     /* ----------------------- Dynamic dimensions ----------------------- */
-    const aspectRatio = 0.9;
+    const aspectRatio = 1;
     const containerWidth = container.offsetWidth;
     const containerHeight = containerWidth * aspectRatio;
   
     const dynamicMargin = {
-      top: containerHeight * 0.05,
-      right: containerWidth * 0.15, // Increased right margin to accommodate subcategory labels and legends
+      top: containerHeight * 0.08,
+      right: containerWidth * 0.1,
       bottom: containerHeight * 0.1,
       left: containerWidth * 0.37,
     };
@@ -55,10 +55,10 @@
       // Add separator subcategories to create a gap
       categories.forEach((category) => {
         const subcat = data.filter((d) => d.category === category).map((d) => d.subcategory);
-        subcategories.push(...subcat, `${category}_separator`); // Using a custom separator
+        subcategories.push(...subcat, `${category}_separator`);
       });
   
-      yScale.domain(subcategories.reverse()); // Reverse the order of subcategories
+      yScale.domain(subcategories.reverse());
       xScale.domain([0, 100]);
   
       svg
@@ -88,6 +88,9 @@
         .attr("fill", colorScale(0))
         .on("mouseover", function (event, d) {
           const hoveredKey = "underway";
+          const tooltipX = event.clientX + window.scrollX;
+          const tooltipY = event.clientY + window.scrollY;
+  
           tooltip
             .html(
               `<div class="tooltip-title">${d.subcategory}</div>
@@ -107,15 +110,18 @@
                </table>`
             )
             .style("opacity", "0.9")
-            .style("left", `${event.pageX + dynamicMargin.left / 4}px`)
-            .style("top", `${event.pageY}px`);
+            .style("left", `${tooltipX + dynamicMargin.right / 4}px`)
+            .style("top", `${tooltipY}px`);
   
           d3.select(this).attr("opacity", 0.5);
         })
         .on("mousemove", function (event) {
+          const tooltipX = event.clientX + window.scrollX;
+          const tooltipY = event.clientY + window.scrollY;
+  
           tooltip
-            .style("left", `${event.pageX + dynamicMargin.left / 4}px`)
-            .style("top", `${event.pageY}px`);
+            .style("left", `${tooltipX + dynamicMargin.right / 4}px`)
+            .style("top", `${tooltipY}px`);
         })
         .on("mouseout", function () {
           d3.select(this).attr("opacity", 1);
@@ -132,6 +138,9 @@
         .attr("fill", colorScale(1))
         .on("mouseover", function (event, d) {
           const hoveredKey = "considering";
+          const tooltipX = event.clientX + window.scrollX;
+          const tooltipY = event.clientY + window.scrollY;
+  
           tooltip
             .html(
               `<div class="tooltip-title">${d.subcategory}</div>
@@ -151,22 +160,25 @@
                </table>`
             )
             .style("opacity", "0.9")
-            .style("left", `${event.pageX + dynamicMargin.left / 4}px`)
-            .style("top", `${event.pageY}px`);
+            .style("left", `${tooltipX + dynamicMargin.right / 4}px`)
+            .style("top", `${tooltipY}px`);
   
           d3.select(this).attr("opacity", 0.5);
         })
         .on("mousemove", function (event) {
+          const tooltipX = event.clientX + window.scrollX;
+          const tooltipY = event.clientY + window.scrollY;
+  
           tooltip
-            .style("left", `${event.pageX + dynamicMargin.left / 4}px`)
-            .style("top", `${event.pageY}px`);
+            .style("left", `${tooltipX + dynamicMargin.right / 4}px`)
+            .style("top", `${tooltipY}px`);
         })
         .on("mouseout", function () {
           d3.select(this).attr("opacity", 1);
           tooltip.style("opacity", "0");
         });
   
-      // Wrap function for text wrapping inside foreignObject
+      // Wrap function for text wrapping
       function wrapText(text, width) {
         text.each(function () {
           const elem = d3.select(this);
@@ -203,8 +215,8 @@
       barGroups
         .append("text")
         .attr("x", -dynamicMargin.left * 0.03)
-        .attr("y", barHeight * 0.35) // Adjusted to position text above each bar
-        .attr("dy", ".35em") // Adjust baseline to height of the bar
+        .attr("y", barHeight * 0.35)
+        .attr("dy", ".35em")
         .attr("class", "chart-labels")
         .attr("text-anchor", "end")
         .attr("fill", "#000")
@@ -229,7 +241,7 @@
       /* ----------------------- Legend ----------------------- */
       const legend = svg
         .append("g")
-        .attr("transform", `translate(${width + dynamicMargin.right * 0.1}, ${dynamicMargin.top})`);
+        .attr("transform", `translate(0, -${dynamicMargin.top * 0.8})`); // Adjust this value to move legend to the top
   
       const legendData = [
         { key: "Underway", color: "#1d476d" },
@@ -237,8 +249,9 @@
       ];
   
       // Calculate the dimensions for legend items
-      const legendItemSize = width * 0.05; // Set the width and height to be 5% of the container width
-      const gap = height * 0.01; // Gap between legend items
+      const legendItemSize = containerWidth * 0.03; // Set the width and height to be 5% of the container width
+      const gap = containerWidth * 0.03; // Gap between legend items
+      const textSpacing = legendItemSize + gap * 0.3; // Space between the legend rectangle and text
   
       const legendGroups = legend
         .selectAll(".legend-group")
@@ -246,7 +259,7 @@
         .enter()
         .append("g")
         .attr("class", "legend-group")
-        .attr("transform", (d, i) => `translate(0, ${i * (legendItemSize + gap)})`);
+        .attr("transform", (d, i) => `translate(${i * (legendItemSize * 4 + gap)}, 0)`); // Arrange items horizontally
   
       legendGroups
         .append("rect")
@@ -259,7 +272,7 @@
   
       legendGroups
         .append("text")
-        .attr("x", legendItemSize + gap)
+        .attr("x", textSpacing)
         .attr("y", legendItemSize / 2)
         .attr("alignment-baseline", "middle")
         .attr("class", "chart-labels")

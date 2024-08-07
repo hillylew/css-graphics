@@ -119,6 +119,9 @@
                 // Highlight the active bar
                 d3.select(this).attr("opacity", 0.7);
 
+                const tooltipX = event.clientX + window.scrollX;
+                const tooltipY = event.clientY + window.scrollY;
+
                 // Show and populate the tooltip
                 tooltip.html(`
                     <div class="tooltip-title">${d.subcategory}</div>
@@ -132,13 +135,17 @@
                     </table>
                 `)
                 .style('opacity', '0.9')
-                .style("left", `${event.pageX + dynamicMargin.left / 4}px`)
-                .style("top", `${event.pageY}px`);
+                .style("left", `${tooltipX + dynamicMargin.left / 4}px`)
+                .style("top", `${tooltipY}px`);
             })
             .on("mousemove", function (event, d) {
+                const tooltipX = event.clientX + window.scrollX;
+                const tooltipY = event.clientY + window.scrollY;
+
                 // Update tooltip position
-                tooltip.style("left", (event.pageX + dynamicMargin.left / 4) + "px")
-                    .style("top", (event.pageY) + "px");
+                tooltip
+                    .style("left", (tooltipX + dynamicMargin.left / 4) + "px")
+                    .style("top", (tooltipY) + "px");
             })
             .on("mouseout", function () {
                 // Reset bar opacity

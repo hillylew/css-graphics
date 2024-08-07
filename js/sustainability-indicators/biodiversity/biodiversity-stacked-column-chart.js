@@ -181,6 +181,9 @@ data.forEach((d) => {
     .on("mousemove", function (event, d) {
       const mousePosition = d3.pointer(event);
       const category = d3.select(this.parentNode).datum().key;
+
+      const tooltipX = event.clientX + window.scrollX;
+      const tooltipY = event.clientY + window.scrollY;
   
       tooltip
       .html(
@@ -205,8 +208,8 @@ data.forEach((d) => {
         </table>`
       )
         .style("opacity", 0.9)
-        .style("left", `${event.pageX + dynamicMargin.left / 4}px`)
-        .style("top", `${event.pageY}px`);
+        .style("left", `${tooltipX + dynamicMargin.left / 4}px`)
+        .style("top", `${tooltipY}px`);
     })
     .on("mouseout", function () {
       // Hide the tooltip

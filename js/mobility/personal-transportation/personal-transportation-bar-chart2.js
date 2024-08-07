@@ -100,6 +100,9 @@
         .attr("fill", (d, i) => colorScale(i))
         .on('mouseover', function (event, d) {
           d3.select(this).attr("opacity", 0.5);
+
+            const tooltipX = event.clientX + window.scrollX;
+            const tooltipY = event.clientY + window.scrollY;
   
           tooltip.html(`
             <div class="tooltip-title">${d.Mode}</div>
@@ -115,12 +118,15 @@
             </table>
           `)
             .style('opacity', '0.9')
-            .style("left", `${event.pageX + dynamicMargin.left / 4}px`)
-            .style("top", `${event.pageY}px`);
+            .style("left", `${tooltipX + dynamicMargin.left / 4}px`)
+            .style("top", `${tooltipY}px`);
         })
         .on("mousemove", function (event) {
-          tooltip.style("left", `${event.pageX + dynamicMargin.left / 4}px`)
-            .style("top", `${event.pageY}px`);
+            const tooltipX = event.clientX + window.scrollX;
+            const tooltipY = event.clientY + window.scrollY;
+            tooltip
+                .style("left", `${tooltipX + dynamicMargin.left / 4}px`)
+                .style("top", `${tooltipY}px`);
         })
         .on("mouseout", function () {
           d3.select(this).attr("opacity", 1);

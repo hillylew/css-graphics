@@ -67,11 +67,15 @@
 
     /* ----------------------- Create Tooltip ----------------------- */
     function onMouseMove(event, d) {
+
+        const tooltipX = event.clientX + window.scrollX;
+        const tooltipY = event.clientY + window.scrollY;
+        
         // Position tooltip
         tooltip
             .style("opacity", 0.9)
-            .style("left", `${event.pageX + 5}px`)
-            .style("top", `${event.pageY - 80}px`)
+            .style("left", `${tooltipX + dynamicMargin.left / 4}px`)
+            .style("top", `${tooltipY}px`)
             .html(`
                 <div class="tooltip-title">${d.Technology}</div>
                 <table class="tooltip-content">

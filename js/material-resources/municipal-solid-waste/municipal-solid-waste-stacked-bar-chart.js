@@ -92,6 +92,9 @@
                 const hoveredCategory = d3.select(this.parentNode).datum().key;
                 d3.select(this).style("opacity", 0.5);
 
+                const tooltipX = event.clientX + window.scrollX;
+                const tooltipY = event.clientY + window.scrollY;
+
                 const tooltipData = categories.map(key => {
                     const isHovered = key === hoveredCategory;
                     return `<tr style="opacity: ${isHovered ? 1 : 0.5}; font-weight: ${isHovered ? 'bold' : 'normal'};">
@@ -107,8 +110,8 @@
                         ${tooltipData}
                     </table>`
                 )
-                .style("left", `${event.pageX + dynamicMargin.left / 4}px`)
-                .style("top", `${event.pageY}px`);
+                .style("left", `${tooltipX + dynamicMargin.left / 4}px`)
+                .style("top", `${tooltipY}px`);
             })
             .on("mouseout", function () {
                 d3.select(this).style("opacity", 1);

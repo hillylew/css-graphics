@@ -65,7 +65,7 @@
   });
   const path = d3.geoPath().projection(transform);
 
-  const tooltip = d3.select("#tooltip");
+  const tooltip = d3.select("#diagram-tooltip");
 
   // Highlight states based on the color
   const highlightStates = (color) => {
@@ -101,6 +101,10 @@
     .attr("stroke-width", 0.5)
     .on("mouseover", function (event, d) {
       // d3.select(this).style("fill-opacity", 0.7);
+
+      const tooltipX = event.clientX + window.scrollX;
+      const tooltipY = event.clientY + window.scrollY;
+
       tooltip
         .html(
           `<div class="tooltip-title">${d.properties.name}</div>
@@ -109,8 +113,8 @@
                </div>`
         )
         .style("opacity", 0.9)
-        .style("left", `${event.pageX}px`)
-        .style("top", `${event.pageY}px`);
+        .style("left", `${tooltipX}px`)
+        .style("top", `${tooltipY}px`);
     })
     .on("mouseout", function () {
       d3.select(this).style("fill-opacity", 1);

@@ -169,11 +169,14 @@
             const hoveredType = y.domain().find((type) => y(type) <= yPos && yPos < y(type) + y.bandwidth());
             const hoverData = data.find((d) => d["Technology Type"] === hoveredType);
 
+            const tooltipX = event.clientX + window.scrollX;
+            const tooltipY = event.clientY + window.scrollY;
+
             // Position tooltip
             tooltip
                 .style("opacity", 0.9)
-                .style("left", `${event.pageX}px`)
-                .style("top", `${event.pageY + dynamicMargin.top / 4}px`);
+                .style("left", `${tooltipX + dynamicMargin.right / 2}px`)
+                .style("top", `${tooltipY}px`);
 
             const formatNumber = d3.format(",");
             if (hoverData) {

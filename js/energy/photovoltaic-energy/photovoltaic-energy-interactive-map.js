@@ -176,10 +176,13 @@
 
         tooltipContent += `</table>`;
 
+        const tooltipX = event.clientX + window.scrollX;
+        const tooltipY = event.clientY + window.scrollY;
+
         tooltip
           .html(tooltipContent)
-          .style("left", `${event.pageX}px`)
-          .style("top", `${event.pageY}px`);
+          .style("left", `${tooltipX}px`)
+          .style("top", `${tooltipY}px`);
       })
       .on("mouseout", () => {
         tooltip.style("opacity", 0);

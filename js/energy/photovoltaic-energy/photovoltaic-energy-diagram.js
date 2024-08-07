@@ -1,6 +1,27 @@
 (function () {
-  const aspectRatio = 0.7;
+  /* ----------------------- Create Tooltip ------------------------ */
   const container = document.getElementById("photovoltaic-energy-diagram");
+
+  const tooltipDiv = document.createElement("div");
+  tooltipDiv.id = "diagram-tooltip";
+  tooltipDiv.className = "diagram-tooltip";
+  container.appendChild(tooltipDiv);
+
+  const tooltip = d3.select(container).select("#diagram-tooltip");
+
+   // Update the tooltip position based on mouse movement
+   document.addEventListener("mousemove", function (event) {
+    const tooltipX = event.clientX + window.scrollX;
+    const tooltipY = event.clientY + window.scrollY;
+
+    d3.select("#diagram-tooltip")
+      .style("left", `${tooltipX + dynamicMargin.left}px`)
+      .style("top", `${tooltipY}px`);
+  });
+
+  /* ----------------------- Dynamic Dimensions ----------------------- */
+  const aspectRatio = 0.7;
+
   const containerWidth = container.offsetWidth; // Use offsetWidth for full element width
   const containerHeight = containerWidth * aspectRatio; // Calculate the height based on the width and aspect ratio
 
@@ -131,8 +152,6 @@
   }
 
   /* ----------------------- Draw PV System ----------------------- */
-  const tooltip = d3.select("#diagram-tooltip");
-
   const drawBorder = (group, width, height, gap, className) => {
     group
       .append("rect")
@@ -523,9 +542,4 @@
       .attr("stroke-width", arrayWidth * 0.015);
   })();
 
-  // Update the tooltip position based on mouse movement
-  document.addEventListener("mousemove", function (event) {
-    d3.select("#diagram-tooltip")
-      .style("left", `${event.pageX + dynamicMargin.left / 4}px`)
-      .style("top", `${event.pageY}px`);
-  });
+ 

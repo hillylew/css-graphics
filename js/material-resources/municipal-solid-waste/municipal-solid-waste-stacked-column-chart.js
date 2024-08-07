@@ -88,6 +88,9 @@
                 // d3.select(this).style("fill", "orange");
                 d3.select(this).style("opacity", 0.5);
 
+                const tooltipX = event.clientX + window.scrollX;
+                const tooltipY = event.clientY + window.scrollY;
+
                 const tooltipData = categories.slice().reverse().map(key => {
                     const formatNumber = d3.format(",.1f");
                     const isHovered = key === hoveredCategory;
@@ -105,8 +108,8 @@
                         ${tooltipData}
                     </table>`
                 )
-                .style("left", `${event.pageX + dynamicMargin.left / 4}px`)
-                .style("top", `${event.pageY}px`);
+                .style("left", `${tooltipX + dynamicMargin.left / 4}px`)
+                .style("top", `${tooltipY}px`);
             })
             .on("mouseout", function () {
                 // d3.select(this).style("fill", d3.select(this).attr('data-original-color'));

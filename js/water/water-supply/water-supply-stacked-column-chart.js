@@ -101,6 +101,9 @@
                 // Reduce the opacity of the other bars
                 svg.selectAll(".bar").filter(e => e !== d).style("opacity", 0.1);
 
+                const tooltipX = event.clientX + window.scrollX;
+                const tooltipY = event.clientY + window.scrollY;
+
                 // Show and populate the tooltip
                 tooltip.html(`
                     <div class="tooltip-title">${d.Category}</div>
@@ -120,13 +123,17 @@
                     </table>
                 `)
                 .style('opacity', '0.9')
-                .style("left", `${event.pageX + dynamicMargin.left / 4}px`)
-                .style("top", `${event.pageY}px`);
+                .style("left", `${tooltipX + dynamicMargin.left / 4}px`)
+                .style("top", `${tooltipY}px`);
             })
             .on("mousemove", function (event, d) {
+                const tooltipX = event.clientX + window.scrollX;
+                const tooltipY = event.clientY + window.scrollY;
+
                 // Update tooltip position
-                tooltip.style("left", (event.pageX + dynamicMargin.left / 4) + "px")
-                    .style("top", (event.pageY) + "px");
+                tooltip
+                    .style("left", (tooltipX + dynamicMargin.left / 4) + "px")
+                    .style("top", (tooltipY) + "px");
             })
             .on("mouseout", function () {
                 // Hide tooltip

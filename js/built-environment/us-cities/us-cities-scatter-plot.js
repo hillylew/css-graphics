@@ -179,16 +179,13 @@
           d3.select(this) // Select the hovered circle
             .style("fill", "orange"); // Change the color on hover
 
-          // Highlight corresponding continent
-        //   d3.selectAll(".dot")
-        //     .style("opacity", 0.1)
-        //     .filter((circleData) => circleData.Continent === d.Continent)
-        //     .style("opacity", 1);
+        const tooltipX = event.clientX + window.scrollX;
+        const tooltipY = event.clientY + window.scrollY;
 
           tooltip
             .style("opacity", 0.9)
-            .style("left", `${event.pageX + dynamicMargin.left / 4}px`)
-            .style("top", `${event.pageY}px`)
+            .style("left", `${tooltipX + dynamicMargin.left / 4}px`)
+            .style("top", `${tooltipY}px`)
             .html(
               `<div class="tooltip-title">${d.City}</div>
                 <table class="tooltip-content">
@@ -205,8 +202,8 @@
         })
         .on("mousemove", function (event) {
           tooltip
-            .style("left", `${event.pageX + dynamicMargin.left / 4}px`)
-            .style("top", `${event.pageY}px`);
+            .style("left", `${tooltipX + dynamicMargin.left / 4}px`)
+            .style("top", `${tooltipY}px`);
         })
         .on("mouseout", function (event, d) {
           d3.select(this) // Select the circle

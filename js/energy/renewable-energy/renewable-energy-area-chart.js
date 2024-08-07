@@ -127,11 +127,14 @@
       // Area gets highlighted
       areaPath.style("opacity", 0.2);
 
+      const tooltipX = event.clientX + window.scrollX;
+      const tooltipY = event.clientY + window.scrollY;
+
       // Position tooltip
       tooltip
         .style("opacity", 0.9)
-        .style("left", `${event.pageX + dynamicMargin.left / 4}px`)
-        .style("top", `${event.pageY}px`);
+        .style("left", `${tooltipX + dynamicMargin.left / 4}px`)
+        .style("top", `${tooltipY}px`);
 
       const formatNumber = d3.format(",.1f");
       if (hoverData) {

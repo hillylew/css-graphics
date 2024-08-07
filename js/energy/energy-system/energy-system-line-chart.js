@@ -1,14 +1,25 @@
 (function () {
-    const aspectRatio = 0.7; // Define an aspect ratio for the chart
+
+    /* ----------------------- Create Tooltip ------------------------ */
+    const container = document.getElementById("energy-system-line-chart");
+
+    const tooltipDiv = document.createElement("div");
+    tooltipDiv.id = "tooltip";
+    tooltipDiv.className = "tooltip";
+    container.appendChild(tooltipDiv);
+
+    const tooltip = d3.select(container).select("#tooltip");
+
+    /* ----------------------- Dynamic dimensions ----------------------- */
+    const aspectRatio = 0.6; // Define an aspect ratio for the chart
   
     // Get the container and its dimensions
-    const container = document.getElementById("energy-system-line-chart");
     const containerWidth = container.offsetWidth; // Use offsetWidth for full element width
     const containerHeight = containerWidth * aspectRatio; // Calculate the height based on the width and aspect ratio
   
     // Calculate the dynamic margins
     const dynamicMargin = {
-      top: containerHeight * 0.15, // 20% of the container height
+      top: containerHeight * 0.05, // 20% of the container height
       right: containerWidth * 0.3, // 20% of the container width
       bottom: containerHeight * 0.1, // 10% of the container height
       left: containerWidth * 0.07, // 7% of the container width
@@ -28,12 +39,6 @@
       .attr("transform", `translate(${dynamicMargin.left},${dynamicMargin.top})`);
   
     // Add the title with subscript
-    const title = svg.append("text")
-      .attr("class", "chart-title")
-      .attr("text-anchor", "start")
-      .attr("transform", `translate(-${dynamicMargin.left}, -${dynamicMargin.top / 2})`);
-  
-    title.append("tspan").text("U.S. Energy Consumption (Quadrillion BTU)");
   
     // X and Y scales
     const x = d3.scaleTime().range([0, width]);
@@ -55,8 +60,6 @@
         "#3167a4", // Renewable Energy Consumption
         "#8fc8e5"  // Energy Consumption Per Capita
       ]);
-  
-    const tooltip = d3.select("#tooltip");
   
     // Load and process the CSV data
     d3.csv("../../data/energy/energy-system/energy-system1.csv").then((data) => {
@@ -205,11 +208,14 @@
         const [xPos, yPos] = d3.pointer(event, this);
         const date = x.invert(xPos);
         const hoverData = data.find(d => d.Year.getFullYear() === date.getFullYear());
+
+        const tooltipX = event.clientX + window.scrollX;
+        const tooltipY = event.clientY + window.scrollY;
   
         tooltip
           .style("opacity", 0.9)
-          .style("left", `${event.pageX + dynamicMargin.left / 4}px`)
-          .style("top", `${event.pageY}px`);
+          .style("left", `${tooltipX + dynamicMargin.left / 4}px`)
+          .style("top", `${tooltipY}px`);
   
         if (hoverData) {
           tooltip.html(`

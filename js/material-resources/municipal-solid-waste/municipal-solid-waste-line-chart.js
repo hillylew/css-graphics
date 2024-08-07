@@ -195,12 +195,15 @@
         const yearDate = x.invert(xPos);
         const year = yearDate.getFullYear();
         const hoverData = data.find((d) => d.year.getFullYear() === year);
+
+        const tooltipX = event.clientX + window.scrollX;
+        const tooltipY = event.clientY + window.scrollY;
   
         // Position tooltip
         tooltip
           .style("opacity", 0.9)
-          .style("left", `${event.pageX + dynamicMargin.left / 4}px`)
-          .style("top", `${event.pageY}px`);
+          .style("left", `${tooltipX + dynamicMargin.left / 4}px`)
+          .style("top", `${tooltipY}px`);
   
         if (hoverData) {
           tooltip.html(`

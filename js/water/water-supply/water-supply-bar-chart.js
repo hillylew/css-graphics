@@ -110,6 +110,9 @@
             .on("mouseover", function(event, d) {
                 d3.select(this).attr("class", "bar active");
 
+                const tooltipX = event.clientX + window.scrollX;
+                const tooltipY = event.clientY + window.scrollY;
+
                 // Show and populate the tooltip
                 tooltip
                     .html(
@@ -122,13 +125,16 @@
                             </table>`
                     )
                     .style("opacity", 0.9)
-                    .style("left", `${event.pageX + dynamicMargin.left / 4}px`)
-                    .style("top", `${event.pageY}px`);
+                    .style("left", `${tooltipX + dynamicMargin.left / 4}px`)
+                    .style("top", `${tooltipY}px`);
             })
             .on("mousemove", function(event) {
+                const tooltipX = event.clientX + window.scrollX;
+                const tooltipY = event.clientY + window.scrollY;
+
                 tooltip
-                    .style("left", (event.pageX + dynamicMargin.left / 4) + "px")
-                    .style("top", (event.pageY) + "px");
+                    .style("left", (tooltipX + dynamicMargin.left / 4) + "px")
+                    .style("top", (tooltipY) + "px");
             })
             .on("mouseout", function() {
                 d3.select(this).attr("class", "bar");

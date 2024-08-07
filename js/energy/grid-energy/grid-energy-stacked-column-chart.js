@@ -9,6 +9,7 @@
 
     const tooltip = d3.select(container).select("#tooltip");
 
+    /* ----------------------- Dynamic Dimensions ----------------------- */
     const aspectRatio = 0.7;
     const containerWidth = container.offsetWidth;
     const containerHeight = containerWidth * aspectRatio;
@@ -107,6 +108,9 @@
 
                 const hoveredData = d.data;
 
+                const tooltipX = event.clientX + window.scrollX;
+                const tooltipY = event.clientY + window.scrollY;
+                
                 tooltip.transition().duration(200).style("opacity", 0.9);
                 tooltip.html(`
                     <div class="tooltip-title">${hoveredData.State}</div>
@@ -126,8 +130,9 @@
                             <td class="value">${formatNumber(hoveredData["Non-PHS"] + hoveredData["PHS"])}</td>
                         </tr>
                     </table>
-                `).style("left", `${event.pageX + dynamicMargin.left / 4}px`)
-                .style("top", `${event.pageY}px`);
+                `)
+                .style("left", `${tooltipX + dynamicMargin.left / 2}px`)
+                .style("top", `${tooltipY}px`);
             })
             .on("mouseout", function() {
                 d3.select(this).style("opacity", 1);
@@ -196,6 +201,9 @@
                 const hoveredState = xScale.domain().find((state) => xScale(state) <= xPos && xPos < xScale(state) + xScale.bandwidth());
                 const hoverData = data.find((d) => d.State === hoveredState);
 
+                const tooltipX = event.clientX + window.scrollX;
+                const tooltipY = event.clientY + window.scrollY;
+
                 if (hoverData) {
                     tooltip.transition().duration(200).style("opacity", 0.9);
                     tooltip.html(`
@@ -216,8 +224,8 @@
                                 <td class="value">${formatNumber(hoverData["Non-PHS"] + hoverData["PHS"])}</td>
                             </tr>
                         </table>
-                    `).style("left", `${event.pageX + dynamicMargin.left / 4}px`)
-                    .style("top", `${event.pageY}px`);
+                    `).style("left", `${tooltipX + dynamicMargin.left / 2}px`)
+                    .style("top", `${tooltipY}px`);
                 }
             })
             .on("mouseout", function() {

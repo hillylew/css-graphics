@@ -89,6 +89,9 @@
                 .attr("stroke", "white")
                 // Add hover event listeners
                 .on("mouseover", function (event, d) {
+                    const tooltipX = event.clientX + window.scrollX;
+                    const tooltipY = event.clientY + window.scrollY;
+
                     tooltip.transition().duration(200).style("opacity", 0.9);
                     tooltip.html(
                         `
@@ -108,22 +111,33 @@
                               </tr>
                           </table>`
                     )
-                        .style("left", `${event.pageX + dynamicMargin.left / 4}px`)
-                        .style("top", `${event.pageY}px`);
+                    .style("left", `${tooltipX + dynamicMargin.left / 4}px`)
+                    .style("top", `${tooltipY}px`);
 
-                    // Highlight corresponding circles
-                    d3.selectAll(".bubble")
-                        .style("opacity", 0.1)
-                        .filter((circleData) => color(+circleData["GDP per capita (current US$)"]) === color(+d["GDP per capita (current US$)"]))
-                        .style("opacity", 1);
+                    // Mute other circles
+                    d3.selectAll(".bubble").style("opacity", 0.3);
+                    // Highlight the hovered circle
+                    d3.select(this)
+                        .style("opacity", 1)
+                        .style("fill", "red")
+                        .style("stroke-width", "2px");
                 })
                 .on("mousemove", function (event, d) {
-                    tooltip.style("left", `${event.pageX + dynamicMargin.left / 4}px`)
-                        .style("top", `${event.pageY}px`);
+                    const tooltipX = event.clientX + window.scrollX;
+                    const tooltipY = event.clientY + window.scrollY;
+
+                    tooltip
+                        .style("left", `${tooltipX + dynamicMargin.left / 4}px`)
+                        .style("top", `${tooltipY}px`);
                 })
-                .on("mouseout", function (event, d) {
-                    tooltip.transition().duration(500).style("opacity", 0);
-                    d3.selectAll(".bubble").style("opacity", 1); // reset circle opacity
+                .on("mouseout", function () {
+                    tooltip.style("opacity", 0);
+
+                    // Reset circles' opacity
+                    d3.selectAll(".bubble")
+                        .style("opacity", 1)
+                        .style("fill", (d) => color(+d["GDP per capita (current US$)"]))
+                        .style("stroke-width", "1px");
                 });
 
             // Add text labels for specific countries

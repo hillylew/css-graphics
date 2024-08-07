@@ -103,6 +103,8 @@
         .attr("fill", (d) => colorScale(d.key))
         .on("mouseover", (event, d) => {
           const percentChangeColor = d.percentChange >= 0 ? "#3167A4" : "#CE5845";
+          const tooltipX = event.clientX + window.scrollX;
+          const tooltipY = event.clientY + window.scrollY;
   
           tooltip.transition().duration(200).style("opacity", 0.9);
           tooltip
@@ -129,8 +131,8 @@
             </table>
             `
             )
-            .style("left", `${event.pageX + dynamicMargin.left / 4}px`)
-            .style("top", `${event.pageY}px`);
+            .style("left", `${tooltipX + dynamicMargin.left / 4}px`)
+            .style("top", `${tooltipY}px`);
         })
         .on("mouseout", () => {
           tooltip.transition().duration(500).style("opacity", 0);
