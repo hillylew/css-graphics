@@ -57,14 +57,14 @@
             .attr("x", width / 2 - width * 0.3) // Center of the first column
             .attr("y", height * 0.1)
             .attr("text-anchor", "middle")
-            .attr("class", "diagram-labels")
+            .attr("class", "chart-labels")
             .text("Vehicle 1");
 
         svg.append("text")
             .attr("x", width / 2 + width * 0.3) // Center of the second column
             .attr("y", height * 0.1)
             .attr("text-anchor", "middle")
-            .attr("class", "diagram-labels")
+            .attr("class", "chart-labels")
             .text("Vehicle 2");
 
         // Group for options, results, and ranges
@@ -231,7 +231,7 @@
                 .attr("ry", 5); // Rounded corners;
 
             groupCar1.append("text")
-                .attr("class", "range-data")
+                .attr("class", "chart-labels")
                 .attr("id", "range-data-car1")
                 .attr("x", 0)
                 .attr("y", 0) // Centered within the rectangle
@@ -257,7 +257,7 @@
                 .attr("ry", 5); // Rounded corners;
 
             groupCar2.append("text")
-                .attr("class", "range-data")
+                .attr("class", "chart-labels")
                 .attr("id", "range-data-car2")
                 .attr("x", 0)
                 .attr("y", 0) // Centered within the rectangle
@@ -286,6 +286,7 @@
 
             parent.append("text")
                 .attr("id", "reset-button-text")
+                .attr("class", "chart-labels")
                 .attr("x", 0)
                 .attr("y", buttonY + buttonHeight / 2)
                 .attr("dy", ".35em")
