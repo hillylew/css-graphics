@@ -96,8 +96,8 @@
 
             // Add the selected class to the clicked item and update its border
             item.classed('selected', true)
-                .style("stroke", "red")
-                .style("stroke-width", 1);
+                .style("stroke", "#3167A4")
+                .style("stroke-width", 2);
 
             // Update button colors based on selections
             updateButtonColors();
@@ -121,7 +121,7 @@
             }
 
             // Append option labels
-            ["pick vehicle", "pick battery"].forEach((label, index) => {
+            ["select vehicle", "select battery"].forEach((label, index) => {
                 let colX;
                 if (index === 0) {
                     colX = offsetX - boxWidth / 2;
@@ -150,7 +150,7 @@
                     .attr("data-car", carId)
                     .attr("data-category", "type")
                     .attr("data-value", type)
-                    .style("fill", "#CECECE")
+                    .style("fill", "#F2F2F2")
                     .style("stroke", "white")
                     .attr("rx", 5) // Rounded corners
                     .attr("ry", 5); // Rounded corners
@@ -180,7 +180,7 @@
                     .attr("data-car", carId)
                     .attr("data-category", "ev")
                     .attr("data-value", ev)
-                    .style("fill", "#CECECE")
+                    .style("fill", "#F2F2F2")
                     .style("stroke", "white")
                     .attr("rx", 5) // Rounded corners
                     .attr("ry", 5); // Rounded corners
@@ -225,7 +225,7 @@
                 .attr("y", -rectHeight / 2)
                 .attr("width", totalWidth)
                 .attr("height", rectHeight)
-                .style("fill", "#CECECE")
+                .style("fill", "#F2F2F2")
                 .style("stroke", "white")
                 .attr("rx", 5) // Rounded corners
                 .attr("ry", 5); // Rounded corners;
@@ -251,7 +251,7 @@
                 .attr("y", -rectHeight / 2)
                 .attr("width", totalWidth)
                 .attr("height", rectHeight)
-                .style("fill", "#CECECE")
+                .style("fill", "#F2F2F2")
                 .style("stroke", "white")
                 .attr("rx", 5) // Rounded corners
                 .attr("ry", 5); // Rounded corners;
@@ -278,7 +278,7 @@
                 .attr("y", buttonY)
                 .attr("width", buttonWidth)
                 .attr("height", buttonHeight)
-                .style("fill", "#CECECE")
+                .style("fill", "#F2F2F2")
                 .style("stroke", "white")
                 .style("cursor", "pointer")
                 .attr("rx", 5) // Rounded corners
@@ -306,36 +306,36 @@
 
             d3.selectAll('.grid-item').classed('selected', false);
 
-            d3.selectAll('.grid-item').style('fill', '#CECECE');
+            d3.selectAll('.grid-item').style('fill', '#F2F2F2');
 
             d3.selectAll('.grid-item').style('stroke', 'white').style('stroke-width', 1);
 
             d3.select('#result').text("Select Options to Compare").style('fill', 'black');
             d3.select('#range-data-car1').text("Car 1 Range").style('fill', 'black');
             d3.select('#range-data-car2').text("Car 2 Range").style('fill', 'black');
-            d3.select('#range-rect-car1').style('fill', '#CECECE');
-            d3.select('#range-rect-car2').style('fill', '#CECECE');
+            d3.select('#range-rect-car1').style('fill', '#F2F2F2');
+            d3.select('#range-rect-car2').style('fill', '#F2F2F2');
         }
 
         function updateButtonColors() {
             if (selections.car1.type) {
                 d3.selectAll('.grid-item[data-car="1"][data-category="type"]')
-                    .style('fill', '#FED679');
+                    .style('fill', '#8FC8E5');
             }
 
             if (selections.car1.ev) {
                 d3.selectAll('.grid-item[data-car="1"][data-category="ev"]')
-                    .style('fill', '#FED679');
+                    .style('fill', '#8FC8E5');
             }
 
             if (selections.car2.type) {
                 d3.selectAll('.grid-item[data-car="2"][data-category="type"]')
-                    .style('fill', '#FED679');
+                    .style('fill', '#8FC8E5');
             }
 
             if (selections.car2.ev) {
                 d3.selectAll('.grid-item[data-car="2"][data-category="ev"]')
-                    .style('fill', '#FED679');
+                    .style('fill', '#8FC8E5');
             }
         }
 
