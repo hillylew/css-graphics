@@ -46,7 +46,13 @@
   const yAxis = (g) => g.call(d3.axisLeft(yScale).tickSizeOuter(0).tickSizeInner(0).tickPadding(5));
 
   /* ----------------------- Loading and processing data ----------------------- */
-  d3.csv("../../data/sustainability-indicators/environmental-justice/environmental-justice4.csv", (d) => ({
+
+  // Define csv file path if it's not already defined
+  if (typeof csvFile === "undefined") {
+    var csvFile = "../../data/sustainability-indicators/environmental-justice/environmental-justice4.csv";
+  }
+
+  d3.csv(csvFile, (d) => ({
     category: d.Category,
     percentage: +d["Percentage"],
   })).then((data) => {

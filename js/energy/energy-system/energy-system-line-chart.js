@@ -62,7 +62,13 @@
       ]);
   
     // Load and process the CSV data
-    d3.csv("../../data/energy/energy-system/energy-system1.csv").then((data) => {
+
+    // Define csv file path if it's not already defined
+    if (typeof csvFile === "undefined") {
+      var csvFile = "../../data/energy/energy-system/energy-system1.csv";
+    }
+
+    d3.csv(csvFile).then((data) => {
       // Parse years and convert string values to numbers
       data.forEach((d) => {
         d.Year = new Date(+d.Year, 0, 1);

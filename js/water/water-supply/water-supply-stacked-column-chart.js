@@ -56,7 +56,13 @@
     
 
     // Load CSV data and build chart
-    d3.csv("../../data/water/water-supply/water-supply1.csv", d3.autoType).then(function(data) {
+
+    // Define csv file path if it's not already defined
+    if (typeof csvFile === "undefined") {
+        var csvFile = "../../data/water/water-supply/water-supply1.csv"
+    }
+
+    d3.csv(csvFile, d3.autoType).then(function(data) {
 
         // Calculate the total BGD for the y-axis domain
         const totalBGD = d3.sum(data, d => d.BGD);

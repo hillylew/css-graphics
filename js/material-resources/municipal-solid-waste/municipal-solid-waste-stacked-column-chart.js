@@ -41,7 +41,13 @@
         .range(["#1D476D", "#3167A4", "#8FC8E5", "#386660", "#E2E27A"]);
 
     // Load the CSV file and process it
-    d3.csv("../../data/material-resources/municipal-solid-waste/municipal-solid-waste2.csv").then((data) => {
+
+    // Define csv file path if it's not already defined
+    if (typeof csvFile === "undefined") {
+        var csvFile = "../../data/material-resources/municipal-solid-waste/municipal-solid-waste2.csv";
+    }
+
+    d3.csv(csvFile).then((data) => {
         data.forEach(d => {
             d.year = +d.Year;
             d.Recycled = +d.Recycled;

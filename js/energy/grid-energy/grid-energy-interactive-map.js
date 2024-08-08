@@ -1,7 +1,13 @@
 (async () => {
   // Load data from external sources
   const us = await d3.json("https://d3js.org/us-10m.v2.json");
-  const projectData = await d3.csv("../../data/energy/grid-energy/grid-energy1.csv");
+
+  // Define csv file path if it's not already defined
+  if (typeof csvFile === "undefined") {
+    var csvFile = "../../data/energy/grid-energy/grid-energy1.csv";
+  }
+
+  const projectData = await d3.csv(csvFile);
 
   // Maps of state states to color and storage data
   const fipsToData = {};

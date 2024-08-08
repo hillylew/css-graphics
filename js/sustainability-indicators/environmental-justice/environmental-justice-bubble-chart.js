@@ -37,7 +37,13 @@
         .attr("transform", `translate(${dynamicMargin.left},${dynamicMargin.top})`);
 
     // Load data from CSV
-    d3.csv("../../data/sustainability-indicators/environmental-justice/environmental-justice5.csv")
+
+    // Define csv file path if it's not already defined
+    if (typeof csvFile === "undefined") {
+        var csvFile = "../../data/sustainability-indicators/environmental-justice/environmental-justice5.csv";
+    }
+
+    d3.csv(csvFile)
         .then((data) => {
             // Scale functions
             const x = d3.scaleLinear().range([0, width]);

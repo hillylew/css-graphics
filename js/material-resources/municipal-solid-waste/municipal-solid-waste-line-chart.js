@@ -39,7 +39,13 @@
     const yRight = d3.scaleLinear().range([height, 0]);
   
     // Load the CSV file and process it
-    d3.csv("../../data/material-resources/municipal-solid-waste/municipal-solid-waste1.csv").then((data) => {
+
+    // Define csv file path if it's not already defined
+    if (typeof csvFile === "undefined") {
+        var csvFile = "../../data/material-resources/municipal-solid-waste/municipal-solid-waste1.csv";
+    }
+
+    d3.csv(csvFile).then((data) => {
       // Parse years and convert string values to numbers
       data.forEach((d) => {
         d.year = new Date(+d.year, 0, 1);

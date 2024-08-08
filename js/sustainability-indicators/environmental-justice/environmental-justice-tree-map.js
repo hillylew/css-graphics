@@ -37,7 +37,13 @@
         .attr("transform", `translate(${dynamicMargin.left},${dynamicMargin.top})`);
 
     // Load data from CSV
-    d3.csv("../../data/sustainability-indicators/environmental-justice/environmental-justice2.csv").then((data) => {
+
+    // Define csv file path if it's not already defined
+    if (typeof csvFile === "undefined") {
+        var csvFile = "../../data/sustainability-indicators/environmental-justice/environmental-justice2.csv";
+    }
+
+    d3.csv(csvFile).then((data) => {
         // Convert data types if necessary
         data.forEach(d => {
             d['Metric Ton'] = +d['Metric Ton']; // Convert Metric Ton to numeric

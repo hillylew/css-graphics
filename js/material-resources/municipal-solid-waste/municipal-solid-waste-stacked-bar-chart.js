@@ -33,9 +33,13 @@
         .append("g")
         .attr("transform", `translate(${dynamicMargin.left},${dynamicMargin.top})`);
 
-    const csvFilePath = "../../data/material-resources/municipal-solid-waste/municipal-solid-waste3.csv";
+
+    // Define csv file path if it's not already defined
+    if (typeof csvFile === "undefined") {
+        var csvFile = "../../data/material-resources/municipal-solid-waste/municipal-solid-waste3.csv";
+    }
     
-    d3.csv(csvFilePath).then((data) => {
+    d3.csv(csvFile).then((data) => {
         // Parse the data
         data.forEach(d => {
             d.epaRegion = +d.epaRegion;

@@ -56,7 +56,13 @@
     .text("Biofuel Yield (GJ/ha)");
 
   /* ----------------------- Loading and processing data ----------------------- */
-  d3.csv("../../data/energy/biofuels/biofuels3.csv", (d) => ({
+
+  // Define csv file path if it's not already defined
+  if (typeof csvFile === "undefined") {
+    var csvFile = "../../data/energy/biofuels/biofuels3.csv";
+  }
+
+  d3.csv(csvFile, (d) => ({
     feedstock: d.Feedstock,
     region: d.Region,
     biofuelYield: +d["Biofuel Yield"],

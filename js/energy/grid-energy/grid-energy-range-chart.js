@@ -96,7 +96,13 @@
     }
 
     // Load and process the CSV data
-    d3.csv("../../data/energy/grid-energy/grid-energy5.csv").then((data) => {
+
+    // Define csv file path if it's not already defined
+    if (typeof csvFile === "undefined") {
+        var csvFile = "../../data/energy/grid-energy/grid-energy5.csv";
+    }
+
+    d3.csv(csvFile).then((data) => {
         // Parse the data
         data.forEach((d) => {
             d.val1 = +d.val1;

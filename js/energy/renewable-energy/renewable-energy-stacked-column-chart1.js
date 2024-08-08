@@ -57,8 +57,12 @@
     // If you stack it wihtout subtracking, you would be "adding" the Annual Additions twice. 
     // For these reasons, you need to add Annual Additions and Cumulative Capacity to get the REAL Cumulative Capacity data. 
 
+    // Define csv file path if it's not already defined
+    if (typeof csvFile === "undefined") {
+        var csvFile = "../../data/energy/renewable-energy/renewable-energy3.csv";
+    }
 
-    d3.csv("../../data/energy/renewable-energy/renewable-energy3.csv").then((data) => {
+    d3.csv(csvFile).then((data) => {
         // Parse years and convert string values to numbers
         data.forEach((d) => {
             d.Year = new Date(+d.Year, 0, 1);

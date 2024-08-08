@@ -1,4 +1,5 @@
 (function () {
+  
    /* ----------------------- Create Tooltip ------------------------ */
    const container = document.getElementById("biofuels-bar-chart3");
 
@@ -39,7 +40,13 @@
   const color = d3.scaleOrdinal().range(["#FED679", "#ED974A", "#8FC8E5", "#3167A4"]);
 
   /* ----------------------- Loading and processing data ----------------------- */
-  d3.csv("../../data/energy/biofuels/biofuels5.csv").then((data) => {
+
+  // Define csv file path if it's not already defined
+  if (typeof csvFile === "undefined") {
+    var csvFile = "../../data/energy/biofuels/biofuels5.csv";
+  }
+  
+  d3.csv(csvFile).then((data) => {
     // Manually set the desired order of subgroups
     const subgroups = ["Cropland Use in 2005", "Cropland Use in 2030", "Irrigation Water Use in 2005", "Irrigation Water Use in 2030"];
     const regions = data.map(d => d.Region);
@@ -80,7 +87,7 @@
       .on("mousemove", function(event) {
         const tooltipX = event.clientX + window.scrollX;
         const tooltipY = event.clientY + window.scrollY;
-        
+
         tooltip.style("left", `${tooltipX + dynamicMargin.left / 4}px`)
           .style("top", `${tooltipY}px`);
       })

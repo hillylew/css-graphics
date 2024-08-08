@@ -1,18 +1,20 @@
-Category,End Use,Annual CO2 Emission (lbs)
-Electricity,Space heating,2034
-Gas,Pool heaters,4602
-Electricity,Pool pumps,1950
-Electricity,EV charging,1933
-Electricity,AC,1897
-Electricity,Refrigerators,686
-Electricity,Clothes dryers,556
-Electricity,Lighting,535
-Electricity,TVs and related,518
-Electricity,Cooking,237
-Electricity,Ceiling fans,185
-Electricity,Dishwashers,91
-Electricity,Microwaves,86
-Electricity,Clothes washer,55
-Gas,Cooking,236
-Gas,Clothes dryers,241
-Gas,Space heating,5252
+Activity,Annual CO2 emission per household
+Gas space heating,5252
+Gas pool heaters,4602
+Water heating,2206
+Gas water heating,2129
+Space heating,2034
+Pool pumps,1950
+EV charging,1933
+AC,1897
+Refrigerators,686
+Clothes dryers,556
+Lighting,535
+TVs and related,518
+Gas clothes dryer,241
+Cooking,237
+Gas cooking,236
+Ceiling fans,185
+Dishwashers,91
+Microwaves,86
+Clothes washer,55

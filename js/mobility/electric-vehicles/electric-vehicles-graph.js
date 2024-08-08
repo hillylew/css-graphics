@@ -1,17 +1,17 @@
 (function () {
-    const aspectRatio = 0.7;
+    const aspectRatio = 1.0; // Adjusted for a more square layout
     const data = {
-        "Internal Combustion Engine": {
+        "ICEV": {
             Pickup: { efficiency: 100, ghg: "543-573" },
             SUV: { efficiency: 82, ghg: "435-485" },
             Sedan: { efficiency: 71, ghg: "373-420" }
         },
-        "Hybrid Electric Vehicle": {
+        "HEV": {
             Pickup: { efficiency: 72, ghg: "388-410" },
             SUV: { efficiency: 59, ghg: "317-345" },
             Sedan: { efficiency: 49, ghg: "262-287" }
         },
-        "Battery Electric Vehicle": {
+        "BEV": {
             Pickup: { efficiency: 35, ghg: "182-207" },
             SUV: { efficiency: 31, ghg: "162-170" },
             Sedan: { efficiency: 24, ghg: "129-136" }
@@ -36,9 +36,9 @@
         // Calculate the dynamic margins
         const dynamicMargin = {
             top: containerHeight * 0.05,
-            right: containerWidth * 0.01,
-            bottom: containerHeight * 0.02, 
-            left: containerWidth * 0.01,
+            right: containerWidth * 0.05,
+            bottom: containerHeight * 0.10, // Space for the reset button
+            left: containerWidth * 0.05,
         };
 
         // Calculate the width and height for the inner drawing area
@@ -52,17 +52,33 @@
             .append("g")
             .attr("transform", `translate(${dynamicMargin.left},${dynamicMargin.top})`);
 
-        const gridContainer = svg.append("g")
+        // Add title texts
+        svg.append("text")
+            .attr("x", width / 2 - width * 0.3) // Center of the first column
+            .attr("y", height * 0.1)
+            .attr("text-anchor", "middle")
+            .attr("class", "diagram-labels")
+            .text("Vehicle 1");
+
+        svg.append("text")
+            .attr("x", width / 2 + width * 0.3) // Center of the second column
+            .attr("y", height * 0.1)
+            .attr("text-anchor", "middle")
+            .attr("class", "diagram-labels")
+            .text("Vehicle 2");
+
+        // Group for options, results, and ranges
+        const groupContainer = svg.append("g")
             .attr("transform", `translate(${width / 2}, ${height / 2})`);
 
         const carTypes = ["Pickup", "SUV", "Sedan"];
-        const carEvs = ["Internal Combustion Engine", "Hybrid Electric Vehicle", "Battery Electric Vehicle"];
+        const carEvs = ["ICEV", "HEV", "BEV"];
 
-        appendOptions(gridContainer, carTypes, carEvs, 1);
-        appendResult(gridContainer);
-        appendOptions(gridContainer, carTypes, carEvs, 2);
-        appendRangeData(gridContainer);
-        appendResetButton(gridContainer);
+        appendOptions(groupContainer, carTypes, carEvs, 1);
+        appendResult(groupContainer);
+        appendOptions(groupContainer, carTypes, carEvs, 2);
+        appendRangeData(groupContainer);
+        appendResetButton(groupContainer);
 
         // Add event listeners
         d3.selectAll('.grid-item').on("click", function () {
@@ -90,17 +106,44 @@
             compareResults();
         });
 
-        function appendOptions(parent, types, evs, carId) {
-            const boxWidth = width * 0.17; // Increase button width
-            const boxHeight = height * 0.12; // Increase button height
-            const spacing = boxHeight * 1.5;
-            const offsetX = carId === 1 ? -width * 0.5 : 0; // Adjust based on center line
 
+        function appendOptions(parent, types, evs, carId) {
+            const boxWidth = width * 0.20; // Adjust button width
+            const boxHeight = height * 0.15; // Adjust button height
+            const spacing = boxHeight * 1.2;
+            const columnGap = width * 0.05; // Gap between columns
+
+            let offsetX;
+            if (carId === 1) {
+                offsetX = -width * 0.3 - boxWidth / 2 - columnGap / 2; // Adjusted to fit in the left half and add gap
+            } else {
+                offsetX = width * 0.3 - boxWidth / 2 - columnGap / 2; // Adjusted to fit in the right half and add gap
+            }
+
+            // Append option labels
+            ["pick vehicle", "pick battery"].forEach((label, index) => {
+                let colX;
+                if (index === 0) {
+                    colX = offsetX - boxWidth / 2;
+                } else {
+                    colX = offsetX + boxWidth + columnGap - boxWidth / 2;
+                }
+
+                parent.append("text")
+                    .attr("class", "chart-labels")
+                    .attr("x", colX + boxWidth / 2)
+                    .attr("y", -height * 0.35)
+                    .attr("text-anchor", "middle")
+                    .attr("pointer-events", "none")
+                    .text(label);
+            });
+
+            // Append car type options
             types.forEach((type, index) => {
-                const row = spacing * (index + 1) - height * 0.5; // Adjust based on center line
+                const row = spacing * (index + 1) - height * 0.5;
                 parent.append("rect")
                     .attr("class", "grid-item")
-                    .attr("x", offsetX)
+                    .attr("x", offsetX - boxWidth / 2)
                     .attr("y", row)
                     .attr("width", boxWidth)
                     .attr("height", boxHeight)
@@ -109,24 +152,28 @@
                     .attr("data-value", type)
                     .style("fill", "#CECECE")
                     .style("stroke", "white")
-                    .attr("rx", 3) // Rounded corners
-                    .attr("ry", 3); // Rounded corners
+                    .attr("rx", 5) // Rounded corners
+                    .attr("ry", 5); // Rounded corners
 
                 parent.append("text")
                     .attr("class", "chart-labels")
-                    .attr("x", offsetX + boxWidth / 2)
+                    .attr("x", offsetX - boxWidth / 2 + boxWidth / 2)
                     .attr("y", row + boxHeight / 2 + 4)
                     .attr("text-anchor", "middle")
                     .attr("pointer-events", "none")
                     .text(type);
             });
 
+            // Adjust offsetX for the EV options with a gap
+            offsetX += boxWidth + columnGap;
+
+            // Append EV options
             evs.forEach((ev, index) => {
-                const row = spacing * (index + 1) - height * 0.5; // Adjust based on center line
-                const col = offsetX + width * 0.2;
+                const row = spacing * (index + 1) - height * 0.5;
+
                 parent.append("rect")
                     .attr("class", "grid-item")
-                    .attr("x", col)
+                    .attr("x", offsetX - boxWidth / 2)
                     .attr("y", row)
                     .attr("width", boxWidth)
                     .attr("height", boxHeight)
@@ -135,12 +182,12 @@
                     .attr("data-value", ev)
                     .style("fill", "#CECECE")
                     .style("stroke", "white")
-                    .attr("rx", 3) // Rounded corners
-                    .attr("ry", 3); // Rounded corners
+                    .attr("rx", 5) // Rounded corners
+                    .attr("ry", 5); // Rounded corners
 
                 parent.append("text")
                     .attr("class", "chart-labels")
-                    .attr("x", col + boxWidth / 2)
+                    .attr("x", offsetX - boxWidth / 2 + boxWidth / 2)
                     .attr("y", row + boxHeight / 2 + 4)
                     .attr("text-anchor", "middle")
                     .attr("pointer-events", "none")
@@ -152,28 +199,70 @@
             parent.append("text")
                 .attr("id", "result")
                 .attr("x", 0)
-                .attr("y", -height * 0.4)
+                .attr("y", -height * 0.5)
                 .attr("dy", ".35em")
                 .attr("text-anchor", "middle")
-                .attr("class", "diagram-labels")
+                .attr("class", "diagram-labels-result")
                 .text("Select Options to Compare");
         }
 
         function appendRangeData(parent) {
-            parent.append("text")
+            const boxWidth = width * 0.20;
+            const columnGap = width * 0.05; // Gap between columns
+            const totalWidth = boxWidth * 2 + columnGap; // Total width for both columns
+
+            const rectHeight = height * 0.1; // Height of the rectangle
+
+            // Group for Car 1 range data
+            const groupCar1 = parent.append("g")
+                .attr("class", "range-group")
+                .attr("transform", `translate(${-width * 0.3}, ${height * 0.3})`); // Positioned and centered
+
+            groupCar1.append("rect")
+                .attr("class", "range-data-rect")
+                .attr("id", "range-rect-car1")
+                .attr("x", -totalWidth / 2)
+                .attr("y", -rectHeight / 2)
+                .attr("width", totalWidth)
+                .attr("height", rectHeight)
+                .style("fill", "#CECECE")
+                .style("stroke", "white")
+                .attr("rx", 5) // Rounded corners
+                .attr("ry", 5); // Rounded corners;
+
+            groupCar1.append("text")
                 .attr("class", "range-data")
                 .attr("id", "range-data-car1")
-                .attr("x", -width * 0.25)
-                .attr("y", height * 0.4)
+                .attr("x", 0)
+                .attr("y", 0) // Centered within the rectangle
                 .attr("text-anchor", "middle")
+                .attr("dy", ".35em")
                 .text("Car 1 Range");
 
-            parent.append("text")
+            // Group for Car 2 range data
+            const groupCar2 = parent.append("g")
+                .attr("class", "range-group")
+                .attr("transform", `translate(${width * 0.3}, ${height * 0.3})`); // Positioned and centered
+
+            groupCar2.append("rect")
+                .attr("class", "range-data-rect")
+                .attr("id", "range-rect-car2")
+                .attr("x", -totalWidth / 2)
+                .attr("y", -rectHeight / 2)
+                .attr("width", totalWidth)
+                .attr("height", rectHeight)
+                .style("fill", "#CECECE")
+                .style("stroke", "white")
+                .attr("rx", 5) // Rounded corners
+                .attr("ry", 5); // Rounded corners;
+
+            groupCar2.append("text")
                 .attr("class", "range-data")
                 .attr("id", "range-data-car2")
-                .attr("x", width * 0.25)
-                .attr("y", height * 0.4)
+                .attr("x", 0)
+                .attr("y", 0) // Centered within the rectangle
                 .attr("text-anchor", "middle")
+                .attr("dy", ".35em")
                 .text("Car 2 Range");
         }
 
@@ -181,9 +270,9 @@
             const buttonWidth = width * 0.2;
             const buttonHeight = height * 0.08;
             const buttonX = -buttonWidth / 2;
-            const buttonY = height * 0.45;
+            const buttonY = height * 0.4;
 
-            const button = parent.append("rect")
+            parent.append("rect")
                 .attr("id", "reset-button")
                 .attr("x", buttonX)
                 .attr("y", buttonY)
@@ -192,10 +281,10 @@
                 .style("fill", "#CECECE")
                 .style("stroke", "white")
                 .style("cursor", "pointer")
-                .attr("rx", 3) // Rounded corners
-                .attr("ry", 3); // Rounded corners
+                .attr("rx", 5) // Rounded corners
+                .attr("ry", 5); // Rounded corners;
 
-            const buttonText = parent.append("text")
+            parent.append("text")
                 .attr("id", "reset-button-text")
                 .attr("x", 0)
                 .attr("y", buttonY + buttonHeight / 2)
@@ -205,7 +294,7 @@
                 .text("Reset");
 
             // Add click event to reset button
-            button.on("click", resetSelections);
+            d3.select("#reset-button").on("click", resetSelections);
         }
 
         function resetSelections() {
@@ -213,37 +302,39 @@
                 car1: { type: null, ev: null },
                 car2: { type: null, ev: null }
             };
-        
+
             d3.selectAll('.grid-item').classed('selected', false);
-        
+
             d3.selectAll('.grid-item').style('fill', '#CECECE');
-        
+
             d3.selectAll('.grid-item').style('stroke', 'white').style('stroke-width', 1);
-        
+
             d3.select('#result').text("Select Options to Compare").style('fill', 'black');
             d3.select('#range-data-car1').text("Car 1 Range").style('fill', 'black');
             d3.select('#range-data-car2').text("Car 2 Range").style('fill', 'black');
+            d3.select('#range-rect-car1').style('fill', '#CECECE');
+            d3.select('#range-rect-car2').style('fill', '#CECECE');
         }
 
         function updateButtonColors() {
             if (selections.car1.type) {
                 d3.selectAll('.grid-item[data-car="1"][data-category="type"]')
-                  .style('fill', '#FED679');
+                    .style('fill', '#FED679');
             }
 
             if (selections.car1.ev) {
                 d3.selectAll('.grid-item[data-car="1"][data-category="ev"]')
-                  .style('fill', '#FED679');
+                    .style('fill', '#FED679');
             }
 
             if (selections.car2.type) {
                 d3.selectAll('.grid-item[data-car="2"][data-category="type"]')
-                  .style('fill', '#FED679');
+                    .style('fill', '#FED679');
             }
 
             if (selections.car2.ev) {
                 d3.selectAll('.grid-item[data-car="2"][data-category="ev"]')
-                  .style('fill', '#FED679');
+                    .style('fill', '#FED679');
             }
         }
 
@@ -258,26 +349,22 @@
 
                 difference = difference > 0 ? `+${difference.toFixed(2)}` : difference.toFixed(2);
 
-                d3.select('#result').text(`Change in Emissions: ${difference}%`);
-                d3.select('#range-data-car1').text(`GHG Emissions Range: ${range1}`);
-                d3.select('#range-data-car2').text(`GHG Emissions Range: ${range2}`);
+                d3.select('#result')
+                    .text(`Change in Emissions: ${difference}%`)
+                    .style('fill', 'red')
+                    .style('font-size', '24px');
 
-                let resultColor;
-                if (difference === "0.00") {
-                    resultColor = 'gray';
-                } else {
-                    resultColor = parseFloat(difference) < 0 ? 'green' : 'red';
-                }
-                d3.select('#result').style('fill', resultColor);
+                d3.select('#range-data-car1').text(`GHG Emissions Range: ${range1}`).style('fill', 'black');
+                d3.select('#range-data-car2').text(`GHG Emissions Range: ${range2}`).style('fill', 'black');
 
-                const ghg1 = parseInt(data[car1.ev][car1.type].ghg.split('-')[0]);
-                const ghg2 = parseInt(data[car2.ev][car2.type].ghg.split('-')[0]);
+                const ghg1 = parseInt(range1.split('-')[0]);
+                const ghg2 = parseInt(range2.split('-')[0]);
 
                 const color1 = calculateColor(ghg1);
                 const color2 = calculateColor(ghg2);
 
-                d3.select('#range-data-car1').style('fill', color1);
-                d3.select('#range-data-car2').style('fill', color2);
+                d3.select('#range-rect-car1').style('fill', color1);
+                d3.select('#range-rect-car2').style('fill', color2);
             }
         }
 
@@ -303,4 +390,42 @@
     renderDiagram();
     window.addEventListener('resize', renderDiagram);
 
+    // Adding CSS Styles
+    const style = document.createElement('style');
+    style.innerHTML = `
+        .grid-item{
+            cursor: pointer;
+            transition: fill 0.3s, stroke 0.3s;
+        }
+        .grid-item:hover{
+            fill: #B8B8B8;
+            stroke: #888888;
+        }
+        .range-data-rect, #reset-button {
+            transition: fill 0.3s, stroke 0.3s;
+        }
+        #reset-button:hover {
+            fill: #B8B8B8;
+            stroke: #888888;
+        }
+        .chart-labels {
+            font-family: sans-serif;
+            font-weight: bold;
+        }
+        .diagram-labels {
+            font-family: sans-serif;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .diagram-labels-result {
+            font-family: sans-serif;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        .range-data {
+            font-family: sans-serif;
+            font-size: 12px;
+        }
+    `;
+    document.head.appendChild(style);
 })();

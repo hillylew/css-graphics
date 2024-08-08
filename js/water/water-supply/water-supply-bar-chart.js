@@ -50,7 +50,12 @@
         g.call(d3.axisLeft(yScale).ticks(5).tickFormat((d) => d / 1000));
 
     /* ----------------------- Loading and processing data ----------------------- */
-    d3.csv("../../data/water/water-supply/water-supply2.csv", (d) => ({
+    // Define csv file path if it's not already defined
+    if (typeof csvFile === "undefined") {
+        var csvFile = "../../data/water/water-supply/water-supply2.csv";
+    }
+
+    d3.csv(csvFile, (d) => ({
         Source: d.Source,
         Type: d.Type,
         Amount: +d.Amount,

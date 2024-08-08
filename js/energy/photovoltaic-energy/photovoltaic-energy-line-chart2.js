@@ -49,7 +49,13 @@
     ])
     .range(["#1d476d", "#4084bc", "#ED974A", "#CE5845"]);
 
-  d3.csv("../../data/energy/photovoltaic-energy/photovoltaic-energy3.csv").then((data) => {
+  
+  // Define csv file path if it's not already defined
+  if (typeof csvFile === "undefined") {
+    var csvFile = "../../data/energy/photovoltaic-energy/photovoltaic-energy3.csv";
+  }
+
+  d3.csv(csvFile).then((data) => {
     // Parse years and convert string values to numbers
     data.forEach((d) => {
       d.Year = new Date(+d.Year, 0, 1);

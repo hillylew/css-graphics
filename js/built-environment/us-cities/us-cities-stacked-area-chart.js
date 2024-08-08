@@ -52,7 +52,13 @@
     .range(["#1d476d", "#4084bc", "#8cc9f2", "#ffcb03", "#ffe07d"]);
 
   /* ----------------------- Load and process the CSV data ----------------------- */
-  d3.csv("../../data/built-environment/us-cities/us-cities1.csv").then((data) => {
+
+  // Define csv file path if it's not already defined
+  if (typeof csvFile === "undefined") {
+    var csvFile = "../../data/built-environment/us-cities/us-cities1.csv";
+  }
+
+  d3.csv(csvFile).then((data) => {
     // Parse years and convert string values to numbers
     data.forEach((d) => {
       d.Year = new Date(+d.Year, 0, 1);

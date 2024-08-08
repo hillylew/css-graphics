@@ -55,7 +55,13 @@
       .text("Thousands");
   
     /* ----------------------- Loading and processing data ----------------------- */
-    d3.csv("../../data/mobility/personal-transportation/personal-transportation3.csv", (d) => ({
+
+    // Define csv file path if it's not already defined
+    if (typeof csvFile === "undefined") {
+        var csvFile = "../../data/mobility/personal-transportation/personal-transportation3.csv";
+    }
+
+    d3.csv(csvFile, (d) => ({
       mode: d.Modes,
       quantity: +d["Quantity (thousands)"],
     })).then((data) => {

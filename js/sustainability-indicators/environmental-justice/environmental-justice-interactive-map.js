@@ -1,7 +1,13 @@
 (async () => {
   // Load data from external sources
   const us = await d3.json("https://d3js.org/us-10m.v2.json");
-  const releaseData = await d3.csv("../../data/sustainability-indicators/environmental-justice/environmental-justice1.csv");
+
+  // Define csv file path if it's not already defined
+  if (typeof csvFile === "undefined") {
+    var csvFile = "../../data/sustainability-indicators/environmental-justice/environmental-justice1.csv";
+  }
+
+  const releaseData = await d3.csv(csvFile);
 
   // Maps of state states to color and storage data
   const fipsToData = {};

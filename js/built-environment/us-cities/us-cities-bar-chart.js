@@ -43,7 +43,13 @@
     const yAxis = (g) => g.call(d3.axisLeft(yScale).tickSizeOuter(0).tickSizeInner(0).tickPadding(10));
   
     /* ----------------------- Loading and processing data ----------------------- */
-    d3.csv("../../data/built-environment/us-cities/us-cities3.csv", (d) => ({
+    
+    // Define csv file path if it's not already defined
+    if (typeof csvFile === "undefined") {
+        var csvFile = "../../data/built-environment/us-cities/us-cities3.csv";
+    }
+
+    d3.csv(csvFile, (d) => ({
       category: d.Category,
       subcategory: d.Subcategory,
       underway: +d["Underway"],

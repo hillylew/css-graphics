@@ -43,10 +43,14 @@
     const yAxis = (g) => g.call(d3.axisLeft(yScale).tickSize(0).tickPadding(10));
   
     /* ----------------------- Loading and processing data ----------------------- */
-    d3.csv(
-      "../../data/built-environment/us-cities/us-cities4.csv",
-      d3.autoType
-    ).then((data) => {
+    
+
+    // Define csv file path if it's not already defined
+    if (typeof csvFile === "undefined") {
+        var csvFile = "../../data/built-environment/us-cities/us-cities4.csv";
+    }
+
+    d3.csv(csvFile, d3.autoType).then((data) => {
       const subgroups = ["2000", "2022"];
       const cities = data.map((d) => d.City);
   

@@ -1,33 +1,33 @@
 (function() {
-    /* ----------------------- Create Tooltip ------------------------ */
-    const container = document.getElementById("greenhouse-gases-bar-chart");
+  /* ----------------------- Create Tooltip ------------------------ */
+  const container = document.getElementById("greenhouse-gases-bar-chart");
 
-    const tooltipDiv = document.createElement("div");
-    tooltipDiv.id = "tooltip";
-    tooltipDiv.className = "tooltip";
-    container.appendChild(tooltipDiv);
+  const tooltipDiv = document.createElement("div");
+  tooltipDiv.id = "tooltip";
+  tooltipDiv.className = "tooltip";
+  container.appendChild(tooltipDiv);
 
-    const tooltip = d3.select(container).select("#tooltip");
+  const tooltip = d3.select(container).select("#tooltip");
 
   /* ----------------------- Dynamic dimensions ----------------------- */
-  const aspectRatio = 0.6;
-  
+  const aspectRatio = 0.8;
+
   // Get the container and its dimensions
   const containerWidth = container.offsetWidth;
   const containerHeight = containerWidth * aspectRatio;
-  
+
   // Calculate the dynamic margins
   const dynamicMargin = {
     top: containerHeight * 0.02,
-    right: containerWidth * 0.05,
+    right: containerWidth * 0.07,
     bottom: containerHeight * 0.15,
-    left: containerWidth * 0.17,
+    left: containerWidth * 0.2,
   };
-  
+
   // Calculate the width and height for the inner drawing area
   const width = containerWidth - dynamicMargin.left - dynamicMargin.right;
   const height = containerHeight - dynamicMargin.top - dynamicMargin.bottom;
-  
+
   // Append SVG object
   const svg = d3
     .select("#greenhouse-gases-bar-chart")
@@ -36,98 +36,99 @@
     .attr("preserveAspectRatio", "xMinYMin meet")
     .append("g")
     .attr("transform", `translate(${dynamicMargin.left},${dynamicMargin.top})`);
-  
-  /* ----------------------- Scales, axes, and color ----------------------- */
-  const yScale = d3.scaleBand().range([height, 0]).padding(0.3); // Scale for end-uses
+
+  /* ----------------------- Scales and axes ----------------------- */
+  const yScale = d3.scaleBand().range([height, 0]).padding(0.15); // Scale for activities
   const xScale = d3.scaleLinear().range([0, width]);
-  
-  const colorScale = d3.scaleOrdinal()
-    .domain(['Electricity', 'Gas'])
-    .range(["#FFCB05", "#3167A4"]);
-  
-  const xAxis = (g) => g.call(d3.axisBottom(xScale));
-  const yAxis = (g) =>
-    g.call(d3.axisLeft(yScale).tickSizeOuter(0).tickSizeInner(0).tickPadding(10));
-  
+
+  const xAxis = (g) => g
+    .call(d3.axisBottom(xScale).tickValues(d3.range(0, xScale.domain()[1] + 1000, 1000)))
+    .call(g => g.select(".domain").attr("stroke", "none"))  // This removes the x-axis line
+    .call(g => g.selectAll(".tick line").attr("stroke", "#aaaaaa").attr("stroke-width", "0.2"))  // Make tick lines light grey
+    .call(g => g.selectAll(".tick text").attr("class", "chart-labels").attr("fill", "#000"));  // Make tick texts light grey
+
+  const yAxis = (g) => g.call(d3.axisLeft(yScale).tickSizeOuter(0).tickSizeInner(0).tickPadding(10));
+
   // Append the main label text with CO2 subscripted
   svg.append("text")
-      .attr("x", width / 2)
-      .attr("y", height + dynamicMargin.bottom * 0.6)
-      .attr("class", "chart-labels")
-      .attr("text-anchor", "middle")
-      .attr("fill", "#000")
-      .call(function(label) {
-          label.append("tspan").text("Average Annual CO");
-          label.append("tspan")
-              .text("2")
-              .attr("baseline-shift", "sub")
-              .attr("font-size", "60%"); // Adjust the font size for subscript
-          label.append("tspan").text(" Emissions (lbs)");
-      });
-  
+    .attr("x", width / 2)
+    .attr("y", height + dynamicMargin.bottom * 0.6)
+    .attr("class", "chart-labels")
+    .attr("text-anchor", "middle")
+    .attr("fill", "#000")
+    .call(function(label) {
+        label.append("tspan").text("Average Annual CO");
+        label.append("tspan")
+            .text("2")
+            .attr("baseline-shift", "sub")
+            .attr("font-size", "60%"); // Adjust the font size for subscript
+        label.append("tspan").text(" Emissions (lbs)");
+    });
+
   /* ----------------------- Loading and processing data ----------------------- */
-  d3.csv("../../data/climate-change/greenhouse-gases/greenhouse-gases4.csv", (d) => ({
-    Category: d.Category,
-    EndUse: d["End Use"],
-    CO2Emission: +d["Annual CO2 Emission (lbs)"],
+
+  // Define csv file path if it's not already defined
+  if (typeof csvFile === "undefined") {
+    var csvFile = "../../data/climate-change/greenhouse-gases/greenhouse-gases4.csv"; // Update this path to your CSV file location
+  }
+
+  d3.csv(csvFile, (d) => ({
+    Activity: d["Activity"],
+    CO2Emission: +d["Annual CO2 emission per household"],
   })).then((data) => {
-    // Get unique end uses
-    const endUses = [...new Set(data.map((d) => d.EndUse))];
-  
+    // Get unique activities
+    const activities = data.map(d => d.Activity).reverse();
+
     // Update scales
-    yScale.domain(endUses);
-    xScale.domain([0, Math.ceil(Math.max(...data.map(d => d.CO2Emission)) / 500) * 500]);
-  
+    const maxValue = Math.ceil(Math.max(...data.map(d => d.CO2Emission)) / 1000) * 1000;
+    yScale.domain(activities);
+    xScale.domain([0, maxValue]);
+
     // Draw the y-axis
-    svg.append("g").call(yAxis).selectAll(".tick text").attr("class", "chart-labels");
-  
-    // Draw the x-axis
-    svg
+    svg.append("g").call(yAxis).selectAll(".tick text").attr("class", "chart-labels").style("font-weight", "bold");
+
+    const xAxisGroup = svg
       .append("g")
       .attr("transform", `translate(0,${height})`)
-      .call(xAxis)
-      .selectAll("text")
-      .attr("class", "chart-labels");
-  
-    // Create groups for each end use
-    const endUseGroups = svg
-      .selectAll(".end-use-group")
-      .data(endUses)
+      .call(xAxis);
+
+    // Add vertical grid lines
+    svg.selectAll("line.vertical-grid")
+      .data(xScale.ticks(Math.floor(maxValue / 1000)))  // Adjust to match tickValues
       .enter()
-      .append("g")
-      .attr("class", "end-use-group")
-      .attr("transform", (d) => `translate(0,${yScale(d)})`);
-  
-    // Draw the bars for each end use
-    endUseGroups
-      .selectAll(".bar")
-      .data((d) => data.filter((item) => item.EndUse === d))
+      .append("line")
+      .attr("class", "vertical-grid")
+      .attr("x1", d => xScale(d))
+      .attr("x2", d => xScale(d))
+      .attr("y1", 0)
+      .attr("y2", height)
+      .attr("stroke", "#aaaaaa")
+      .attr("stroke-width", "0.2");
+
+    // Draw the bars
+    svg.selectAll(".bar")
+      .data(data)
       .enter()
       .append("rect")
       .attr("class", "bar")
-      .attr("y", (d, i, nodes) => {
-        const numCategories = nodes.length;
-        const categoryIndex = d.Category === 'Electricity' ? 0 : 1; // Adjust index for categories
-        const categoryHeight = yScale.bandwidth() / 2; // Half the height of the band
-        return categoryIndex * categoryHeight;
-      })
+      .attr("y", d => yScale(d.Activity))
       .attr("x", 0)
-      .attr("height", yScale.bandwidth() / 2)
-      .attr("width", (d) => xScale(d.CO2Emission))
-      .attr("fill", (d) => colorScale(d.Category))
+      .attr("height", yScale.bandwidth())
+      .attr("width", d => xScale(d.CO2Emission))
+      .attr("fill", "#ED974A") // Single color for all bars
       .on("mouseover", function(event, d) {
         d3.select(this).attr("class", "bar active");
 
         const tooltipX = event.clientX + window.scrollX;
         const tooltipY = event.clientY + window.scrollY;
-        
+
         // Show and populate the tooltip
         tooltip
           .html(
-            `<div class="tooltip-title">${d.EndUse}</div>
+            `<div class="tooltip-title">${d.Activity}</div>
               <table class="tooltip-content">
                 <tr>
-                  <td><span class="color-legend" style="background-color: ${colorScale(d.Category)};"></span>Emissions:</td>
+                  <td>Emissions:</td>
                   <td class="value"><strong>${d.CO2Emission}</strong> lbs</td>
                 </tr>
               </table>`
@@ -135,56 +136,19 @@
           .style("opacity", 0.9)
           .style("left", `${tooltipX + dynamicMargin.left / 4}px`)
           .style("top", `${tooltipY}px`);
+
+        d3.select(this).attr("opacity", 0.7);
       })
       .on("mousemove", function(event) {
         tooltip
-          .style("left", (tooltipX + dynamicMargin.left / 4) + "px")
-          .style("top", (tooltipY) + "px");
+          .style("left", (event.clientX + window.scrollX + dynamicMargin.left / 4) + "px")
+          .style("top", (event.clientY + window.scrollY) + "px");
       })
       .on("mouseout", function() {
         d3.select(this).attr("class", "bar");
         tooltip.style("opacity", 0);
+
+        d3.select(this).attr("opacity", 1);
       });
-  
-    // Adding the legend
-    const legendData = [
-      { category: 'Electricity', color: '#FFCB05' },
-      { category: 'Gas', color: '#3167A4' },
-    ];
-  
-    const legend = svg
-      .append("g")
-      .attr("class", "legend")
-      .attr("transform", `translate(${width - 100}, 20)`);
-  
-    legend
-      .selectAll(".legend-item")
-      .data(legendData)
-      .enter()
-      .append("g")
-      .attr("class", "legend-item")
-      .attr("transform", (d, i) => `translate(0,${i * 20})`);
-  
-    legend
-      .selectAll(".legend-item")
-      .append("rect")
-      .attr("x", 0)
-      .attr("y", 0)
-      .attr("width", 18)
-      .attr("height", 18)
-      .attr("fill", (d) => d.color)
-      .attr("rx", 3) // Rounded corners
-      .attr("ry", 3); // Rounded corners
-  
-    legend
-      .selectAll(".legend-item")
-      .append("text")
-      .attr("x", 24)
-      .attr("y", 9)
-      .attr("dy", "0.35em")
-      .attr("class", "chart-labels")
-      .text((d) => d.category)
-      .attr("text-anchor", "start")
-      .attr("fill", "#000");
   });
 })();

@@ -54,7 +54,13 @@
     const yAxis = (g) => g.call(d3.axisLeft(yScale).tickSizeOuter(0).tickSizeInner(0).tickPadding(10));
   
     /* ----------------------- Loading and processing data ----------------------- */
-    d3.csv("../../data/mobility/personal-transportation/personal-transportation4.csv").then((data) => {
+
+    // Define csv file path if it's not already defined
+    if (typeof csvFile === "undefined") {
+        var csvFile = "../../data/mobility/personal-transportation/personal-transportation4.csv";
+    }
+
+    d3.csv(csvFile).then((data) => {
       data.forEach(d => {
         d.Intensity = +d["Intensity (BTU/passenger-mile)"];
         d.LoadFactor = +d["Load Factor (persons/vehicle)"];

@@ -36,7 +36,13 @@
         .text("Greenhouse Gases Contribution by Food Type in Average Diet");
 
     // Load data from CSV - replace with the correct path to your CSV file
-    d3.csv("../../data/sustainability-indicators/carbon-footprint/carbon-footprint1.csv").then((data) => {
+
+    // Define csv file path if it's not already defined
+    if (typeof csvFile === "undefined") {
+        var csvFile = "../../data/sustainability-indicators/carbon-footprint/carbon-footprint1.csv";
+    }
+
+    d3.csv(csvFile).then((data) => {
         // Process data and calculate percentages
         const categories = data.columns.slice(1); // assuming the first column is 'Location'
 

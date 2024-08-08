@@ -38,7 +38,14 @@
    const color = d3.scaleOrdinal().range(["#8FC8E5"]);
 
    /* ----------------------- Loading and processing data ----------------------- */
-   d3.csv("../../data/material-resources/municipal-solid-waste/municipal-solid-waste4.csv").then(data => {
+
+
+   // Define csv file path if it's not already defined
+   if (typeof csvFile === "undefined") {
+      var csvFile = "../../data/material-resources/municipal-solid-waste/municipal-solid-waste4.csv";
+   }
+
+   d3.csv(csvFile).then(data => {
 
       x.domain(data.map(d => d.Material));
       y.domain([0, d3.max(data, d => +d.Recovered)]).nice();

@@ -48,7 +48,12 @@
         .range(["#CE5845", "#ED974A", "#FED679"]);
 
     /* ----------------------- Load and Process Data ----------------------- */
-    d3.csv("../../data/energy/grid-energy/grid-energy3.csv").then(data => {
+    // Define csv file path if it's not already defined
+    if (typeof csvFile === "undefined") {
+        var csvFile = "../../data/energy/grid-energy/grid-energy3.csv";
+    }
+
+    d3.csv(csvFile).then(data => {
         // Parse data
         data.forEach(d => {
             for (let prop in d) {

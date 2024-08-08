@@ -1,0 +1,53 @@
+/* styling for the header for website not grpahs */
+* {
+  margin: 0;
+  box-sizing: border-box;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 30px 40px;
+  background: #00274c;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 15px;
+
+  z-index: 999;
+  position: sticky;
+  top: 0;
+  left: 0;
+}
+
+header a {
+  text-decoration: none;
+  color: white;
+}
+
+.factsheets-container {
+  padding: 30px;
+  font-size: 16px;
+}
+
+@media only screen and (min-width: 720px) {
+
+  header {
+    font-size: 22px;
+  }
+
+  .factsheets-container {
+    font-size: 18px;
+  }
+  
+}
+
+@media screen and (min-width: 1025px) {
+  header {
+    font-size: 22px;
+  }
+
+  .factsheets-container {
+    font-size: 18px;
+  }
+  
+}

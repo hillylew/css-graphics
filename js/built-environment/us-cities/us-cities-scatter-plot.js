@@ -1,14 +1,13 @@
 (function () {
+  /* ----------------------- Create Tooltip ------------------------ */
+  const container = document.getElementById("us-cities-scatter-plot");
 
-    /* ----------------------- Create Tooltip ------------------------ */
-    const container = document.getElementById("us-cities-scatter-plot");
+  const tooltipDiv = document.createElement("div");
+  tooltipDiv.id = "tooltip";
+  tooltipDiv.className = "tooltip";
+  container.appendChild(tooltipDiv);
 
-    const tooltipDiv = document.createElement("div");
-    tooltipDiv.id = "tooltip";
-    tooltipDiv.className = "tooltip";
-    container.appendChild(tooltipDiv);
-
-    const tooltip = d3.select(container).select("#tooltip");
+  const tooltip = d3.select(container).select("#tooltip");
 
   /* ----------------------- Dynamic dimensions ----------------------- */
   const aspectRatio = 0.7;
@@ -52,142 +51,146 @@
     .range(["#8FC7E5", "#386660", "#3167A3", "#1D476D"]);
 
   /* ----------------------- Load and process the CSV data ----------------------- */
-  d3.csv("../../data/built-environment/us-cities/us-cities2.csv").then(
-    (data) => {
-      // Process the data
-      data.forEach((d) => {
-        d.Density = +d.Density;
-        d.Energy = +d.Energy;
 
-        // Assign continents based on city names
-        if (
-          [
-            "Sacramento",
-            "Houston",
-            "Phoenix",
-            "San Diego",
-            "San Francisco",
-            "Denver",
-            "Los Angeles",
-            "Detroit",
-            "Boston",
-            "Washington",
-            "Chicago",
-            "New York",
-            "Toronto",
-            "Calgary",
-            "Winnipeg",
-            "Vancouver",
-            "Ottawa",
-          ].includes(d.City)
-        ) {
-          d.Continent = "North America";
-        } else if (
-          [
-            "Frankfurt",
-            "Brussels",
-            "Hamburg",
-            "Zurich",
-            "Stockholm",
-            "Vienna",
-            "Copenhagen",
-            "Paris",
-            "Munich",
-            "Amsterdam",
-            "London",
-          ].includes(d.City)
-        ) {
-          d.Continent = "Europe";
-        } else if (
-          [
-            "Singapore",
-            "Tokyo",
-            "Hong Kong",
-            "Kuala Lumpur",
-            "Jakarta",
-            "Bangkok",
-            "Seoul",
-            "Manila",
-            "Surabaya",
-          ].includes(d.City)
-        ) {
-          d.Continent = "Asia";
-        } else if (
-          [
-            "Perth",
-            "Brisbane",
-            "Melbourne",
-            "Sydney",
-            "Canberra",
-            "Adelaide",
-          ].includes(d.City)
-        ) {
-          d.Continent = "Australia";
-        }
-      });
+  // Define csv file path if it's not already defined
+  if (typeof csvFile === "undefined") {
+    var csvFile = "../../data/built-environment/us-cities/us-cities2.csv";
+  }
 
-      // Update the scale domains with the processed data
-      const maxXValue = Math.ceil(d3.max(data, (d) => d.Density) / 50) * 50;
-      x.domain([0, maxXValue]);
+  d3.csv(csvFile).then((data) => {
+    // Process the data
+    data.forEach((d) => {
+      d.Density = +d.Density;
+      d.Energy = +d.Energy;
 
-      const maxYValue =
-        Math.ceil(d3.max(data, (d) => d.Energy) / 10000) * 10000;
-      y.domain([0, maxYValue]);
+      // Assign continents based on city names
+      if (
+        [
+          "Sacramento",
+          "Houston",
+          "Phoenix",
+          "San Diego",
+          "San Francisco",
+          "Denver",
+          "Los Angeles",
+          "Detroit",
+          "Boston",
+          "Washington",
+          "Chicago",
+          "New York",
+          "Toronto",
+          "Calgary",
+          "Winnipeg",
+          "Vancouver",
+          "Ottawa",
+        ].includes(d.City)
+      ) {
+        d.Continent = "North America";
+      } else if (
+        [
+          "Frankfurt",
+          "Brussels",
+          "Hamburg",
+          "Zurich",
+          "Stockholm",
+          "Vienna",
+          "Copenhagen",
+          "Paris",
+          "Munich",
+          "Amsterdam",
+          "London",
+        ].includes(d.City)
+      ) {
+        d.Continent = "Europe";
+      } else if (
+        [
+          "Singapore",
+          "Tokyo",
+          "Hong Kong",
+          "Kuala Lumpur",
+          "Jakarta",
+          "Bangkok",
+          "Seoul",
+          "Manila",
+          "Surabaya",
+        ].includes(d.City)
+      ) {
+        d.Continent = "Asia";
+      } else if (
+        [
+          "Perth",
+          "Brisbane",
+          "Melbourne",
+          "Sydney",
+          "Canberra",
+          "Adelaide",
+        ].includes(d.City)
+      ) {
+        d.Continent = "Australia";
+      }
+    });
 
-      // Draw X-axis
-      const xAxisGroup = svg
-        .append("g")
-        .attr("transform", `translate(0,${height})`)
-        .call(xAxis);
+    // Update the scale domains with the processed data
+    const maxXValue = Math.ceil(d3.max(data, (d) => d.Density) / 50) * 50;
+    x.domain([0, maxXValue]);
 
-      xAxisGroup.selectAll(".tick text").attr("class", "chart-labels");
+    const maxYValue = Math.ceil(d3.max(data, (d) => d.Energy) / 10000) * 10000;
+    y.domain([0, maxYValue]);
 
-      // Draw Y-axis
-      const yAxisGroup = svg
-        .append("g")
-        .call(yAxis)
-        .attr("class", "chart-labels");
+    // Draw X-axis
+    const xAxisGroup = svg
+      .append("g")
+      .attr("transform", `translate(0,${height})`)
+      .call(xAxis);
 
-      // Append y-axis label
-      yAxisGroup
-        .append("text")
-        .attr("class", "chart-labels")
-        .attr("text-anchor", "middle")
-        .attr(
-          "transform",
-          `rotate(-90) translate(${-height / 2}, ${-dynamicMargin.left * 0.7})`
-        )
-        .style("fill", "#000")
-        .text("Energy Consumption (per 1000 MJ)");
+    xAxisGroup.selectAll(".tick text").attr("class", "chart-labels");
 
-      /* ----------------------- Draw the scatter plot ----------------------- */
-      // Calculate the dynamic circle radius
-      const circleRadius = width * 0.01; // Set the radius to be 2% of the container width
+    // Draw Y-axis
+    const yAxisGroup = svg
+      .append("g")
+      .call(yAxis)
+      .attr("class", "chart-labels");
 
-      const formatNumber = d3.format(",");
-      const circles = svg
-        .selectAll(".dot")
-        .data(data)
-        .enter()
-        .append("circle")
-        .attr("class", "dot")
-        .attr("cx", (d) => x(d.Density))
-        .attr("cy", (d) => y(d.Energy))
-        .attr("r", circleRadius) // Use the dynamic radius here
-        .style("fill", (d) => colorScale(d.Continent))
-        .on("mouseover", function (event, d) {
-          d3.select(this) // Select the hovered circle
-            .style("fill", "orange"); // Change the color on hover
+    // Append y-axis label
+    yAxisGroup
+      .append("text")
+      .attr("class", "chart-labels")
+      .attr("text-anchor", "middle")
+      .attr(
+        "transform",
+        `rotate(-90) translate(${-height / 2}, ${-dynamicMargin.left * 0.7})`
+      )
+      .style("fill", "#000")
+      .text("Energy Consumption (per 1000 MJ)");
+
+    /* ----------------------- Draw the scatter plot ----------------------- */
+    // Calculate the dynamic circle radius
+    const circleRadius = width * 0.01; // Set the radius to be 2% of the container width
+
+    const formatNumber = d3.format(",");
+    const circles = svg
+      .selectAll(".dot")
+      .data(data)
+      .enter()
+      .append("circle")
+      .attr("class", "dot")
+      .attr("cx", (d) => x(d.Density))
+      .attr("cy", (d) => y(d.Energy))
+      .attr("r", circleRadius) // Use the dynamic radius here
+      .style("fill", (d) => colorScale(d.Continent))
+      .on("mouseover", function (event, d) {
+        d3.select(this) // Select the hovered circle
+          .style("fill", "orange"); // Change the color on hover
 
         const tooltipX = event.clientX + window.scrollX;
         const tooltipY = event.clientY + window.scrollY;
 
-          tooltip
-            .style("opacity", 0.9)
-            .style("left", `${tooltipX + dynamicMargin.left / 4}px`)
-            .style("top", `${tooltipY}px`)
-            .html(
-              `<div class="tooltip-title">${d.City}</div>
+        tooltip
+          .style("opacity", 0.9)
+          .style("left", `${tooltipX + dynamicMargin.left / 4}px`)
+          .style("top", `${tooltipY}px`)
+          .html(
+            `<div class="tooltip-title">${d.City}</div>
                 <table class="tooltip-content">
                     <tr>
                         <td>Density:</td>
@@ -198,113 +201,108 @@
                         <td class="value">${formatNumber(d.Energy)}</td>
                     </tr>
                 </table>`
-            );
-        })
-        .on("mousemove", function (event) {
-          tooltip
-            .style("left", `${tooltipX + dynamicMargin.left / 4}px`)
-            .style("top", `${tooltipY}px`);
-        })
-        .on("mouseout", function (event, d) {
-          d3.select(this) // Select the circle
-            .style("fill", (d) => colorScale(d.Continent)); // Revert to original color
+          );
+      })
+      .on("mousemove", function (event) {
+        tooltip
+          .style("left", `${tooltipX + dynamicMargin.left / 4}px`)
+          .style("top", `${tooltipY}px`);
+      })
+      .on("mouseout", function (event, d) {
+        d3.select(this) // Select the circle
+          .style("fill", (d) => colorScale(d.Continent)); // Revert to original color
 
-          // Revert the opacity of all circles
+        // Revert the opacity of all circles
         //   d3.selectAll(".dot").style("opacity", 1);
 
-          tooltip.style("opacity", 0);
+        tooltip.style("opacity", 0);
+      });
+
+    // Append x-axis label
+    svg
+      .append("text")
+      .attr("class", "chart-labels")
+      .attr("text-anchor", "middle")
+      .attr(
+        "transform",
+        `translate(${width / 2}, ${height + dynamicMargin.bottom * 0.8})`
+      )
+      .style("fill", "#000")
+      .text("Population Density (Inhabitants per Hectare)");
+
+    /* ----------------------- Add Power Regression Line ----------------------- */
+    const powerRegression = d3
+      .regressionPow()
+      .x((d) => d.Density)
+      .y((d) => d.Energy)
+      .domain(d3.extent(data, (d) => d.Density));
+
+    const trendline = powerRegression(data);
+
+    const line = d3
+      .line()
+      .x((d) => x(d[0]))
+      .y((d) => y(d[1]));
+
+    svg
+      .append("path")
+      .datum(trendline)
+      .attr("fill", "none")
+      .attr("stroke", "gray")
+      .attr("stroke-width", 2)
+      .attr("d", line);
+
+    /* ----------------------- Add Legend ----------------------- */
+    const legend = svg
+      .append("g")
+      .attr(
+        "transform",
+        `translate(${width - dynamicMargin.right * 0.8}, ${dynamicMargin.top})`
+      );
+
+    const legendData = [
+      { continent: "North America", color: "#8FC7E5" },
+      { continent: "Europe", color: "#386660" },
+      { continent: "Asia", color: "#3167A3" },
+      { continent: "Australia", color: "#1D476D" },
+    ];
+
+    // Calculate the dimensions for legend items
+    const legendItemSize = width * 0.04; // Set the width and height to be 4% of the container width
+    const gap = width * 0.01; // Decrease the gap between legend items
+
+    legendData.forEach((d, i) => {
+      legend
+        .append("rect")
+        .attr("x", 0)
+        .attr("y", i * (legendItemSize + gap)) // Adjust spacing between legend items
+        .attr("width", legendItemSize)
+        .attr("height", legendItemSize)
+        .style("fill", d.color)
+        .attr("rx", 3)
+        .attr("ry", 3)
+        .attr("class", "legend-rect")
+        .on("mouseover", function () {
+          d3.select(this).style("stroke", "white").style("stroke-width", "2px");
+
+          d3.selectAll(".dot")
+            .style("opacity", 0.1)
+            .filter((circleData) => circleData.Continent === d.continent)
+            .style("opacity", 1);
+        })
+        .on("mouseout", function () {
+          d3.select(this).style("stroke", "none");
+
+          d3.selectAll(".dot").style("opacity", 1);
         });
 
-      // Append x-axis label
-      svg
+      legend
         .append("text")
-        .attr("class", "chart-labels")
-        .attr("text-anchor", "middle")
-        .attr(
-          "transform",
-          `translate(${width / 2}, ${height + dynamicMargin.bottom * 0.8})`
-        )
-        .style("fill", "#000")
-        .text("Population Density (Inhabitants per Hectare)");
-
-      /* ----------------------- Add Power Regression Line ----------------------- */
-      const powerRegression = d3
-        .regressionPow()
-        .x((d) => d.Density)
-        .y((d) => d.Energy)
-        .domain(d3.extent(data, (d) => d.Density));
-
-      const trendline = powerRegression(data);
-
-      const line = d3
-        .line()
-        .x((d) => x(d[0]))
-        .y((d) => y(d[1]));
-
-      svg
-        .append("path")
-        .datum(trendline)
-        .attr("fill", "none")
-        .attr("stroke", "gray")
-        .attr("stroke-width", 2)
-        .attr("d", line);
-
-      /* ----------------------- Add Legend ----------------------- */
-      const legend = svg
-        .append("g")
-        .attr(
-          "transform",
-          `translate(${width - dynamicMargin.right * 0.8}, ${
-            dynamicMargin.top
-          })`
-        );
-
-      const legendData = [
-        { continent: "North America", color: "#8FC7E5" },
-        { continent: "Europe", color: "#386660" },
-        { continent: "Asia", color: "#3167A3" },
-        { continent: "Australia", color: "#1D476D" },
-      ];
-
-      // Calculate the dimensions for legend items
-      const legendItemSize = width * 0.04; // Set the width and height to be 4% of the container width
-      const gap = width * 0.01; // Decrease the gap between legend items
-
-      legendData.forEach((d, i) => {
-        legend
-          .append("rect")
-          .attr("x", 0)
-          .attr("y", i * (legendItemSize + gap)) // Adjust spacing between legend items
-          .attr("width", legendItemSize)
-          .attr("height", legendItemSize)
-          .style("fill", d.color)
-          .attr("rx", 3)
-          .attr("ry", 3)
-          .attr("class", "legend-rect")
-          .on("mouseover", function () {
-            d3.select(this)
-              .style("stroke", "white")
-              .style("stroke-width", "2px");
-
-            d3.selectAll(".dot")
-              .style("opacity", 0.1)
-              .filter((circleData) => circleData.Continent === d.continent)
-              .style("opacity", 1);
-          })
-          .on("mouseout", function () {
-            d3.select(this).style("stroke", "none");
-
-            d3.selectAll(".dot").style("opacity", 1);
-          });
-
-        legend
-          .append("text")
-          .attr("x", legendItemSize + gap)
-          .attr("y", i * (legendItemSize + gap) + legendItemSize / 2)
-          .attr("alignment-baseline", "middle")
-          .text(d.continent)
-          .attr("class", "chart-labels");
-      });
-    }
-  );
+        .attr("x", legendItemSize + gap)
+        .attr("y", i * (legendItemSize + gap) + legendItemSize / 2)
+        .attr("alignment-baseline", "middle")
+        .text(d.continent)
+        .attr("class", "chart-labels");
+    });
+  });
 })();

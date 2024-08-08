@@ -52,7 +52,13 @@
 
   
     /* ----------------------- Load and process the CSV data ----------------------- */
-    d3.csv("../../data/energy/biofuels/biofuels1.csv").then((data) => {
+
+    // Define csv file path if it's not already defined
+    if (typeof csvFile === "undefined") {
+      var csvFile = "../../data/energy/biofuels/biofuels1.csv";
+    }
+
+    d3.csv(csvFile).then((data) => {
       // Parse years and convert string values to numbers
       data.forEach((d) => {
         d.Year = new Date(+d.Year, 0, 1);
@@ -64,7 +70,7 @@
       // Stack the data
       const stack = d3
         .stack()
-        .keys(["U.S.", "European Union", "Brazil", "India"]);
+        .keys(["U.S.", "Brazil", "European Union", "India"]);
       const stackedData = stack(data);
   
       // svg
