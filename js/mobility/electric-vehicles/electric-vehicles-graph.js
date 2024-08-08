@@ -351,9 +351,9 @@
                 difference = difference > 0 ? `+${difference.toFixed(2)}` : difference.toFixed(2);
 
                 d3.select('#result')
+                    .attr("class", "diagram-labels")
                     .text(`Change in Emissions: ${difference}%`)
-                    .style('fill', 'red')
-                    .style('font-size', '24px');
+                    .style('fill', 'red');
 
                 d3.select('#range-data-car1').text(`GHG Emissions Range: ${range1}`).style('fill', 'black');
                 d3.select('#range-data-car2').text(`GHG Emissions Range: ${range2}`).style('fill', 'black');

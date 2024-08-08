@@ -33,7 +33,7 @@
 
     const xScale = d3.scaleBand().range([0, width]).padding(0.3);
     const yScale = d3.scaleLinear().range([height, 0]);
-    const colorScale = d3.scaleOrdinal().domain(["Non-PHS", "PHS"]).range(["#ED974A", "#FFCB05"]);
+    const colorScale = d3.scaleOrdinal().domain(["Non-PHS", "PHS"]).range(["#CE5845", "#FFCB05"]);
     const formatNumber = d3.format(",");
 
     const xAxis = (g) =>
