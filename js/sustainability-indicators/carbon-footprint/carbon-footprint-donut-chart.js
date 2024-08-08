@@ -112,7 +112,7 @@
                 d3.select(this).style('opacity', 1);
 
                 // Create the dynamic image path
-                const imagePath = `./images/${d.data.Food.toLowerCase()}.png`;
+                const imagePath = `../../images/${d.data.Food.toLowerCase()}.png`;
 
                 // Show the corresponding image
                 percentageImg.attr('href', imagePath)
