@@ -202,7 +202,7 @@
                 .attr("y", -height * 0.5)
                 .attr("dy", ".35em")
                 .attr("text-anchor", "middle")
-                .attr("class", "diagram-labels-result")
+                .attr("class", "diagram-labels")
                 .text("Select Options to Compare");
         }
 
