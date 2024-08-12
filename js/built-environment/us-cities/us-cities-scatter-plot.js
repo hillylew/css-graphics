@@ -52,7 +52,12 @@
 
   /* ----------------------- Load and process the CSV data ----------------------- */
 
-  d3.csv(uscities2).then((data) => {
+  // Define csv file path if it's not already defined
+  if (typeof csvFile === "undefined") {
+    var csvFile = "../../data/built-environment/us-cities/us-cities2.csv";
+  }
+
+  d3.csv(csvFile).then((data) => {
     // Process the data
     data.forEach((d) => {
       d.Density = +d.Density;
@@ -177,8 +182,8 @@
         d3.select(this) // Select the hovered circle
           .style("fill", "orange"); // Change the color on hover
 
-        const tooltipX = event.clientX;
-        const tooltipY = event.clientY;
+        const tooltipX = event.clientX + window.scrollX;
+        const tooltipY = event.clientY + window.scrollY;
 
         tooltip
           .style("opacity", 0.9)
