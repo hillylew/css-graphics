@@ -50,13 +50,7 @@
     .range(["#1C476D","#8FC8E5", "#3167A4",  "#FFCB05"]);
 
   /* ----------------------- Load and process the CSV data ----------------------- */
-
-  // Define csv file path if it's not already defined
-  if (typeof csvFile === "undefined") {
-    var csvFile = "../../data/mobility/personal-transportation/personal-transportation2.csv";
-  }
-
-  d3.csv(csvFile).then((data) => {
+  d3.csv(personalTransportation2).then((data) => {
     // Parse years and convert string values to numbers
     data.forEach((d) => {
       d.Year = new Date(+d.Year, 0, 1);
@@ -184,8 +178,8 @@
         (d) => d.Year.getFullYear() === date.getFullYear()
       );
 
-      const tooltipX = event.clientX + window.scrollX;
-      const tooltipY = event.clientY + window.scrollY;
+      const tooltipX = event.clientX;
+      const tooltipY = event.clientY;
 
       // Position tooltip
       tooltip

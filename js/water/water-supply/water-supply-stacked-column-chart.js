@@ -107,8 +107,8 @@
                 // Reduce the opacity of the other bars
                 svg.selectAll(".bar").filter(e => e !== d).style("opacity", 0.1);
 
-                const tooltipX = event.clientX + window.scrollX;
-                const tooltipY = event.clientY + window.scrollY;
+                const tooltipX = event.clientX;
+                const tooltipY = event.clientY;
 
                 // Show and populate the tooltip
                 tooltip.html(`
@@ -133,8 +133,8 @@
                 .style("top", `${tooltipY}px`);
             })
             .on("mousemove", function (event, d) {
-                const tooltipX = event.clientX + window.scrollX;
-                const tooltipY = event.clientY + window.scrollY;
+                const tooltipX = event.clientX;
+                const tooltipY = event.clientY;
 
                 // Update tooltip position
                 tooltip

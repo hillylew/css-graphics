@@ -43,14 +43,7 @@
     const yAxis = (g) => g.call(d3.axisLeft(yScale).tickSize(0).tickPadding(10));
   
     /* ----------------------- Loading and processing data ----------------------- */
-    
-
-    // Define csv file path if it's not already defined
-    if (typeof csvFile === "undefined") {
-        var csvFile = "../../data/built-environment/us-cities/us-cities4.csv";
-    }
-
-    d3.csv(csvFile, d3.autoType).then((data) => {
+    d3.csv(uscities4, d3.autoType).then((data) => {
       const subgroups = ["2000", "2022"];
       const cities = data.map((d) => d.City);
   
@@ -106,9 +99,9 @@
         .attr("height", subgroupScale.bandwidth())
         .attr("fill", (d) => colorScale(d.key))
         .on("mouseover", (event, d) => {
-          const percentChangeColor = d.percentChange >= 0 ? "#3167A4" : "#CE5845";
-          const tooltipX = event.clientX + window.scrollX;
-          const tooltipY = event.clientY + window.scrollY;
+            const percentChangeColor = d.percentChange >= 0 ? "#3167A4" : "#CE5845";
+            const tooltipX = event.clientX;
+            const tooltipY = event.clientY;
   
           tooltip.transition().duration(200).style("opacity", 0.9);
           tooltip

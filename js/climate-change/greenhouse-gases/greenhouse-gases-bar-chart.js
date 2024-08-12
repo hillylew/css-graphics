@@ -66,13 +66,7 @@
     });
 
   /* ----------------------- Loading and processing data ----------------------- */
-
-  // Define csv file path if it's not already defined
-  if (typeof csvFile === "undefined") {
-    var csvFile = "../../data/climate-change/greenhouse-gases/greenhouse-gases4.csv"; // Update this path to your CSV file location
-  }
-
-  d3.csv(csvFile, (d) => ({
+  d3.csv(greenhouseGases4, (d) => ({
     Activity: d["Activity"],
     CO2Emission: +d["Annual CO2 emission per household"],
   })).then((data) => {
@@ -119,8 +113,8 @@
       .on("mouseover", function(event, d) {
         d3.select(this).attr("class", "bar active");
 
-        const tooltipX = event.clientX + window.scrollX;
-        const tooltipY = event.clientY + window.scrollY;
+        const tooltipX = event.clientX;
+        const tooltipY = event.clientY;
 
         const formatNumber = d3.format(",");
 
@@ -143,8 +137,8 @@
       })
       .on("mousemove", function(event) {
         tooltip
-          .style("left", (event.clientX + window.scrollX + dynamicMargin.left / 4) + "px")
-          .style("top", (event.clientY + window.scrollY) + "px");
+          .style("left", (tooltipX + dynamicMargin.left / 4) + "px")
+          .style("top", (tooltipY + window.scrollY) + "px");
       })
       .on("mouseout", function() {
         d3.select(this).attr("class", "bar");

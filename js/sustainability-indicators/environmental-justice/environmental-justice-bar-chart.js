@@ -57,13 +57,7 @@
         g.call(d3.axisLeft(yScale).tickSizeOuter(0).tickSizeInner(0).tickPadding(10));
 
     /* ----------------------- Loading and processing data ----------------------- */
-
-    // Define csv file path if it's not already defined
-    if (typeof csvFile === "undefined") {
-        var csvFile = "../../data/sustainability-indicators/environmental-justice/environmental-justice3.csv";
-    }
-
-    d3.csv(csvFile, (d) => ({
+    d3.csv(environmentalJustice3, (d) => ({
         category: d.Category,
         subcategory: d.Subcategory,
         percentage: +d.Percentage,
@@ -125,8 +119,8 @@
                 // Highlight the active bar
                 d3.select(this).attr("opacity", 0.7);
 
-                const tooltipX = event.clientX + window.scrollX;
-                const tooltipY = event.clientY + window.scrollY;
+                const tooltipX = event.clientX;
+                const tooltipY = event.clientY;
 
                 // Show and populate the tooltip
                 tooltip.html(`
@@ -145,8 +139,8 @@
                 .style("top", `${tooltipY}px`);
             })
             .on("mousemove", function (event, d) {
-                const tooltipX = event.clientX + window.scrollX;
-                const tooltipY = event.clientY + window.scrollY;
+                const tooltipX = event.clientX;
+                const tooltipY = event.clientY;
 
                 // Update tooltip position
                 tooltip

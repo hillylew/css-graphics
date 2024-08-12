@@ -41,13 +41,7 @@
         .range(["#1D476D", "#3167A4", "#8FC8E5", "#386660", "#E2E27A"]);
 
     // Load the CSV file and process it
-
-    // Define csv file path if it's not already defined
-    if (typeof csvFile === "undefined") {
-        var csvFile = "../../data/material-resources/municipal-solid-waste/municipal-solid-waste2.csv";
-    }
-
-    d3.csv(csvFile).then((data) => {
+    d3.csv(msw2).then((data) => {
         data.forEach(d => {
             d.year = +d.Year;
             d.Recycled = +d.Recycled;
@@ -94,8 +88,8 @@
                 // d3.select(this).style("fill", "orange");
                 d3.select(this).style("opacity", 0.5);
 
-                const tooltipX = event.clientX + window.scrollX;
-                const tooltipY = event.clientY + window.scrollY;
+                const tooltipX = event.clientX;
+                const tooltipY = event.clientY;
 
                 const tooltipData = categories.slice().reverse().map(key => {
                     const formatNumber = d3.format(",.1f");

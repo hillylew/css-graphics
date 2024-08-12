@@ -52,13 +52,7 @@
     .range(["#eb5250", "#6298c6", "#75bf70", "#ae71b6"]);
 
   /* ----------------------- Load and process the CSV data ----------------------- */
-
-  // Define csv file path if it's not already defined
-  if (typeof csvFile === "undefined") {
-    var csvFile = "./data/greenhouse-gases/greenhouse-gases2.csv";
-  }
-
-  d3.csv(csvFile).then((data) => {
+  d3.csv(greenhouseGases2).then((data) => {
     // Parse years and convert string values to numbers
     data.forEach((d) => {
       d.Year = new Date(+d.Year, 0, 1);
@@ -196,8 +190,8 @@
         (d) => d.Year.getFullYear() === hoveredYear.getFullYear()
       );
 
-      const tooltipX = event.clientX + window.scrollX;
-      const tooltipY = event.clientY + window.scrollY;
+        const tooltipX = event.clientX;
+        const tooltipY = event.clientY;
 
       // Position tooltip
       tooltip

@@ -11,8 +11,8 @@
 
    // Update the tooltip position based on mouse movement
    document.addEventListener("mousemove", function (event) {
-    const tooltipX = event.clientX + window.scrollX;
-    const tooltipY = event.clientY + window.scrollY;
+      const tooltipX = event.clientX;
+      const tooltipY = event.clientY;
 
     d3.select("#diagram-tooltip")
       .style("left", `${tooltipX + dynamicMargin.left}px`)

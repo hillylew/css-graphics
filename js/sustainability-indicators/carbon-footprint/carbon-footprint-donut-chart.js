@@ -55,13 +55,7 @@
         .style("font-size", "1.5em");
 
     // Load data from CSV
-
-    // Define csv file path if it's not already defined
-    if (typeof csvFile === "undefined") {
-        var csvFile = "../../data/sustainability-indicators/carbon-footprint/carbon-footprint1.csv";
-    }
-
-    d3.csv(csvFile).then((data) => {
+    d3.csv(carbonFootprint1).then((data) => {
         // Convert the Percentage values to numerical format
         data.forEach(d => d.Percentage = +d.Percentage);
 

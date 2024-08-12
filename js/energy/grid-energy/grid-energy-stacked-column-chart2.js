@@ -48,12 +48,7 @@
         .range(["#CE5845", "#ED974A", "#FED679"]);
 
     /* ----------------------- Load and Process Data ----------------------- */
-    // Define csv file path if it's not already defined
-    if (typeof csvFile === "undefined") {
-        var csvFile = "../../data/energy/grid-energy/grid-energy3.csv";
-    }
-
-    d3.csv(csvFile).then(data => {
+    d3.csv(gridEnergy3).then(data => {
         // Parse data
         data.forEach(d => {
             for (let prop in d) {
@@ -163,8 +158,8 @@
             const hoveredType = y.domain().find(type => y(type) <= yPos && yPos < y(type) + y.bandwidth());
             const hoverData = data.find(d => d["Technology Type"] === hoveredType);
 
-            const tooltipX = event.clientX + window.scrollX;
-            const tooltipY = event.clientY + window.scrollY;
+            const tooltipX = event.clientX;
+            const tooltipY = event.clientY;
 
             // Position tooltip
             tooltip

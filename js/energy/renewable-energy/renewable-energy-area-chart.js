@@ -45,13 +45,7 @@
   const yAxis = d3.axisLeft(y).tickFormat(d3.format(",")); // Adjust ticks as needed
 
   // Load and process the CSV data
-
-  // Define csv file path if it's not already defined
-  if (typeof csvFile === "undefined") {
-    var csvFile = "../../data/energy/renewable-energy/renewable-energy5.csv";
-  }
-
-  d3.csv(csvFile).then((data) => {
+  d3.csv(renewable5).then((data) => {
     // Parse years and convert string values to numbers
     data.forEach((d) => {
       d.Year = new Date(+d.Year, 0, 1);
@@ -133,8 +127,8 @@
       // Area gets highlighted
       areaPath.style("opacity", 0.2);
 
-      const tooltipX = event.clientX + window.scrollX;
-      const tooltipY = event.clientY + window.scrollY;
+      const tooltipX = event.clientX;
+      const tooltipY = event.clientY;
 
       // Position tooltip
       tooltip

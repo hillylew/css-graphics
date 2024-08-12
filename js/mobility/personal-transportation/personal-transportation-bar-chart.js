@@ -55,13 +55,7 @@
       .text("Thousands");
   
     /* ----------------------- Loading and processing data ----------------------- */
-
-    // Define csv file path if it's not already defined
-    if (typeof csvFile === "undefined") {
-        var csvFile = "../../data/mobility/personal-transportation/personal-transportation3.csv";
-    }
-
-    d3.csv(csvFile, (d) => ({
+    d3.csv(personalTransportation3, (d) => ({
       mode: d.Modes,
       quantity: +d["Quantity (thousands)"],
     })).then((data) => {
@@ -107,8 +101,8 @@
         .on('mouseover', function (event, d) {
           d3.select(this).attr("opacity", 0.5);
 
-            const tooltipX = event.clientX + window.scrollX;
-            const tooltipY = event.clientY + window.scrollY;
+          const tooltipX = event.clientX;
+          const tooltipY = event.clientY;
   
           tooltip.html(`
             <div class="tooltip-title">${d.mode}</div>
@@ -124,8 +118,8 @@
             .style("top", `${tooltipY}px`);
         })
         .on("mousemove", function (event) {
-            const tooltipX = event.clientX + window.scrollX;
-            const tooltipY = event.clientY + window.scrollY;
+            const tooltipX = event.clientX;
+            const tooltipY = event.clientY;
             tooltip.style("left", `${tooltipX + dynamicMargin.left / 4}px`)
                 .style("top", `${tooltipY}px`);
         })

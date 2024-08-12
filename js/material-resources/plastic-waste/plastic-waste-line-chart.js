@@ -48,13 +48,7 @@
   const tooltip = d3.select("#tooltip");
 
   // Load and process the CSV data
-
-  // Define csv file path if it's not already defined
-  if (typeof csvFile === "undefined") {
-    var csvFile = "../../data/material-resources/plastic-waste/plastic-waste1.csv";
-  }
-
-  d3.csv(csvFile).then((data) => {
+  d3.csv(plasticWaste1).then((data) => {
     // Parse years and convert string values to numbers
     data.forEach((d) => {
       d.Year = new Date(+d.Year, 0, 1);
@@ -226,8 +220,8 @@ xAxisGroup.selectAll(".tick text").attr("class", "chart-labels");
         (d) => d.Year.getFullYear() === date.getFullYear()
       );
 
-      const tooltipX = event.clientX + window.scrollX;
-      const tooltipY = event.clientY + window.scrollY;
+      const tooltipX = event.clientX;
+      const tooltipY = event.clientY;
 
       // Position tooltip
       tooltip

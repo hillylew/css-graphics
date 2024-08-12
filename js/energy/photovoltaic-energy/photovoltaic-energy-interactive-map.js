@@ -2,12 +2,7 @@
   // Load data from external sources
   const us = await d3.json("https://d3js.org/us-10m.v2.json");
 
-  // Define csv file path if it's not already defined
-  if (typeof csvFile === "undefined") {
-    var csvFile = "../../data/energy/photovoltaic-energy/photovoltaic-energy2.csv";
-  }
-
-  const projectData = await d3.csv(csvFile);
+  const projectData = await d3.csv(photovoltaic2);
 
   // Map of states to data
   const fipsToData = {};
@@ -182,8 +177,8 @@
 
         tooltipContent += `</table>`;
 
-        const tooltipX = event.clientX + window.scrollX;
-        const tooltipY = event.clientY + window.scrollY;
+        const tooltipX = event.clientX;
+        const tooltipY = event.clientY;
 
         tooltip
           .html(tooltipContent)

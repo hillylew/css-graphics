@@ -63,12 +63,7 @@
   
     // Load and process the CSV data
 
-    // Define csv file path if it's not already defined
-    if (typeof csvFile === "undefined") {
-      var csvFile = "../../data/energy/energy-system/energy-system1.csv";
-    }
-
-    d3.csv(csvFile).then((data) => {
+    d3.csv(energySystem1).then((data) => {
       // Parse years and convert string values to numbers
       data.forEach((d) => {
         d.Year = new Date(+d.Year, 0, 1);
@@ -215,8 +210,8 @@
         const date = x.invert(xPos);
         const hoverData = data.find(d => d.Year.getFullYear() === date.getFullYear());
 
-        const tooltipX = event.clientX + window.scrollX;
-        const tooltipY = event.clientY + window.scrollY;
+        const tooltipX = event.clientX;
+        const tooltipY = event.clientY;
   
         tooltip
           .style("opacity", 0.9)

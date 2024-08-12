@@ -37,13 +37,7 @@
         .attr("transform", `translate(${dynamicMargin.left},${dynamicMargin.top})`);
 
     // Load data from CSV
-
-    // Define csv file path if it's not already defined
-    if (typeof csvFile === "undefined") {
-        var csvFile = "../../data/sustainability-indicators/environmental-justice/environmental-justice5.csv";
-    }
-
-    d3.csv(csvFile)
+    d3.csv(environmentalJustice5)
         .then((data) => {
             // Scale functions
             const x = d3.scaleLinear().range([0, width]);
@@ -95,8 +89,8 @@
                 .attr("stroke", "white")
                 // Add hover event listeners
                 .on("mouseover", function (event, d) {
-                    const tooltipX = event.clientX + window.scrollX;
-                    const tooltipY = event.clientY + window.scrollY;
+                    const tooltipX = event.clientX;
+                    const tooltipY = event.clientY;
 
                     tooltip.transition().duration(200).style("opacity", 0.9);
                     tooltip.html(
@@ -129,8 +123,8 @@
                         .style("stroke-width", "2px");
                 })
                 .on("mousemove", function (event, d) {
-                    const tooltipX = event.clientX + window.scrollX;
-                    const tooltipY = event.clientY + window.scrollY;
+                    const tooltipX = event.clientX;
+                    const tooltipY = event.clientY;
 
                     tooltip
                         .style("left", `${tooltipX + dynamicMargin.left / 4}px`)

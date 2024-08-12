@@ -53,12 +53,7 @@
         .call(g => g.selectAll(".tick text").attr("class", "chart-labels").attr("fill", "#000"));
 
 
-    // Define csv file path if it's not already defined
-    if (typeof csvFile === "undefined") {
-        var csvFile = "../../data/energy/grid-energy/grid-energy2.csv";
-    }
-
-    d3.csv(csvFile).then((data) => {
+    d3.csv(gridEnergy2).then((data) => {
         data.forEach((d) => {
             for (let prop in d) {
                 if (prop !== "State") d[prop] = +d[prop];
@@ -114,8 +109,8 @@
 
                 const hoveredData = d.data;
 
-                const tooltipX = event.clientX + window.scrollX;
-                const tooltipY = event.clientY + window.scrollY;
+                const tooltipX = event.clientX;
+                const tooltipY = event.clientY;
 
                 tooltip.transition().duration(200).style("opacity", 0.9);
                 tooltip.html(`
@@ -207,8 +202,8 @@
                 const hoveredState = xScale.domain().find((state) => xScale(state) <= xPos && xPos < xScale(state) + xScale.bandwidth());
                 const hoverData = data.find((d) => d.State === hoveredState);
 
-                const tooltipX = event.clientX + window.scrollX;
-                const tooltipY = event.clientY + window.scrollY;
+                const tooltipX = event.clientX;
+                const tooltipY = event.clientY;
 
                 if (hoverData) {
                     tooltip.transition().duration(200).style("opacity", 0.9);

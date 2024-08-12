@@ -50,13 +50,7 @@
     .range(["#1d476d", "#4084bc", "#aedbed", "#386660", "#e2e27a"]);
 
   /* ----------------------- Load and process the CSV data ----------------------- */
-
-  // Define csv file path if it's not already defined
-  if (typeof csvFile === "undefined") {
-    var csvFile = "../../data/energy/wind-energy/wind-energy2.csv";
-  }
-
-  d3.csv(csvFile).then((data) => {
+  d3.csv(wind2).then((data) => {
     // Parse years and convert string values to numbers
     data.forEach((d) => {
       d.Year = new Date(+d.Year, 0, 1);
@@ -220,8 +214,8 @@
         (d) => d.Year.getFullYear() === date.getFullYear()
       );
 
-      const tooltipX = event.clientX + window.scrollX;
-      const tooltipY = event.clientY + window.scrollY;
+      const tooltipX = event.clientX;
+      const tooltipY = event.clientY;
 
       // Position tooltip
       tooltip

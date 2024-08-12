@@ -54,13 +54,7 @@
     const yAxis = (g) => g.call(d3.axisLeft(yScale).tickSizeOuter(0).tickSizeInner(0).tickPadding(10));
   
     /* ----------------------- Loading and processing data ----------------------- */
-
-    // Define csv file path if it's not already defined
-    if (typeof csvFile === "undefined") {
-        var csvFile = "../../data/mobility/personal-transportation/personal-transportation4.csv";
-    }
-
-    d3.csv(csvFile).then((data) => {
+    d3.csv(personalTransportation4).then((data) => {
       data.forEach(d => {
         d.Intensity = +d["Intensity (BTU/passenger-mile)"];
         d.LoadFactor = +d["Load Factor (persons/vehicle)"];
@@ -107,8 +101,8 @@
         .on('mouseover', function (event, d) {
           d3.select(this).attr("opacity", 0.5);
 
-            const tooltipX = event.clientX + window.scrollX;
-            const tooltipY = event.clientY + window.scrollY;
+          const tooltipX = event.clientX;
+          const tooltipY = event.clientY;
   
           tooltip.html(`
             <div class="tooltip-title">${d.Mode}</div>
@@ -128,8 +122,8 @@
             .style("top", `${tooltipY}px`);
         })
         .on("mousemove", function (event) {
-            const tooltipX = event.clientX + window.scrollX;
-            const tooltipY = event.clientY + window.scrollY;
+            const tooltipX = event.clientX;
+            const tooltipY = event.clientY;
             tooltip
                 .style("left", `${tooltipX + dynamicMargin.left / 4}px`)
                 .style("top", `${tooltipY}px`);
@@ -152,7 +146,7 @@
   
       // Add a note/label for Load Factor
       svg.append("text")
-        .attr("x", width - dynamicMargin.right)
+        .attr("x", width - dynamicMargin.right / 2)
         .attr("y", -dynamicMargin.top / 2)
         .attr("class", "chart-labels")
         .attr("text-anchor", "end")

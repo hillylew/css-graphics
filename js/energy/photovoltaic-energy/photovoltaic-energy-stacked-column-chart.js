@@ -50,13 +50,7 @@
         .range(["#CE5845", "#ED974A"]);
 
     /* ----------------------- Load and process the CSV data ----------------------- */
-
-    // Define csv file path if it's not already defined
-    if (typeof csvFile === "undefined") {
-        var csvFile = "../../data/energy/photovoltaic-energy/photovoltaic-energy4.csv";
-    }
-
-    d3.csv(csvFile).then((data) => {
+    d3.csv(photovoltaic4).then((data) => {
         // Parse years and convert string values to numbers
         data.forEach((d) => {
             d.Year = new Date(+d.Year, 0, 1);
@@ -176,8 +170,8 @@
             const hoveredYear = x.domain().find((year) => x(year) <= xPos && xPos < x(year) + x.bandwidth());
             const hoverData = data.find((d) => d.Year.getFullYear() === hoveredYear.getFullYear());
 
-            const tooltipX = event.clientX + window.scrollX;
-            const tooltipY = event.clientY + window.scrollY;
+            const tooltipX = event.clientX;
+            const tooltipY = event.clientY;
 
             // Position tooltip
             tooltip

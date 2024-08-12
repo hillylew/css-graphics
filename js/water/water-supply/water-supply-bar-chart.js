@@ -115,8 +115,8 @@
             .on("mouseover", function(event, d) {
                 d3.select(this).attr("class", "bar active");
 
-                const tooltipX = event.clientX + window.scrollX;
-                const tooltipY = event.clientY + window.scrollY;
+                const tooltipX = event.clientX;
+                const tooltipY = event.clientY;
 
                 // Show and populate the tooltip
                 tooltip
@@ -134,8 +134,8 @@
                     .style("top", `${tooltipY}px`);
             })
             .on("mousemove", function(event) {
-                const tooltipX = event.clientX + window.scrollX;
-                const tooltipY = event.clientY + window.scrollY;
+                const tooltipX = event.clientX;
+                const tooltipY = event.clientY;
 
                 tooltip
                     .style("left", (tooltipX + dynamicMargin.left / 4) + "px")

@@ -40,14 +40,7 @@
     .attr("transform", `translate(${dynamicMargin.left},${dynamicMargin.top})`);
 
   // Load data from CSV - replace with the correct path to your CSV file
-
-  // Define csv file path if it's not already defined
-  if (typeof csvFile === "undefined") {
-    var csvFile =
-      "../../data/sustainability-indicators/biodiversity/biodiversity1.csv";
-  }
-
-  d3.csv(csvFile).then((data) => {
+  d3.csv(biodiversity1).then((data) => {
     // Process data and calculate percentages
     const categories = data.columns.slice(1); // assuming the first column is 'Location'
 
@@ -197,8 +190,8 @@
         const mousePosition = d3.pointer(event);
         const category = d3.select(this.parentNode).datum().key;
 
-        const tooltipX = event.clientX + window.scrollX;
-        const tooltipY = event.clientY + window.scrollY;
+        const tooltipX = event.clientX;
+        const tooltipY = event.clientY;
 
         tooltip
           .html(

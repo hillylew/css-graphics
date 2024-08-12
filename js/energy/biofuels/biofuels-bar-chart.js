@@ -79,14 +79,8 @@
     .attr("fill", "#000") // Text color
     .text("Fossil Energy Ratio");
 
-  /* ----------------------- Loading and processing data ----------------------- */
-
-  // Define csv file path if it's not already defined
-  if (typeof csvFile === "undefined") {
-    var csvFile = "../../data/energy/biofuels/biofuels4.csv";
-  }
-    
-  d3.csv(csvFile, (d) => ({
+  /* ----------------------- Loading and processing data ----------------------- */ 
+  d3.csv(biofuels4, (d) => ({
       feedstock: d.Feedstock,
       energyRatio: +d["Fossil Energy Ratio"],
       range: d.Range,

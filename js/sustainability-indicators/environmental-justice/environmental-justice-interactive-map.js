@@ -1,13 +1,7 @@
 (async () => {
   // Load data from external sources
   const us = await d3.json("https://d3js.org/us-10m.v2.json");
-
-  // Define csv file path if it's not already defined
-  if (typeof csvFile === "undefined") {
-    var csvFile = "../../data/sustainability-indicators/environmental-justice/environmental-justice1.csv";
-  }
-
-  const releaseData = await d3.csv(csvFile);
+  const releaseData = await d3.csv(environmentalJustice1);
 
   // Maps of state states to color and storage data
   const fipsToData = {};
@@ -117,8 +111,8 @@
     .on("mouseover", function (event, d) {
       d3.select(this).style("fill-opacity", 0.7);
 
-      const tooltipX = event.clientX + window.scrollX;
-      const tooltipY = event.clientY + window.scrollY;
+      const tooltipX = event.clientX;
+      const tooltipY = event.clientY;
 
       tooltip
         .html(

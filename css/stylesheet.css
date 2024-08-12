@@ -35,10 +35,9 @@
 }
 
 /* Tooltip */
-
 .tooltip {
   pointer-events: none;
-  position: absolute;
+  position: fixed;
   width: auto;
   height: auto;
   background-color: white;
@@ -129,6 +128,45 @@ table.tooltip-total {
   background-color: #e9ecef; /* Light grey background on hover */
 }
 
+
+/* CSS for Styled Table */
+.styled-table {
+  border-collapse: collapse;
+  margin: 25px 0;
+  font-size: 1em;
+  font-family: 'Arial', sans-serif;
+  min-width: 400px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+  overflow-x: auto;
+}
+
+.styled-table thead tr {
+  background-color: #3167A4;
+  color: #ffffff;
+  text-align: left;
+}
+
+.styled-table th,
+.styled-table td {
+  padding: 12px 15px;
+}
+
+.styled-table tbody tr {
+  border-bottom: 1px solid #dddddd;
+}
+
+.styled-table tbody tr:nth-of-type(even) {
+  background-color: #f3f3f3;
+}
+
+/* .styled-table tbody tr:last-of-type {
+  border-bottom: 2px solid #3167A4;
+} */
+
+.styled-table tbody tr.active-row {
+  font-weight: bold;
+  color: #3167A4;
+}
 
 
 /* tablet */
