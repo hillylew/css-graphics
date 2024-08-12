@@ -231,7 +231,7 @@
         .text(series.key);
     });
 
-    const formatNumber = d3.format(".1f"); // Format with one decimal place
+    const formatNumber = d3.format(",.1f"); // Format with one decimal place
 
     function onMouseMove(event) {
       const [xPos, yPos] = d3.pointer(event, this);

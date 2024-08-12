@@ -34,17 +34,17 @@
 
     // Define the data as a constant variable
     const data = [
-        { "Compound": "Carbon dioxide (CO<sub>2</sub>)", "Pre-industry Concentration (ppt)": 278000000, "Concentration in 2022 (ppt)": 417900000, "Atmospheric Lifetime (years)": "Variable", "Main Human Activity Source": "Fossil fuels, cement production, land use change", "GWP": 1 },
-        { "Compound": "Methane (CH<sub>4</sub>)", "Pre-industry Concentration (ppt)": 729000, "Concentration in 2022 (ppt)": 1923000, "Atmospheric Lifetime (years)": 12, "Main Human Activity Source": "Fossil fuels, Rice paddies, waste dumps, livestock", "GWP": "30 (fossil fuel), 27 (non fossil fuel)" },
-        { "Compound": "Nitrous Oxide (N<sub>2</sub>O)", "Pre-industry Concentration (ppt)": 270000, "Concentration in 2022 (ppt)": 335800, "Atmospheric Lifetime (years)": 109, "Main Human Activity Source": "Fertilizers, combustion industrial processes", "GWP": 273 },
-        { "Compound": "HFC-134a (CF<sub>3</sub>CH<sub>2</sub>F)", "Pre-industry Concentration (ppt)": 0, "Concentration in 2022 (ppt)": 108, "Atmospheric Lifetime (years)": 14, "Main Human Activity Source": "Refrigerant", "GWP": 1526 },
-        { "Compound": "HFC-32 (CH<sub>2</sub>F<sub>2</sub>)", "Pre-industry Concentration (ppt)": 0, "Concentration in 2022 (ppt)": 20, "Atmospheric Lifetime (years)": 5, "Main Human Activity Source": "Refrigerant", "GWP": 771 },
-        { "Compound": "CFC-11 (CCl<sub>3</sub>F)", "Pre-industry Concentration (ppt)": 0, "Concentration in 2022 (ppt)": 226, "Atmospheric Lifetime (years)": 52, "Main Human Activity Source": "Refrigerant", "GWP": 6226 },
-        { "Compound": "PFC-14 (CF<sub>4</sub>)", "Pre-industry Concentration (ppt)": 34, "Concentration in 2022 (ppt)": 86, "Atmospheric Lifetime (years)": 50000, "Main Human Activity Source": "Aluminum production", "GWP": 7380 },
-        { "Compound": "SF<sub>6</sub>", "Pre-industry Concentration (ppt)": 0, "Concentration in 2022 (ppt)": 9.95, "Atmospheric Lifetime (years)": 3200, "Main Human Activity Source": "Electrical insulation", "GWP": 25200 }
+        { "Compound": "Carbon dioxide (CO<sub>2</sub>)", "Pre-industry Concentration": "278 ppm", "Concentration in 2022": "417.9 ppm", "Atmospheric Lifetime (years)": "Variable", "Main Human Activity Source": "Fossil fuels, cement production, land use change", "GWP": 1 },
+        { "Compound": "Methane (CH<sub>4</sub>)", "Pre-industry Concentration": "729 ppb", "Concentration in 2022": "1,923 ppb", "Atmospheric Lifetime (years)": 12, "Main Human Activity Source": "Fossil fuels, Rice paddies, waste dumps, livestock", "GWP": "30 (fossil fuel), 27 (non fossil fuel)" },
+        { "Compound": "Nitrous Oxide (N<sub>2</sub>O)", "Pre-industry Concentration": "270 ppb", "Concentration in 2022": "335.8 ppb", "Atmospheric Lifetime (years)": 109, "Main Human Activity Source": "Fertilizers, combustion industrial processes", "GWP": 273 },
+        { "Compound": "HFC-134a (CF<sub>3</sub>CH<sub>2</sub>F)", "Pre-industry Concentration": "0 ppt", "Concentration in 2022": "108 ppt", "Atmospheric Lifetime (years)": 14, "Main Human Activity Source": "Refrigerant", "GWP": 1526 },
+        { "Compound": "HFC-32 (CH<sub>2</sub>F<sub>2</sub>)", "Pre-industry Concentration": "0 ppt", "Concentration in 2022": "20 ppt", "Atmospheric Lifetime (years)": 5, "Main Human Activity Source": "Refrigerant", "GWP": 771 },
+        { "Compound": "CFC-11 (CCl<sub>3</sub>F)", "Pre-industry Concentration": "0 ppt", "Concentration in 2022": "226 ppt", "Atmospheric Lifetime (years)": 52, "Main Human Activity Source": "Refrigerant", "GWP": 6226 },
+        { "Compound": "PFC-14 (CF<sub>4</sub>)", "Pre-industry Concentration": "34 ppt", "Concentration in 2022": "86 ppt", "Atmospheric Lifetime (years)": 50000, "Main Human Activity Source": "Aluminum production", "GWP": 7380 },
+        { "Compound": "SF<sub>6</sub>", "Pre-industry Concentration": "0 ppt", "Concentration in 2022": "9.95 ppt", "Atmospheric Lifetime (years)": 3200, "Main Human Activity Source": "Electrical insulation", "GWP": 25200 }
     ];
 
-    const columns = ["Compound", "Pre-industry Concentration (ppt)", "Concentration in 2022 (ppt)", "Atmospheric Lifetime (years)", "Main Human Activity Source", "GWP"];
+    const columns = ["Compound", "Pre-industry Concentration", "Concentration in 2022", "Atmospheric Lifetime (years)", "Main Human Activity Source", "GWP"];
 
     const columnWidths = columns.map((d, i) => {
         if (i === 0) return width * 0.2; // Wider column for the Compound name

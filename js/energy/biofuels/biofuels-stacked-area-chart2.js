@@ -47,8 +47,8 @@
   
     const colorScale = d3
       .scaleOrdinal()
-      .domain(["U.S.","European Union","Brazil","Indonesia","India"])
-      .range(["#1d476d", "#4084bc", "#8cc9f2", "#ffcb03", "#ffe07d"]);
+      .domain(["U.S.","Brazil", "European Union", "Indonesia","Rest of the World"])
+      .range(["#1d476d", "#4084bc", "#8cc9f2", "#ffcb03", "#BFBFBF"]);
   
     /* ----------------------- Load and process the CSV data ----------------------- */
 
@@ -69,7 +69,7 @@
       // Stack the data
       const stack = d3
         .stack()
-        .keys(["U.S.","Brazil","European Union","Indonesia","India"]);
+        .keys(["U.S.","Brazil","European Union","Indonesia","Rest of the World"]);
       const stackedData = stack(data);
 
       // svg.append("text")
@@ -248,7 +248,7 @@
             hoverData["U.S."] +
             hoverData.Brazil +
             hoverData["European Union"] +
-            hoverData.India +
+            hoverData["Rest of the World"] +
             hoverData.Indonesia;
 
             tooltip.html(`
@@ -257,12 +257,12 @@
           
                     <tr>
                     <td><span class="color-legend" style="background-color: ${colorScale(
-                      "India"
-                    )};"></span>India</td>
+                      "Rest of the World"
+                    )};"></span>Rest of the World</td>
                     <td class="value">${formatNumber(
-                      hoverData.India
+                      hoverData["Rest of the World"]
                     )} (${formatNumber2(
-        (hoverData.India / total) * 100
+        (hoverData["Rest of the World"] / total) * 100
       )}%)</td>
                     </tr>
                     <tr>
@@ -319,7 +319,7 @@
           let accumulatingStack = 0;
   
           // Calculate the top edge of each stack element
-          ["U.S.","European Union","Brazil","Indonesia","India"].forEach(
+          ["U.S.","European Union","Brazil","Indonesia","Rest of the World"].forEach(
             (cat) => {
               accumulatingStack += hoverData[cat];
               totalStack.push(accumulatingStack);

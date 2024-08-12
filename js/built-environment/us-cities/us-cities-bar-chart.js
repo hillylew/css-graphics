@@ -15,7 +15,7 @@
     const containerHeight = containerWidth * aspectRatio;
   
     const dynamicMargin = {
-      top: containerHeight * 0.08,
+      top: containerHeight * 0.05,
       right: containerWidth * 0.1,
       bottom: containerHeight * 0.1,
       left: containerWidth * 0.37,

@@ -122,6 +122,8 @@
         const tooltipX = event.clientX + window.scrollX;
         const tooltipY = event.clientY + window.scrollY;
 
+        const formatNumber = d3.format(",");
+
         // Show and populate the tooltip
         tooltip
           .html(
@@ -129,7 +131,7 @@
               <table class="tooltip-content">
                 <tr>
                   <td>Emissions:</td>
-                  <td class="value"><strong>${d.CO2Emission}</strong> lbs</td>
+                  <td class="value"><strong>${formatNumber(d.CO2Emission)}</strong> lbs</td>
                 </tr>
               </table>`
           )

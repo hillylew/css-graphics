@@ -160,7 +160,9 @@
           .append("rect")
           .attr("width", 18)
           .attr("height", 18)
-          .attr("fill", colorScale(category));
+          .attr("fill", colorScale(category))
+          .attr("rx", 3) // Rounded corners
+          .attr("ry", 3); // Rounded corners
 
         // Legend label text
         legendRow
@@ -256,7 +258,7 @@
       .axisBottom(xScale)
       .tickSizeOuter(0)
       .tickSizeInner(0)
-      .tickPadding(5);
+      .tickPadding(10);
     svg
       .append("g")
       .attr("transform", `translate(0, ${height})`)

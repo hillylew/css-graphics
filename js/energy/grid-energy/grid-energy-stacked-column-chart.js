@@ -162,7 +162,7 @@
 
         const legendData = [
             { label: "PHS", color: "#FFCB05" },
-            { label: "Non-PHS", color: "#ED974A" }
+            { label: "Non-PHS", color: "#CE5845" }
         ];
 
         const legendItemSize = width * 0.04;
