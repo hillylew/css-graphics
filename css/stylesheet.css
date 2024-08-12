@@ -38,7 +38,7 @@
 
 .tooltip {
   pointer-events: none;
-  position: fixed;
+  position: absolute;
   width: auto;
   height: auto;
   background-color: white;
