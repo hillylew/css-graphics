@@ -196,17 +196,38 @@
       const lines = legendNames[series.key];
 
       lines.forEach((line, i) => {
-        legendItem
-          .append("text")
-          .datum(lastDatum)
-          .attr("transform", function (d) {
-            return `translate(${width},${y(d.value) + i * 12})`; // Adjust these values as needed for correct positioning
-          })
-          .attr("class", "chart-labels")
-          .attr("x", 5) // This sets the distance of the text from the end of the line
-          .attr("dy", ".35em") // This aligns the text vertically
-          .style("fill", colorScale(series.key))
-          .text(line);
+        // legendItem
+        //   .append("text")
+        //   .datum(lastDatum)
+        //   .attr("transform", function (d) {
+        //     return `translate(${width},${y(d.value) + i * 12})`; // Adjust these values as needed for correct positioning
+        //   })
+        //   .attr("class", "chart-labels")
+        //   .attr("x", 5) // This sets the distance of the text from the end of the line
+        //   .attr("dy", ".35em") // This aligns the text vertically
+          
+        //   // .style("fill", "black")
+        //   .style("fill", colorScale(series.key))
+        //   // .attr("stroke", "black")
+        //   // .attr("stroke-width", 0.4)
+        //   .text(line);
+
+          legendItem
+            .append("text")
+            .datum(lastDatum)
+            .attr("transform", function (d) {
+              return `translate(${width},${y(d.value) + i * 12})`;
+            })
+            .attr("class", "chart-labels")
+            .attr("x", 5)
+            .attr("dy", ".35em")
+            .style("fill", function(d) {
+              // Choose either black or white text based on the brightness of the background color
+              const color = d3.color(colorScale(series.key));
+              const brightness = (color.r * 299 + color.g * 587 + color.b * 114) / 1000;
+              return brightness > 125 ? "black" : colorScale(series.key);
+            })
+            .text(line);
       });
     });
 

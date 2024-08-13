@@ -40,11 +40,12 @@
   const dropdownContainer = d3.select(container)
     .append("div")
     .style("width", `${containerWidth * 0.2}px`)
-    .style("margin-bottom", "10px"); // Add some space between dropdown and map
+    .style("margin-bottom", "5px"); // Add some space between dropdown and map
 
   const dropdown = dropdownContainer
     .append("select")
     .attr("id", "map-dropdown")
+    .attr("class", "chart-labels") // Add class to the select element itself
     .style("width", "100%") // Take full width of the container div
     .on("change", function () {
       selectedOption = this.value.toLowerCase(); // Update selected option
@@ -166,13 +167,7 @@
 
         // Only add Number of Programs and Program Names if programs exist
         if (d.properties.programs) {
-          tooltipContent += `
-              
-              <tr>
-
-                  <td>${formatProgramNames(d.properties.programNames)}</td>
-              </tr>
-              `;
+          tooltipContent += `<tr><td>${formatProgramNames(d.properties.programNames)}</td></tr>`;
         }
 
         tooltipContent += `</table>`;
@@ -211,58 +206,55 @@
     { color: "url(#diagonalHatch)", text: "Programs" },
   ];
 
-  // Adjust legend position to the right of the map.
-  const legend = svg
-    .append("g")
-    .attr("class", "legend")
-    .attr("transform", `translate(${width + dynamicMargin.left / 2}, ${height / 2})`);
+  // Update the legend position
+  const legend = svg.append("g")
+    .attr("transform", `translate(${width}, ${height * 0.6})`);
 
-  // Calculate the legend rectangle dimensions based on container size
-  const legendRectWidth = containerWidth * 0.02; // 2% of container width
-  const legendRectHeight = containerHeight * 0.02; // 2% of container height
+  // Calculate the dimensions for legend items
+  const legendItemSize = width * 0.03; // Set the width and height to be 4% of the container width
+  const gap = width * 0.01; // Decrease the gap between legend items
 
-  // Add rectangles for each item in legendData
-  legend.selectAll("rect")
-    .data(legendData)
-    .enter()
-    .append("rect")
-    .attr("x", 0)
-    .attr("y", (d, i) => i * (legendRectHeight + 5)) // Add some spacing between rectangles
-    .attr("width", legendRectWidth)
-    .attr("height", legendRectHeight)
-    .style("fill", d => d.color)
-    .attr("stroke", "#000")
-    .attr("stroke-width", 0.5);
+  // Append legend items
+  legendData.forEach((d, i) => {
+    legend.append("rect")
+      .attr("x", 0)
+      .attr("y", i * (legendItemSize + gap)) // Adjust spacing between legend items
+      .attr("width", legendItemSize)
+      .attr("height", legendItemSize)
+      .style("fill", d.color)
+      .attr("stroke", "black")
+      .attr("stroke-width", 0.5)
+      .attr("rx", 3) // Rounded corners
+      .attr("ry", 3) // Rounded corners
+      .attr("class", "legend-rect");
 
-  // Add text labels for each item in legendData
-  legend.selectAll("text")
-    .data(legendData)
-    .enter()
-    .append("text")
-    .attr("x", legendRectWidth + 5) // Position text to the right of the rectangle
-    .attr("y", (d, i) => i * (legendRectHeight + 5) + legendRectHeight) // Center text vertically
-    .text(d => d.text)
-    .attr("class", "chart-labels");
+    legend.append("text")
+      .attr("x", legendItemSize + gap)
+      .attr("y", i * (legendItemSize + gap) + legendItemSize / 2)
+      .attr("alignment-baseline", "middle")
+      .text(d.text)
+      .attr("class", "chart-labels");
+  });
 
-    function formatProgramNames(programNames) {
-      if (!programNames) return "";
-    
-      const names = programNames.split(';').map(name => name.trim());
-      let formattedNames = '<tr><td class="label" colspan="2">Program Names:</td></tr>';
-      names.forEach((name, index) => {
-        formattedNames += `
-          <tr>
-            <td class="label">${index + 1}. ${name}</td>
-          </tr>`;
-      });
-      return formattedNames;
-    }
-    
-    // In the tooltipContent where the program names are added
-    if (d.properties.programs) {
-      tooltipContent += `
+  function formatProgramNames(programNames) {
+    if (!programNames) return "";
+  
+    const names = programNames.split(';').map(name => name.trim());
+    let formattedNames = '<tr><td class="label" colspan="2">Program Names:</td></tr>';
+    names.forEach((name, index) => {
+      formattedNames += `
         <tr>
-          <td>${formatProgramNames(d.properties.programNames)}</td>
+          <td class="label">${index + 1}. ${name}</td>
         </tr>`;
-    }
+    });
+    return formattedNames;
+  }
+
+  // In the tooltipContent where the program names are added
+  if (d.properties.programs) {
+    tooltipContent += `
+      <tr>
+        <td>${formatProgramNames(d.properties.programNames)}</td>
+      </tr>`;
+  }
 })();

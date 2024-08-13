@@ -31,13 +31,37 @@
     <!-- Figure 1 -->
     <div class="CaptionedChart">
       <div class="HeaderHTML">
-        <span>U.S. Energy Consumption (Quadrillion BTU)</span>
+        <span>U.S. Energy Consumption (1950 - 2023)</span>
       </div>
       
       <script>
         let energySystem1 = "../../data/energy/energy-system/energy-system1.csv";
       </script>
       <div id="energy-system-line-chart" class="chart"></div>
+    </div>
+
+    <!-- Figure 2  -->
+    <div class="CaptionedChart">
+      <div class="HeaderHTML">
+        <span>U.S. GHG Emissions, 2022</span>
+      </div>
+
+      <script>
+        let energySystem3 = "../../data/energy/energy-system/energy-system3.csv";
+      </script>
+      <div id="energy-system-stacked-column-chart" class="chart"></div>
+    </div>
+
+     <!-- Figure 3  -->
+     <div class="CaptionedChart">
+      <div class="HeaderHTML">
+        <span>States with Renewable Energy Portfolio Standards</span>
+      </div>
+
+      <script>
+        let energySystem2 = "../../data/energy/energy-system/energy-system2.csv";
+      </script>
+      <div id="energy-system-interactive-map" class="chart"></div>
     </div>
 
     <!-- D3.js -->
@@ -48,5 +72,7 @@
 
     <!-- js files-->
     <script src="../../js/energy/energy-system/energy-system-line-chart.js"></script>
+    <script src="../../js/energy/energy-system/energy-system-stacked-column-chart.js"></script>
+    <script src="../../js/energy/energy-system/energy-system-interactive-map.js"></script>
   </body>
 </html>

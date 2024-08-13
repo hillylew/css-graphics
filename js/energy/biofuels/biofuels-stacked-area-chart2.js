@@ -173,7 +173,13 @@
         .attr("y", 0)
         .style("text-anchor", "start")
         .style("alignment-baseline", "middle")
-        .style("fill", (d) => colorScale(d.key))
+        .style("fill", (d) => {
+          const color = d3.color(colorScale(d.key));
+          const brightness = (color.r * 299 + color.g * 587 + color.b * 114) / 1000;
+          return brightness > 125 ? "black" : colorScale(d.key);
+        })
+        // .attr("stroke", "black")
+        // .attr("stroke-width", 0.4)
         .text((d) => d.key)
         .on("mouseover", (event, d) => {
           highlightAreaLayer(d.key);

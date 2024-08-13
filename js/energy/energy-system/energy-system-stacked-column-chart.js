@@ -1,15 +1,14 @@
-(function() {
+(function () {
     /* ----------------------- Create Tooltip ------------------------ */
-    const container = document.getElementById("water-supply-stacked-column-chart");
+    const container = document.getElementById("energy-system-stacked-column-chart");
 
-  const tooltipDiv = document.createElement("div");
-  tooltipDiv.id = "tooltip";
-  tooltipDiv.className = "tooltip";
-  container.appendChild(tooltipDiv);
-  
-  const tooltip = d3.select(container).select("#tooltip");
+    const tooltipDiv = document.createElement("div");
+    tooltipDiv.id = "tooltip";
+    tooltipDiv.className = "tooltip";
+    container.appendChild(tooltipDiv);
 
-    
+    const tooltip = d3.select(container).select("#tooltip");
+
     const containerWidth = container.offsetWidth; // Use offsetWidth for full element width
     const aspectRatio = 0.7; // Example aspect ratio
     const containerHeight = containerWidth * aspectRatio; // Calculate the height based on the width and aspect ratio
@@ -17,9 +16,9 @@
     // Calculate the dynamic margins
     const dynamicMargin = {
         top: containerHeight * 0.05,    
-        right: containerWidth * 0.7,  
+        right: containerWidth * 0.7,
         bottom: containerHeight * 0.1,
-        left: containerWidth * 0.07   
+        left: containerWidth * 0.07
     };
 
     // Calculate the width and height for the inner drawing area
@@ -27,21 +26,18 @@
     const height = containerHeight - dynamicMargin.top - dynamicMargin.bottom;
 
     // Append SVG object
-    const svg = d3.select("#water-supply-stacked-column-chart").append("svg")
+    const svg = d3.select("#energy-system-stacked-column-chart").append("svg")
         .attr('viewBox', `0 0 ${containerWidth} ${containerHeight}`)
         .attr('preserveAspectRatio', 'xMinYMin meet')
         .append('g')
         .attr('transform', `translate(${dynamicMargin.left},${dynamicMargin.top})`);
 
-    const colors = ["#08519c", "#3182bd", "#6baed6", "#9ecae1", "#c6dbef", "#eff3ff"];
-    // const colors = ["#00274c", "#1d476d", "#2f65a7", "#9ecae1", "#8fc8e5", "#d8d8d8"];
-
+    const colors = ["#1C476D", "#4084BC", "#8FC8E5", "#386660", "#E2E27A"];
 
     // Define scales
     const x = d3.scaleBand()
         .range([0, width])
-        .domain(["Total"]);
-        // .padding(0.5);
+        .domain(["2022"]);
 
     const y = d3.scaleLinear()
         .range([height, 0]);
@@ -53,22 +49,17 @@
         .selectAll("text").remove(); // Remove x-axis labels
 
     svg.selectAll(".tick line").remove(); // Remove x-axis ticks
-    
 
     // Load CSV data and build chart
+    d3.csv(energySystem3, d3.autoType).then(function(data) {
+        data.forEach(d => {
+            d.Value = +d['2022 (Mt CO2e)']; // Convert value to number
+        });
 
-    // Define csv file path if it's not already defined
-    if (typeof csvFile === "undefined") {
-        var csvFile = "../../data/water/water-supply/water-supply1.csv"
-    }
-
-    d3.csv(csvFile, d3.autoType).then(function(data) {
-
-        // Calculate the total BGD for the y-axis domain
-        const totalBGD = d3.sum(data, d => d.BGD);
-        const maxYValue = Math.ceil(totalBGD / 20) * 20;
+        // Calculate the total value for the y-axis domain
+        const totalValue = d3.sum(data, d => d.Value);
+        const maxYValue = Math.ceil(totalValue / 500) * 500;
         y.domain([0, maxYValue]);
-        
 
         // Create a group for the y-axis
         const yAxisGroup = svg.append("g").call(d3.axisLeft(y));
@@ -80,51 +71,43 @@
             .attr("text-anchor", "middle")
             .attr("transform", `translate(0, ${-dynamicMargin.top / 2})`)
             .style("fill", "#000")
-            .text("BGD");
+            .text("Mt CO₂e");
 
-        // Calculate BGD cumulative values for the stacked chart
-        let cumulativeBGD = 0;
+        // Calculate values for the stacked chart
+        let cumulativeValue = 0;
         data.forEach(d => {
-            d.startBGD = cumulativeBGD;
-            cumulativeBGD += d.BGD;
-            d.endBGD = cumulativeBGD;
+            d.startValue = cumulativeValue;
+            cumulativeValue += d.Value;
+            d.endValue = cumulativeValue;
         });
 
-        // Create stacked bars using BGD values
+        // Create stacked bars
         svg.selectAll(".bar")
             .data(data)
             .enter().append("rect")
             .attr("class", "bar")
             .attr("fill", (d, i) => colors[i % colors.length])
-            .attr("x", x("Total"))
-            .attr("y", d => y(d.endBGD))
-            .attr("height", d => y(d.startBGD) - y(d.endBGD))
+            .attr("x", x("2022"))
+            .attr("y", d => y(d.endValue))
+            .attr("height", d => y(d.startValue) - y(d.endValue))
             .attr("width", x.bandwidth())
             .on('mouseover', function(event, d) {
-                // Highlight the active bar
                 d3.select(this).attr("class", "bar active");
-
-                // Reduce the opacity of the other bars
                 svg.selectAll(".bar").filter(e => e !== d).style("opacity", 0.1);
 
                 const tooltipX = event.clientX;
                 const tooltipY = event.clientY;
 
-                // Show and populate the tooltip
                 tooltip.html(`
-                    <div class="tooltip-title">${d.Category}</div>
+                    <div class="tooltip-title">${d.Data}</div>
                     <table class="tooltip-content">
                         <tr>
-                        <td>
-                            Amount
-                        </td>
-                        <td class="value">${d.BGD.toFixed(1)} BGD</td>
+                            <td>Amount</td>
+                            <td class="value"><strong>${d.Value.toFixed(1)}</strong> Mt CO₂e</td>
                         </tr>
                         <tr>
-                        <td>
-                            Percent
-                        </td>
-                        <td class="value">${((d.BGD / totalBGD) * 100).toFixed(0)}%</td>
+                            <td>Percent</td>
+                            <td class="value"><strong>${((d.Value / totalValue) * 100).toFixed(0)}</strong> %</td>
                         </tr>
                     </table>
                 `)
@@ -136,35 +119,25 @@
                 const tooltipX = event.clientX;
                 const tooltipY = event.clientY;
 
-                // Update tooltip position
                 tooltip
                     .style("left", (tooltipX + dynamicMargin.left / 4) + "px")
                     .style("top", (tooltipY) + "px");
             })
             .on("mouseout", function () {
-                // Hide tooltip
                 d3.select(this).attr("class", "bar");
-
-                // Reset the opacity of the other bars
                 svg.selectAll(".bar").style("opacity", 1);
-
-                // Hide the tooltip
                 tooltip.style('opacity', '0');
             });
 
-        // Add category labels next to each segment
         svg.selectAll(".category-text")
             .data(data)
             .enter().append("text")
             .attr("class", "chart-labels")
-            .attr("x", x("Total") + x.bandwidth() + 10)
-            .attr("y", d => y(d.startBGD + (d.endBGD - d.startBGD) / 2) + 3)
-            // .attr("fill", (d, i) => colors[i % colors.length])
+            .attr("x", x("2022") + x.bandwidth() + 10)
+            .attr("y", d => y(d.startValue + (d.endValue - d.startValue) / 2) + 5)
             .attr("fill", "black")
-            .text(d => d.Category);
-            
+            .text(d => d.Data);
     }).catch(function(error){
         console.error('Error loading the CSV file:', error);
     });
 })();
- 

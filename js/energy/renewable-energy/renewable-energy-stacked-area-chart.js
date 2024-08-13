@@ -174,7 +174,8 @@
       .attr("y", 0)
       .style("text-anchor", "start")
       .style("alignment-baseline", "middle")
-      .style("fill", (d) => colorScale(d.key))
+      // .style("fill", (d) => colorScale(d.key))
+      .style("fill", "black")
       .text((d) => d.key)
       .on("mouseover", (event, d) => {
         highlightAreaLayer(d.key);
