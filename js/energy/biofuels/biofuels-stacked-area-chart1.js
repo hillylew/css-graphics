@@ -68,15 +68,6 @@
         .keys(["U.S.","Brazil","European Union", "Rest of the World"]);
     const stackedData = stack(data);
 
-    // svg
-    //   .append("text")
-    //   .attr("x", width / 2)
-    //   .attr("y", -dynamicMargin.top / 2) // Place below the chart
-    //   .attr("class", "chart-subtitle")
-    //   .attr("text-anchor", "middle") // Center the text
-    //   .attr("fill", "#000") // Text color
-    //   .text("Ethanol");
-
     /* ----------------------- Update the scale domains with the processed data ----------------------- */
     x.domain(d3.extent(data, (d) => d.Year));
     const maxYValue =
@@ -177,7 +168,8 @@
       .attr("y", 0)
       .style("text-anchor", "start")
       .style("alignment-baseline", "middle")
-      .style("fill", (d) => colorScale(d.key))
+      // .style("fill", (d) => colorScale(d.key))
+      .style("fill", "black")
       .text((d) => d.key)
       .on("mouseover", (event, d) => {
         highlightAreaLayer(d.key);

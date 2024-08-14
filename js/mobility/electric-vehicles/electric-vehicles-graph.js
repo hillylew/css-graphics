@@ -210,14 +210,15 @@
             });
         }
 
+        // Image links (change for website)
         function addCarTypeOptions(parent, offsetX, boxWidth, boxHeight, spacing, carId) {
             const carTypes = ["Pickup", "SUV", "Sedan"];
             carTypes.forEach((type, index) => {
                 const row = spacing * (index + 1) - height * 0.5;
                 parent.append("image")
                     .attr("class", "grid-item")
-                    // .attr("xlink:href", `../../images/icon-${type.toLowerCase()}.png`)
-                    .attr("xlink:href", `/sites/default/files/css-graphics/images/icon-${type.toLowerCase()}.png`)
+                    .attr("xlink:href", `../../images/icon-${type.toLowerCase()}.png`)
+                    // .attr("xlink:href", `/sites/default/files/css-graphics/images/icon-${type.toLowerCase()}.png`)
                     .attr("x", offsetX - boxWidth / 2)
                     .attr("y", row)
                     .attr("width", boxWidth)

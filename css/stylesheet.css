@@ -26,10 +26,6 @@
   font-size: 7px;
 }
 
-.chart-subtitle {
-  font-size: 9px;
-}
-
 .diagram-labels {
   font-size: 10px;
 }
@@ -102,6 +98,7 @@ table.tooltip-total {
   width: 10px;
   height: 10px;
   margin-right: 5px;
+  border-radius: 20%;
 }
 
 
@@ -129,19 +126,32 @@ table.tooltip-total {
 }
 
 
-/* CSS for Styled Table */
+/* pie chart */
+path.slice {
+  stroke-width: 2px;
+}
+
+polyline {
+  opacity: .3;
+  stroke: black;
+  stroke-width: 2px;
+  fill: none;
+}
+
+
+
+/* Styled Table */
+
 .styled-table {
   border-collapse: collapse;
-  margin: 25px 0;
   font-size: 1em;
   font-family: 'Arial', sans-serif;
-  min-width: 400px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
   overflow-x: auto;
+  max-width: 100%; /* Ensure it doesn't exceed the container */
 }
 
 .styled-table thead tr {
-  background-color: #3167A4;
+  background-color: #1C476D;
   color: #ffffff;
   text-align: left;
 }
@@ -159,13 +169,12 @@ table.tooltip-total {
   background-color: #f3f3f3;
 }
 
-/* .styled-table tbody tr:last-of-type {
-  border-bottom: 2px solid #3167A4;
-} */
+.styled-table tbody tr:hover {
+  background-color: #FED679;
+}
 
-.styled-table tbody tr.active-row {
-  font-weight: bold;
-  color: #3167A4;
+.table-labels {
+  font-size: 6px;
 }
 
 
@@ -190,8 +199,8 @@ table.tooltip-total {
     font-size: 10px;
   }
 
-  .chart-subtitle {
-    font-size: 12px;
+  .table-labels {
+    font-size: 8px;
   }
 
   .diagram-labels {
@@ -224,8 +233,8 @@ table.tooltip-total {
     font-size: 12px;
   }
 
-  .chart-subtitle {
-    font-size: 14px;
+  .table-labels {
+    font-size: 10px;
   }
 
   .diagram-labels {

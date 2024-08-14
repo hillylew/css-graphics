@@ -17,7 +17,7 @@
 
    const dynamicMargin = {
        top: containerHeight * 0.15, // Increased top margin for more space
-       right: containerWidth * 0.1,
+       right: containerWidth * 0.15,
        bottom: containerHeight * 0.15,
        left: containerWidth * 0.1,
    };
@@ -63,7 +63,7 @@
                <table class="tooltip-content">
                    <tr>
                        <td>Recovered: </td>
-                       <td class="value">${d.Recovered}%</td>
+                       <td class="value"><strong>${d.Recovered}</strong> %</td>
                    </tr>
                </table>
                `);

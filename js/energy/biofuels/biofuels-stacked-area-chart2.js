@@ -65,14 +65,6 @@
         .stack()
         .keys(["U.S.","Brazil","European Union","Indonesia","Rest of the World"]);
       const stackedData = stack(data);
-
-      // svg.append("text")
-      //   .attr("x", width / 2)
-      //   .attr("y", -dynamicMargin.top/2) // Place below the chart
-      //   .attr("class", "chart-subtitle")
-      //   .attr("text-anchor", "middle") // Center the text
-      //   .attr("fill", "#000") // Text color
-      //   .text("Biodiesel"); 
   
       /* ----------------------- Update the scale domains with the processed data ----------------------- */
       x.domain(d3.extent(data, (d) => d.Year));
