@@ -91,7 +91,7 @@
                     <div class="tooltip-title">${d.data.Food}</div>
                     <table class="tooltip-content">
                         <tr>
-                            <td>Percentage: </td>
+                            <td>Percent: </td>
                             <td class="value"><strong>${d.data.Percentage}</strong> %</td>
                         </tr>
                     </table>

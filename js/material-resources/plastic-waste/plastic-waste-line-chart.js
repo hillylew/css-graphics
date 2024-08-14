@@ -161,7 +161,7 @@ xAxisGroup.selectAll(".tick text").attr("class", "chart-labels");
         .attr('class', 'line-dot')
         .attr('cx', d => x(d.Year))
         .attr('cy', d => y(d.value))
-        .attr('r', 2.5) // Set the radius of the circle
+        .attr('r', 2) // Set the radius of the circle
         .style('fill', colorScale(lineData.key));
       });
 
@@ -209,7 +209,8 @@ xAxisGroup.selectAll(".tick text").attr("class", "chart-labels");
         .attr("class", "chart-labels")
         .attr("x", 5) // This sets the distance of the text from the end of the line
         .attr("dy", ".35em") // This aligns the text vertically
-        .style("fill", colorScale(series.key))
+        // .style("fill", colorScale(series.key))
+        .style("fill", "black")
         .text(fixLegend);
     });
 
@@ -280,7 +281,7 @@ xAxisGroup.selectAll(".tick text").attr("class", "chart-labels");
             .join("circle")
             .attr("cx", x(hoverData.Year))
             .attr("cy", d => y(d.value))
-            .attr("r", 5)
+            .attr("r", 4)
             .style("fill", d => colorScale(d.key))
             .style("stroke", "white")
             .style("opacity", "1");

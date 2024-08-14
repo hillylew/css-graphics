@@ -17,10 +17,10 @@
 
   // Calculate the dynamic margins
   const dynamicMargin = {
-    top: containerHeight * 0.1, // 20% of the container height
-    right: containerWidth * 0.2, // 20% of the container width
+    top: containerHeight * 0.08, // 20% of the container height
+    right: containerWidth * 0.22, // 20% of the container width
     bottom: containerHeight * 0.1, // 10% of the container height
-    left: containerWidth * 0.07, // 7% of the container width
+    left: containerWidth * 0.08, // 7% of the container width
   };
 
   // Calculate the width and height for the inner drawing area
@@ -115,29 +115,29 @@
 
    xAxisGroup
      .selectAll(".tick text")
-     .attr("class", "chart-labels")
+     .attr("class", "table-labels")
      .style("text-anchor", (d) => {
        return d.getFullYear()
      });
 
     xAxisGroup
       .selectAll(".tick text")
-      .attr("class", "chart-labels");
+      .attr("class", "table-labels");
 
     // Draw the Y-axis
     const yAxisGroup = svg
       .append("g")
       .call(yAxis)
-      .attr("class", "chart-labels");
+      .attr("class", "table-labels");
 
     // Define the y-axis label with the desired text and formatting
     const yAxisLabel = yAxisGroup.append("text")
-      .attr("class", "chart-labels")
+      .attr("class", "table-labels")
       .attr("text-anchor", "middle")
       .attr("transform", `translate(0, -${dynamicMargin.top / 2})`)
       .style("fill", "#000");
 
-    yAxisLabel.append("tspan").text("MMT CO");
+    yAxisLabel.append("tspan").text("Mt CO");
     yAxisLabel.append("tspan")
       .attr("baseline-shift", "sub")
       .attr("font-size", "60%") // Adjust the font size to make the subscript smaller
@@ -218,7 +218,7 @@
         .attr("transform", function (d) {
           return `translate(${width},${y(d.value)})`; // Adjust these values as needed for correct positioning
         })
-        .attr("class", "chart-labels")
+        .attr("class", "table-labels")
         .attr("x", 5) // This sets the distance of the text from the end of the line
         .attr("dy", ".35em") // This aligns the text vertically
         // .style("fill", colorScale(series.key))

@@ -21,7 +21,7 @@
     top: containerHeight * 0.1,
     right: containerWidth * 0.17,
     bottom: containerHeight * 0.1,
-    left: containerWidth * 0.07,
+    left: containerWidth * 0.1,
   };
 
   // Calculate the width and height for the inner drawing area
@@ -42,7 +42,7 @@
   const y = d3.scaleLinear().range([height, 0]);
 
   const xAxis = d3.axisBottom(x).tickFormat(d3.timeFormat("%Y"));
-  const yAxis = d3.axisLeft(y).tickFormat(d3.format(","));
+  const yAxis = d3.axisLeft(y).tickFormat(d3.format(",")).ticks(6);
 
   const colorScale = d3
     .scaleOrdinal()
@@ -69,8 +69,8 @@
     x.domain(d3.extent(data, (d) => d.Year));
     const maxYValue =
       Math.ceil(
-        d3.max(stackedData, (layer) => d3.max(layer, (d) => d[1])) / 100
-      ) * 100;
+        d3.max(stackedData, (layer) => d3.max(layer, (d) => d[1])) / 200
+      ) * 200;
     y.domain([0, maxYValue]);
 
     // Draw X-axis
@@ -78,19 +78,19 @@
     const endYear = d3.max(data, (d) => d.Year.getFullYear());
 
     // Define the years you want to filter out
-    const filteredYears = [2010, 2022];
+    // const filteredYears = [2022];
 
     // Filter xTickValues to exclude filteredYears
     const xTickValues = x
-      .ticks(d3.timeYear.every(2))
-      .filter((year) => !filteredYears.includes(year.getFullYear()));
+      .ticks(d3.timeYear.every(2));
+      // .filter((year) => !filteredYears.includes(year.getFullYear()));
 
-    if (!xTickValues.includes(startYear)) {
-      xTickValues.unshift(new Date(startYear, 0, 1));
-    }
-    if (!xTickValues.includes(endYear)) {
-      xTickValues.push(new Date(endYear, 0, 1));
-    }
+    // if (!xTickValues.includes(startYear)) {
+    //   xTickValues.unshift(new Date(startYear, 0, 1));
+    // }
+    // if (!xTickValues.includes(endYear)) {
+    //   xTickValues.push(new Date(endYear, 0, 1));
+    // }
     xAxis.tickValues(xTickValues);
 
     const xAxisGroup = svg
@@ -100,14 +100,7 @@
 
     xAxisGroup
       .selectAll(".tick text")
-      .attr("class", "chart-labels")
-      .style("text-anchor", (d) => {
-        return d.getFullYear() === startYear
-          ? "start"
-          : d.getFullYear() === endYear
-          ? "end"
-          : "middle";
-      });
+      .attr("class", "chart-labels");
 
     // Draw the Y-axis
     const yAxisGroup = svg
@@ -179,7 +172,8 @@
       .attr("y", 0)
       .style("text-anchor", "start")
       .style("alignment-baseline", "middle")
-      .style("fill", (d) => colorScale(d.key))
+      // .style("fill", (d) => colorScale(d.key))
+      .style("fill", "black")
       .text((d) => d.key)
       .on("mouseover", (event, d) => {
         highlightAreaLayer(d.key);
@@ -259,9 +253,9 @@
                           <td><span class="color-legend" style="background-color: ${colorScale(
                             "India"
                           )};"></span>India</td>
-                          <td class="value">${formatNumber(
+                          <td class="value"><strong>${formatNumber(
                             hoverData.India
-                          )} (${formatNumber2(
+                          )} GW</strong>  (${formatNumber2(
           (hoverData.India / total) * 100
         )}%) </td>
                       </tr>
@@ -269,9 +263,9 @@
                       <td><span class="color-legend" style="background-color: ${colorScale(
                         "Germany"
                       )};"></span>Germany</td>
-                      <td class="value">${formatNumber(
+                      <td class="value"><strong>${formatNumber(
                         hoverData.Germany
-                      )} (${formatNumber2(
+                      )} GW</strong> (${formatNumber2(
           (hoverData.Germany / total) * 100
         )}%)</td>
                       </tr>
@@ -279,9 +273,9 @@
                           <td><span class="color-legend" style="background-color: ${colorScale(
                             "U.S."
                           )};"></span>U.S.</td>
-                          <td class="value">${formatNumber(
+                          <td class="value"><strong>${formatNumber(
                             hoverData["U.S."]
-                          )} (${formatNumber2(
+                          )} GW</strong> (${formatNumber2(
           (hoverData["U.S."] / total) * 100
         )}%)</td>
                       </tr>
@@ -289,9 +283,9 @@
                           <td><span class="color-legend" style="background-color: ${colorScale(
                             "China"
                           )};"></span>China</td>
-                          <td class="value">${formatNumber(
+                          <td class="value"><strong>${formatNumber(
                             hoverData.China
-                          )} (${formatNumber2(
+                          )} GW</strong> (${formatNumber2(
           (hoverData.China / total) * 100
         )}%)</td>
                       </tr>
@@ -299,16 +293,16 @@
                           <td><span class="color-legend" style="background-color: ${colorScale(
                             "Rest of the World"
                           )};"></span>Rest of the World</td>
-                          <td class="value">${formatNumber(
+                          <td class="value"><strong>${formatNumber(
                             hoverData["Rest of the World"]
-                          )} (${formatNumber2(
+                          )} GW</strong> (${formatNumber2(
           (hoverData["Rest of the World"] / total) * 100
         )}%)</td>
                   </table>
                   <table class="tooltip-total">
                      <tr>
                     <td><strong>Total</strong></td>
-                    <td class="value">${formatNumber(total)} (100%)</td>
+                    <td class="value"><strong>${formatNumber(total)} GW</strong> (100%)</td>
                   </tr>
                   </table>
                 `);

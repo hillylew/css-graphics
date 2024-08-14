@@ -17,8 +17,8 @@
     const dynamicMargin = {
         top: containerHeight * 0.05,
         right: containerWidth * 0.2,
-        bottom: containerHeight * 0.05,
-        left: containerWidth * 0.15,
+        bottom: containerHeight * 0.1,
+        left: containerWidth * 0.18,
     };
 
     const width = containerWidth - dynamicMargin.left - dynamicMargin.right;
@@ -57,7 +57,8 @@
             .range([0, width]);
         svg.append('g')
             .attr("transform", `translate(0, ${height})`)
-            .call(d3.axisBottom(xScale).ticks(5).tickFormat(d => `${d}%`));
+            .call(d3.axisBottom(xScale).ticks(5).tickFormat(d => `${d}%`))
+            .attr("class", "chart-labels");
 
         // Y scale and Axis
         const yScale = d3.scaleBand()
@@ -65,7 +66,8 @@
             .range([0, height])
             .padding(0.1);
         svg.append('g')
-            .call(d3.axisLeft(yScale));
+            .call(d3.axisLeft(yScale))
+            .attr("class", "chart-labels");
 
         // Color palette
         const color = d3.scaleOrdinal()

@@ -20,7 +20,7 @@
   const dynamicMargin = {
       top: containerHeight * 0.1, // 5% of the container height
       right: containerWidth * 0.2, // 20% of the container width
-      bottom: containerHeight * 0.05, // 5% of the container height
+      bottom: containerHeight * 0.1, // 5% of the container height
       left: containerWidth * 0.05, // 5% of the container width
   };
 
@@ -119,7 +119,7 @@
           .attr("text-anchor", "middle")
           .attr("transform", `translate(0, ${-dynamicMargin.top / 2})`)
           .style("fill", "#CE5845") // Ensure the label color matches the axis color
-          .text("Quadrillion BTU");
+          .text("Quads BTU");
 
       // Define the line generator
       const lineGenerator = (scale) => d3.line()

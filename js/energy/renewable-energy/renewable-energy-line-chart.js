@@ -43,7 +43,7 @@
 
   // Define the axes
   const xAxis = d3.axisBottom(x).tickFormat(d3.timeFormat("%Y"));
-  const yAxis = d3.axisLeft(y).tickFormat(d3.format("$")).ticks(4);
+  const yAxis = d3.axisLeft(y).ticks(4);
 
   const colorScale = d3
     .scaleOrdinal()
@@ -137,9 +137,9 @@
     // Notes
     yAxisGroup
       .append("text")
-      .attr("class", "chart-labels")
-      .attr("text-anchor", "left")
-      .attr("transform", `translate(${width / 2}, ${height + dynamicMargin.bottom * 0.8})`)
+      .attr("class", "table-labels")
+      .attr("text-anchor", "start")
+      .attr("transform", `translate(0, ${height + dynamicMargin.bottom * 0.9})`)
       .style("fill", "#000")
       .text("* 2022 data is not available in the Lazard report");
 

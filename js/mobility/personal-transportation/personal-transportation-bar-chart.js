@@ -18,7 +18,7 @@
       top: containerHeight * 0.02,
       right: containerWidth * 0.1,
       bottom: containerHeight * 0.15,
-      left: containerWidth * 0.15,
+      left: containerWidth * 0.18,
     };
   
     const width = containerWidth - dynamicMargin.left - dynamicMargin.right;

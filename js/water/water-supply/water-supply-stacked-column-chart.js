@@ -76,7 +76,7 @@
         // Add y-axis label
         yAxisGroup
             .append("text")
-            .attr("class", "chart-labels")
+            .attr("class", "table-labels")
             .attr("text-anchor", "middle")
             .attr("transform", `translate(0, ${-dynamicMargin.top / 2})`)
             .style("fill", "#000")
@@ -156,7 +156,7 @@
         svg.selectAll(".category-text")
             .data(data)
             .enter().append("text")
-            .attr("class", "chart-labels")
+            .attr("class", "table-labels")
             .attr("x", x("Total") + x.bandwidth() + 10)
             .attr("y", d => y(d.startBGD + (d.endBGD - d.startBGD) / 2) + 3)
             // .attr("fill", (d, i) => colors[i % colors.length])

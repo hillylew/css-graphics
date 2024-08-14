@@ -21,7 +21,7 @@
         top: containerHeight * 0.02,
         right: containerWidth * 0.05, // Adjust right margin if labels are too long
         bottom: containerHeight * 0.1,
-        left: containerWidth * 0.23, // Increase left margin to fit labels in horizontal orientation
+        left: containerWidth * 0.25, // Increase left margin to fit labels in horizontal orientation
     };
 
     // Calculate the width and height for the inner drawing area

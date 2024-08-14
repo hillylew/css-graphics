@@ -20,8 +20,8 @@
     const dynamicMargin = {
         top: containerHeight * 0.1,
         right: containerWidth * 0.17,
-        bottom: containerHeight * 0.05,
-        left: containerWidth * 0.05,
+        bottom: containerHeight * 0.1,
+        left: containerWidth * 0.08,
     };
 
     // Calculate the width and height for the inner drawing area

@@ -15,10 +15,10 @@
 
     // Calculate the dynamic margins
     const dynamicMargin = {
-        top: containerHeight * 0.05,    
+        top: containerHeight * 0.07,    
         right: containerWidth * 0.7,
         bottom: containerHeight * 0.1,
-        left: containerWidth * 0.07
+        left: containerWidth * 0.1
     };
 
     // Calculate the width and height for the inner drawing area
@@ -62,16 +62,16 @@
         y.domain([0, maxYValue]);
 
         // Create a group for the y-axis
-        const yAxisGroup = svg.append("g").call(d3.axisLeft(y));
+        const yAxisGroup = svg.append("g").call(d3.axisLeft(y)).attr("class", "chart-labels");
 
-        // Add y-axis label
+        // Add y-axis label with subscript
         yAxisGroup
             .append("text")
             .attr("class", "chart-labels")
             .attr("text-anchor", "middle")
             .attr("transform", `translate(0, ${-dynamicMargin.top / 2})`)
             .style("fill", "#000")
-            .text("Mt CO₂e");
+            .html('Mt CO<tspan baseline-shift="sub" font-size="0.7em">2</tspan>e');
 
         // Calculate values for the stacked chart
         let cumulativeValue = 0;
@@ -129,6 +129,7 @@
                 tooltip.style('opacity', '0');
             });
 
+        // Create category text labels with subscript
         svg.selectAll(".category-text")
             .data(data)
             .enter().append("text")
@@ -136,7 +137,17 @@
             .attr("x", x("2022") + x.bandwidth() + 10)
             .attr("y", d => y(d.startValue + (d.endValue - d.startValue) / 2) + 5)
             .attr("fill", "black")
-            .text(d => d.Data);
+            .html(d => {
+                // Function to replace text with subscript notation
+                const formatText = text => {
+                    return text
+                        .replace(/CO2/g, 'CO<tspan baseline-shift="sub" font-size="0.7em">2</tspan>')
+                        .replace(/SF6/g, 'SF<tspan baseline-shift="sub" font-size="0.7em">6</tspan>')
+                        .replace(/NF3/g, 'NF<tspan baseline-shift="sub" font-size="0.7em">3</tspan>');
+                };
+                
+                return formatText(d.Data);
+            });
     }).catch(function(error){
         console.error('Error loading the CSV file:', error);
     });

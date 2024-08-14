@@ -42,7 +42,7 @@
 
   // Define the axes
   const xAxis = d3.axisBottom(x).tickFormat(d3.timeFormat("%Y")).ticks(d3.timeYear.every(2));
-  const yAxis = d3.axisLeft(y).tickFormat(d3.format("$")).ticks(4); 
+  const yAxis = d3.axisLeft(y).ticks(4); 
 
   // Load and process the CSV data
   d3.csv(wind1).then((data) => {

@@ -18,7 +18,7 @@
   const dynamicMargin = {
     top: containerHeight * 0.1, // 5% of the container height
     right: containerWidth * 0.3, // 10% of the container width
-    bottom: containerHeight * 0.05, // 10% of the container height
+    bottom: containerHeight * 0.1, // 10% of the container height
     left: containerWidth * 0.05, // 7% of the container width
   };
 
@@ -37,7 +37,7 @@
   const y = d3.scaleLinear().range([height, 0]);
 
   const xAxis = d3.axisBottom(x).tickFormat(d3.timeFormat("%Y"));
-  const yAxis = d3.axisLeft(y).tickFormat(d3.format("$")); // Format as dollars with two decimal places
+  const yAxis = d3.axisLeft(y); // Format as dollars with two decimal places
 
   const colorScale = d3
     .scaleOrdinal()
@@ -202,7 +202,7 @@
           .attr("transform", function (d) {
             return `translate(${width},${y(d.value) + i * 12})`; // Adjust these values as needed for correct positioning
           })
-          .attr("class", "chart-labels")
+          .attr("class", "table-labels")
           .attr("x", 5) // This sets the distance of the text from the end of the line
           .attr("dy", ".35em") // This aligns the text vertically
           // .style("fill", colorScale(series.key))

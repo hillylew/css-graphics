@@ -21,8 +21,8 @@
   const dynamicMargin = {
     top: containerHeight * 0.1,
     right: containerWidth * 0.17,
-    bottom: containerHeight * 0.07,
-    left: containerWidth * 0.07,
+    bottom: containerHeight * 0.1,
+    left: containerWidth * 0.1,
   };
 
   // Calculate the width and height for the inner drawing area
@@ -111,7 +111,7 @@
       .attr("text-anchor", "middle")
       .attr("transform", `translate(0, -${dynamicMargin.top / 2})`)
       .style("fill", "#000")
-      .text("Tb/d");
+      .text("Million barrels per day");
 
     /* ----------------------- Draw the chart ----------------------- */
     // Define the area generator

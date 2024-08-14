@@ -118,7 +118,7 @@
         .html(
           `<div class="tooltip-title">${d.properties.name}</div>
           <div class="tooltip-content">
-          Toxic release: ${d.properties.release || 0} million lb
+          Toxic release: <strong>${d.properties.release || 0}</strong> million lb
           </div>`
         )
         .style("opacity", 0.9)
@@ -151,34 +151,37 @@
     .attr("class", "legend")
     .attr("transform", `translate(${width + dynamicMargin.left/2}, ${height / 2})`); // Adjust this line for legend positioning
 
-// Calculate the legend rectangle dimensions based on container size
-const legendRectWidth = containerWidth * 0.02; // 2% of container width
-const legendRectHeight = containerHeight * 0.02; // 2% of container height
+  // Calculate the dimensions for legend items
+  const legendItemSize = containerWidth * 0.02; // Set the width and height to be 3% of the container width
+  const gap = containerHeight * 0.01; // Set the gap between legend items
 
-legend
-  .selectAll("rect")
-  .data(legendData)
-  .enter()
-  .append("rect")
-  .attr("x", 0)
-  .attr("y", (d, i) => i * (legendRectHeight + 5)) // Add some spacing between rectangles
-  .attr("width", legendRectWidth)
-  .attr("height", legendRectHeight)
-  .style("fill", (d) => d.color)
-  .attr("stroke", "#000")
-  .attr("stroke-width", 0.5)
-  .on("mouseover", (event, d) => highlightStates(d.color))
-  .on("mouseout", resetHighlight);
+  // Update the legend position
+  // const legend = svg.append("g")
+  //   .attr("transform", `translate(${width}, ${height * 0.6})`);
 
-legend
-  .selectAll("text")
-  .data(legendData)
-  .enter()
-  .append("text")
-  .attr("x", legendRectWidth + 5) // Position text to the right of the rectangle
-  .attr("y", (d, i) => i * (legendRectHeight + 5) + legendRectHeight) // Center text vertically
-  .text((d) => d.text)
-  .attr("class", "chart-labels")
-  .on("mouseover", (event, d) => highlightStates(d.color))
-  .on("mouseout", resetHighlight);
+  // Append legend items
+  legendData.forEach((d, i) => {
+    legend.append("rect")
+      .attr("x", 0)
+      .attr("y", i * (legendItemSize + gap)) // Adjust spacing between legend items
+      .attr("width", legendItemSize)
+      .attr("height", legendItemSize)
+      .style("fill", d.color)
+      .attr("stroke", "black")
+      .attr("stroke-width", 0.5)
+      .attr("rx", 2) // Rounded corners
+      .attr("ry", 2) // Rounded corners
+      .attr("class", "legend-rect")
+      .on("mouseover", (event, data) => highlightStates(d.color))
+      .on("mouseout", resetHighlight);
+
+    legend.append("text")
+      .attr("x", legendItemSize + gap)
+      .attr("y", i * (legendItemSize + gap) + legendItemSize / 2)
+      .attr("alignment-baseline", "middle")
+      .text(d.text)
+      .attr("class", "chart-labels")
+      .on("mouseover", (event, data) => highlightStates(d.color))
+      .on("mouseout", resetHighlight);
+  });
 })();

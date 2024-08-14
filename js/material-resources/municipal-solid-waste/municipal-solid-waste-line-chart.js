@@ -23,8 +23,8 @@
     const dynamicMargin = {
       top: containerHeight * 0.1,  // Increased top margin for more space
       right: containerWidth * 0.2,
-      bottom: containerHeight * 0.05,
-      left: containerWidth * 0.05,
+      bottom: containerHeight * 0.1,
+      left: containerWidth * 0.1,
     };
   
     const width = containerWidth - dynamicMargin.left - dynamicMargin.right;

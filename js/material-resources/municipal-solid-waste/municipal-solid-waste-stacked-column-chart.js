@@ -148,7 +148,8 @@
             .attr("y", 0)
             .style("text-anchor", "start")
             .style("alignment-baseline", "middle")
-            .style("fill", d => color(d.key))
+            // .style("fill", d => color(d.key))
+            .style("fill", "black")
             .text(d => d.key);
 
         // Bind the legend to the highlight logic

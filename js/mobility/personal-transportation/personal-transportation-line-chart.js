@@ -52,9 +52,9 @@
         "Weighted Average"
       ])
       .range([
-        "#ED974A", 
-        "#CE5845", 
         "#3167A4", 
+        "#CE5845", 
+        "#ED974A", 
       ]);
   
     // Load and process the CSV data
@@ -204,7 +204,8 @@
           .attr("class", "chart-labels")
           .attr("x", 5) // This sets the distance of the text from the end of the line
           .attr("dy", ".35em") // This aligns the text vertically
-          .style("fill", colorScale(series.key))
+          // .style("fill", colorScale(series.key))
+          .style("fill", "black")
           .text(series.key);
       });
   

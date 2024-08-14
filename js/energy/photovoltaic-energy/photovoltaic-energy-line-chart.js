@@ -19,7 +19,7 @@
   const dynamicMargin = {
     top: containerHeight * 0.1, // 10% of the container height
     right: containerWidth * 0.15, // 10% of the container width
-    bottom: containerHeight * 0.05, // 10% of the container height
+    bottom: containerHeight * 0.1, // 10% of the container height
     left: containerWidth * 0.07, // 10% of the container width
   };
 
@@ -42,7 +42,7 @@
 
   // Define the axes
   const xAxis = d3.axisBottom(x).tickFormat(d3.timeFormat("%Y")).ticks(d3.timeYear.every(2));
-  const yAxis = d3.axisLeft(y).tickFormat(d3.format("$")).ticks(4); 
+  const yAxis = d3.axisLeft(y).ticks(4); 
 
   // Load and process the CSV data
   d3.csv(photovoltaic1).then((data) => {

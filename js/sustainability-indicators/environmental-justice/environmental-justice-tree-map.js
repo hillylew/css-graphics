@@ -16,9 +16,9 @@
     const containerHeight = containerWidth * aspectRatio;
 
     const dynamicMargin = {
-        top: containerHeight * 0.15, // Increased top margin for more space
-        right: containerWidth * 0.1,
-        bottom: containerHeight * 0.05,
+        top: containerHeight * 0.1, 
+        right: containerWidth * 0.15,
+        bottom: containerHeight * 0.1,
         left: containerWidth * 0.07,
     };
 
@@ -26,7 +26,7 @@
     const height = containerHeight - dynamicMargin.top - dynamicMargin.bottom;
 
     /* ----------------------- Color Scale ----------------------- */
-    const barColor = "#8FC8E5"; // Single bar color
+    const barColor = "#ED974A"; // Single bar color
 
     /* ----------------------- Data ----------------------- */
     const data = [
@@ -41,7 +41,7 @@
     const totalMetricTons = d3.sum(data, d => d['Metric Ton']);
 
     /* ----------------------- Scales ----------------------- */
-    const x = d3.scaleBand().rangeRound([0, width]).padding(0.1);
+    const x = d3.scaleBand().rangeRound([0, width]).padding(0.2);
     const y = d3.scaleLinear().rangeRound([height, 0]); // Invert y-axis to start from the bottom
 
     x.domain(data.map(d => d.Continent));

@@ -21,7 +21,7 @@
     top: containerHeight * 0.05,
     right: containerWidth * 0.15,
     bottom: containerHeight * 0.1,
-    left: containerWidth * 0.07,
+    left: containerWidth * 0.1,
   };
 
   // Calculate the width and height for the inner drawing area
@@ -143,7 +143,8 @@
       .attr("y", 0)
       .style("text-anchor", "start")
       .style("alignment-baseline", "middle")
-      .style("fill", (d) => colorScale(d.key))
+      // .style("fill", (d) => colorScale(d.key))
+      .style("fill", "black")
       .text((d) => d.key)
       .on("mouseover", (event, d) => {
         highlightAreaLayer(d.key);

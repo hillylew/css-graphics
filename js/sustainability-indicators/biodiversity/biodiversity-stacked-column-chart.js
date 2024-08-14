@@ -22,8 +22,8 @@
   const dynamicMargin = {
     top: containerHeight * 0.05,
     right: containerWidth * 0.4,
-    bottom: containerHeight * 0.05,
-    left: containerWidth * 0.08,
+    bottom: containerHeight * 0.1,
+    left: containerWidth * 0.1,
   };
 
   // Calculate the width and height for the inner drawing area
@@ -112,59 +112,62 @@
       .attr("width", xScale.bandwidth())
       .attr("height", (d) => yScale(d[0]) - yScale(d[1]));
 
-    // Define a variable to store the selected category for highlighting
-    let highlightedCategory = null;
+// Define a variable to store the selected category for highlighting
+let highlightedCategory = null;
 
-    const legend = svg
+const legend = svg
+  .append("g")
+  .attr("class", "chart-labels")
+  .attr("transform", `translate(${width + dynamicMargin.right * 0.1}, 0)`);
+
+// Calculate the dimensions for legend items
+const legendItemSize = width * 0.04; // Set the width and height to be 4% of the container width
+const gap = height * 0.02; // Gap between legend items
+
+const highlightOpacity = 0.8;
+const dimmedOpacity = 0.2;
+
+categories
+  .slice()
+  .reverse()
+  .forEach((category, i) => {
+    // Define each legend item
+    const legendRow = legend
       .append("g")
-      .attr("class", "chart-labels")
-      .attr("transform", `translate(${width + dynamicMargin.left / 2}, 0)`);
-
-    const legendItemHeight = containerHeight * 0.05;
-    const highlightOpacity = 0.8;
-    const dimmedOpacity = 0.2;
-
-    categories
-      .slice()
-      .reverse()
-      .forEach((category, i) => {
-        // Define each legend item
-        const legendRow = legend
-          .append("g")
-          .attr("transform", `translate(0, ${i * legendItemHeight})`)
-          .classed("legend-item", true)
-          .on("mouseover", function () {
-            // Highlight all rect of this category (i.e., same color) across all groups
-            highlightedCategory = category;
-            svg
-              .selectAll(".layer")
-              .style("opacity", (d) =>
-                d.key === category ? highlightOpacity : dimmedOpacity
-              );
-          })
-          .on("mouseout", function () {
-            // Reset the opacity and clear the highlighted category
-            highlightedCategory = null;
-            svg.selectAll(".layer").style("opacity", 1); // Reset all layers opacity to full on mouseout
-          });
-
-        // Legend color block
-        legendRow
-          .append("rect")
-          .attr("width", 18)
-          .attr("height", 18)
-          .attr("fill", colorScale(category))
-          .attr("rx", 3) // Rounded corners
-          .attr("ry", 3); // Rounded corners
-
-        // Legend label text
-        legendRow
-          .append("text")
-          .attr("x", 24)
-          .attr("y", 9)
-          .attr("dy", "0.35em")
-          .text(category);
+      .attr("transform", `translate(0, ${i * (legendItemSize + gap)})`)
+      .classed("legend-item", true)
+      .on("mouseover", function () {
+        // Highlight all rect of this category (i.e., same color) across all groups
+        highlightedCategory = category;
+        svg
+          .selectAll(".layer")
+          .style("opacity", (d) =>
+            d.key === category ? highlightOpacity : dimmedOpacity
+          );
+      })
+      .on("mouseout", function () {
+        // Reset the opacity and clear the highlighted category
+        highlightedCategory = null;
+        svg.selectAll(".layer").style("opacity", 1); // Reset all layers opacity to full on mouseout
       });
+
+    // Legend color block
+    legendRow
+      .append("rect")
+      .attr("width", legendItemSize)
+      .attr("height", legendItemSize)
+      .style("fill", colorScale(category))
+      .attr("rx", 2) // Rounded corners
+      .attr("ry", 2); // Rounded corners
+
+    // Legend label text
+    legendRow
+      .append("text")
+      .attr("x", legendItemSize + gap)
+      .attr("y", legendItemSize / 2)
+      .attr("alignment-baseline", "middle")
+      .text(category);
+  });
 
     const formatNumber = d3.format(",");
 

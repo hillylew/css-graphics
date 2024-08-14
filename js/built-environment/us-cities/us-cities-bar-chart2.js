@@ -17,7 +17,7 @@
     const dynamicMargin = {
       top: containerHeight * 0.02,
       right: containerWidth * 0.1,
-      bottom: containerHeight * 0.05,
+      bottom: containerHeight * 0.1,
       left: containerWidth * 0.15,
     };
   

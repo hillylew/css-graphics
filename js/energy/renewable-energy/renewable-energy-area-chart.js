@@ -42,7 +42,7 @@
 
   // Define the axes
   const xAxis = d3.axisBottom(x).tickFormat(d3.timeFormat("%Y")).ticks(d3.timeYear.every(10));
-  const yAxis = d3.axisLeft(y).tickFormat(d3.format(",")); // Adjust ticks as needed
+  const yAxis = d3.axisLeft(y).ticks(6).tickFormat(d3.format(",")); // Adjust ticks to increment by 200
 
   // Load and process the CSV data
   d3.csv(renewable5).then((data) => {

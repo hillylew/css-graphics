@@ -70,7 +70,7 @@
         }
 
         function appendResult(parent) {
-            appendResultBox(parent, 0, -height * 0.5, `Select Options to Compare`, `result-bg`, `result`);
+            appendResultBox2(parent, 0, -height * 0.5, `Select Options to Compare`, `result-bg`, `result`);
         }
 
         function appendRangeData(parent) {
@@ -120,13 +120,25 @@
 
             d3.selectAll(`.grid-item[data-car="${car}"][data-category="${category}"]`)
                 .classed('selected', false)
-                .style("fill", "#F2F2F2");
+                .style("fill", "#F2F2F2")
+                .style("stroke", "white")
+                .style("stroke-width", 1);
 
             d3.selectAll(`text[data-car="${car}"][data-category="${category}"]`)
-                .style("fill", "black");
+                .style("fill", "black")
+                .style("font-weight", "normal")
+                .attr("font-size", "12px");
+
+            d3.selectAll(`.grid-item[data-car="${car}"][data-category="${category}"][data-value="${value}"]`)
+                .classed('selected', true)
+                .style("fill", "#add8e6") // Light blue background to indicate selection
+                .style("stroke", "#0077b6") // Dark blue border for selected items
+                .style("stroke-width", 3);
 
             d3.selectAll(`text[data-car="${car}"][data-category="${category}"][data-value="${value}"]`)
-                .style("fill", "red");
+                .style("fill", "#0077b6")
+                .style("font-weight", "bold")
+                .attr("font-size", "14px"); // Larger font size for selected text
 
             updateRange(`car${car}`);
             compareResults();
@@ -138,11 +150,31 @@
                 car2: { type: null, ev: null }
             };
 
-            d3.selectAll('.grid-item').classed('selected', false).style('fill', '#F2F2F2').style('stroke', 'white').style('stroke-width', 1);
-            d3.selectAll('text[data-category]').style("fill", "black");
-            d3.select('#result').text("Select Options to Compare").style('fill', 'black');
-            d3.select('#range-data-car1').text("GHG Emissions Range").style('fill', 'black');
-            d3.select('#range-data-car2').text("GHG Emissions Range").style('fill', 'black');
+            d3.selectAll('.grid-item')
+                .classed('selected', false)
+                .style('fill', '#F2F2F2')
+                .style('stroke', 'white')
+                .style('stroke-width', 1);
+
+            d3.selectAll('text[data-category]')
+                .style("fill", "black")
+                .style("font-weight", "normal")
+                .attr("font-size", "12px");
+
+            d3.select('#result')
+                .text("Select Options to Compare")
+                .style('fill', 'black')
+                .style('font-weight', 'normal')
+                .attr("font-size", "12px");
+
+            d3.select('#range-data-car1')
+                .text("GHG Emissions Range")
+                .style('fill', 'black');
+
+            d3.select('#range-data-car2')
+                .text("GHG Emissions Range")
+                .style('fill', 'black');
+
             d3.select('#range-rect-car1').style('fill', '#F2F2F2');
             d3.select('#range-rect-car2').style('fill', '#F2F2F2');
         }
@@ -165,12 +197,18 @@
                 const result2 = data[car2.ev][car2.type].efficiency;
                 let difference = (result2 - result1).toFixed(2);
                 difference = difference > 0 ? `+${difference}` : difference;
-
-                d3.select('#result').attr("class", "chart-labels").text(`Change in Emissions: ${difference}%`).style('fill', 'red');
+        
+                const resultColor = difference >= 0 ? "#386660" : "#CE5845"; // Determine color based on positive or negative result
+        
+                d3.select('#result')
+                    .attr("class", "diagram-labels")
+                    .text(`Change in Emissions: ${difference}%`)
+                    .style('fill', resultColor);
+                
                 updateRange("car1");
                 updateRange("car2");
             } else {
-                d3.select('#result').attr("class", "chart-labels").text("Select Options to Compare").style('fill', 'black');
+                d3.select('#result').attr("class", "diagram-labels").text("Select Options to Compare").style('fill', 'black');
             }
         }
 
@@ -233,7 +271,7 @@
                 parent.append("text")
                     .attr("class", "chart-labels")
                     .attr("x", offsetX - boxWidth / 2 + boxWidth / 2)
-                    .attr("y", row + boxHeight + 15)
+                    .attr("y", row + boxHeight * 1.05)
                     .attr("text-anchor", "middle")
                     .attr("pointer-events", "none")
                     .attr("data-car", carId)
@@ -245,18 +283,30 @@
 
         function addEVOptions(parent, offsetX, boxWidth, boxHeight, spacing, carId) {
             const carEvs = ["ICEV", "HEV", "BEV"];
+            const imagePaths = {
+                "ICEV": "../../images/icon-icev.png",
+                "HEV": "../../images/icon-hev.png",
+                "BEV": "../../images/icon-bev.png"
+            };
+
+            // const imagePaths = {
+            //     "ICEV": `/sites/default/files/css-graphics/images/icon-icev.png`,
+            //     "HEV": `/sites/default/files/css-graphics/images/icon-hev.png`,
+            //     "BEV": `/sites/default/files/css-graphics/images/icon-bev.png`
+            // };
+
             carEvs.forEach((ev, index) => {
                 const row = spacing * (index + 1) - height * 0.5;
-                parent.append("rect")
+                parent.append("image")
                     .attr("class", "grid-item")
+                    .attr("xlink:href", imagePaths[ev])
                     .attr("x", offsetX - boxWidth / 2)
                     .attr("y", row)
-                    .attr("width", boxWidth)
-                    .attr("height", boxHeight)
+                    .attr("width", boxWidth * 1.1)
+                    .attr("height", boxHeight * 0.8)
                     .attr("data-car", carId)
                     .attr("data-category", "ev")
                     .attr("data-value", ev)
-                    .style("fill", "#F2F2F2")
                     .style("stroke", "white")
                     .attr("rx", 5)
                     .attr("ry", 5);
@@ -264,7 +314,7 @@
                 parent.append("text")
                     .attr("class", "chart-labels")
                     .attr("x", offsetX - boxWidth / 2 + boxWidth / 2)
-                    .attr("y", row + boxHeight / 2 + 4)
+                    .attr("y", row + boxHeight * 1.05)
                     .attr("text-anchor", "middle")
                     .attr("pointer-events", "none")
                     .attr("data-car", carId)
@@ -305,6 +355,38 @@
                 .attr("dy", ".35em")
                 .text(text);
         }
+
+        function appendResultBox2(parent, x, y, text, rectId, textId) {
+            const boxWidth = width * 0.20;
+            const columnGap = width * 0.05;
+            const totalWidth = (boxWidth * 2 + columnGap * 2) * 2;
+            const rectHeight = height * 0.1;
+
+            const groupBox = parent.append("g")
+                .attr("class", "result-group")
+                .attr("transform", `translate(${x}, ${y})`);
+
+            groupBox.append("rect")
+                .attr("class", "range-data-rect")
+                .attr("id", rectId)
+                .attr("x", -totalWidth / 2)
+                .attr("y", -rectHeight / 2)
+                .attr("width", totalWidth)
+                .attr("height", rectHeight)
+                .style("fill", "#F2F2F2")
+                .style("stroke", "white")
+                .attr("rx", 5)
+                .attr("ry", 5);
+
+            groupBox.append("text")
+                .attr("class", "diagram-labels")
+                .attr("id", textId)
+                .attr("x", 0)
+                .attr("y", 0)
+                .attr("text-anchor", "middle")
+                .attr("dy", ".35em")
+                .text(text);
+        }
     }
 
     renderDiagram();
@@ -314,11 +396,17 @@
     style.innerHTML = `
         .grid-item {
             cursor: pointer;
-            transition: fill 0.3s, stroke 0.3s;
+            transition: fill 0.3s, stroke 0.3s, transform 0.3s;
         }
         .grid-item:hover {
             fill: #B8B8B8;
             stroke: #888888;
+            transform: scale(1.03); // slight scale effect on hover
+        }
+        .grid-item.selected {
+            fill: #add8e6;  // Light blue for selected background
+            stroke: #0077b6;  // Dark blue for selected border
+            stroke-width: 3;
         }
         .range-data-rect, #reset-button {
             transition: fill 0.3s, stroke 0.3s;

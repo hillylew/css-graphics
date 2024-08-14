@@ -20,8 +20,8 @@
     const dynamicMargin = {
       top: containerHeight * 0.1,
       right: containerWidth * 0.17,
-      bottom: containerHeight * 0.07,
-      left: containerWidth * 0.07,
+      bottom: containerHeight * 0.1,
+      left: containerWidth * 0.1,
     };
   
     // Calculate the width and height for the inner drawing area
@@ -108,7 +108,7 @@
         .attr("text-anchor", "middle")
         .attr("transform", `translate(0, -${dynamicMargin.top / 2})`)
         .style("fill", "#000")
-        .text("Tb/d");
+        .text("Million barrels per day");
   
       /* ----------------------- Draw the chart ----------------------- */
       // Define the area generator
@@ -165,11 +165,7 @@
         .attr("y", 0)
         .style("text-anchor", "start")
         .style("alignment-baseline", "middle")
-        .style("fill", (d) => {
-          const color = d3.color(colorScale(d.key));
-          const brightness = (color.r * 299 + color.g * 587 + color.b * 114) / 1000;
-          return brightness > 125 ? "black" : colorScale(d.key);
-        })
+        .style("fill", "black")
         // .attr("stroke", "black")
         // .attr("stroke-width", 0.4)
         .text((d) => d.key)
