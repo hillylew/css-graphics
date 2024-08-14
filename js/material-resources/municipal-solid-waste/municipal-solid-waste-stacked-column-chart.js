@@ -95,16 +95,15 @@
                     const formatNumber = d3.format(",.1f");
                     const isHovered = key === hoveredCategory;
                     return `<tr style="opacity: ${isHovered ? 1 : 0.5}; font-weight: ${isHovered ? 'bold' : 'normal'};">
-                        <td><div style="width:10px; height:10px; background-color:${color(key)};};"></div></td>
-                        <td>${key}</td>
-                        <td style="text-align: right">${formatNumber(d.data[key])}%</td>
+                        <td><span class="color-legend"; style="background-color: ${color(key)};};"></span>${key}</td>
+                        <td class="value">${formatNumber(d.data[key])}%</td>
                     </tr>`;
                 }).join("");
 
                 tooltip.style("opacity", 1);
                 tooltip.html(
-                    `<div style="font-weight: bold; border-radius: 5px 5px 0 0; background-color: #f1eded;padding: 5px;">${d.data.year}</div>
-                    <table>
+                    `<div class="tooltip-title">${d.data.year}</div>
+                    <table class="tooltip-content">
                         ${tooltipData}
                     </table>`
                 )

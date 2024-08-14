@@ -100,7 +100,7 @@
                     const isHovered = key === hoveredCategory;
                     return `<tr style="opacity: ${isHovered ? 1 : 0.5}; font-weight: ${isHovered ? 'bold' : 'normal'};">
                         <td><span class="color-legend" style="background-color: ${color(key)};"></span>${key.replace(/([A-Z])/g, ' $1').toLowerCase()}</td>
-                        <td style="text-align: right">${d.data[key]}%</td>
+                        <td class="value">${d.data[key]}%</td>
                     </tr>`;
                 }).join("");
 

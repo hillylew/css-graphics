@@ -136,9 +136,9 @@
                 .style("stroke-width", 3);
 
             d3.selectAll(`text[data-car="${car}"][data-category="${category}"][data-value="${value}"]`)
-                .style("fill", "#0077b6")
-                .style("font-weight", "bold")
-                .attr("font-size", "14px"); // Larger font size for selected text
+                .style("fill", "red")
+                .style("font-weight", "bold");
+                // .attr("font-size", "14px"); // Larger font size for selected text
 
             updateRange(`car${car}`);
             compareResults();
@@ -198,7 +198,7 @@
                 let difference = (result2 - result1).toFixed(2);
                 difference = difference > 0 ? `+${difference}` : difference;
         
-                const resultColor = difference >= 0 ? "#386660" : "#CE5845"; // Determine color based on positive or negative result
+                const resultColor = difference >= 0 ? "green" : "red"; // Determine color based on positive or negative result
         
                 d3.select('#result')
                     .attr("class", "diagram-labels")
