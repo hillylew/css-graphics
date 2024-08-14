@@ -158,6 +158,7 @@
         // Add images to the left and right of the pie chart with dynamic sizes
         svg.append("image")
             .attr("xlink:href", "../../images/fork.png") // Path to the fork image
+            // .attr("xlink:href", "/sites/default/files/css-graphics/images/fork.png") 
             .attr("width", forkSize.width) // Set dynamic width
             .attr("height", forkSize.height) // Set dynamic height
             .attr("x", -width * 0.7 - forkSize.width / 2) // Position to the left of the pie chart
@@ -165,6 +166,7 @@
 
         svg.append("image")
             .attr("xlink:href", "../../images/spoon.png") // Path to the spoon image
+            // .attr("xlink:href", "/sites/default/files/css-graphics/images/spoon.png") 
             .attr("width", spoonSize.width) // Set dynamic width
             .attr("height", spoonSize.height) // Set dynamic height
             .attr("x", width * 0.7 - spoonSize.width / 2) // Position to the right of the pie chart
