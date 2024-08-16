@@ -26,16 +26,11 @@
   font-size: 7px;
 }
 
-.chart-subtitle {
-  font-size: 9px;
-}
-
 .diagram-labels {
   font-size: 10px;
 }
 
 /* Tooltip */
-
 .tooltip {
   pointer-events: none;
   position: fixed;
@@ -75,9 +70,7 @@
   background-color: #f1eded;
 }
 
-.tooltip-title,
-.tooltip-total,
-.tooltip-content {
+.tooltip-title {
   padding: 4px 6px;
 }
 
@@ -92,6 +85,11 @@ table.tooltip-total {
   border-spacing: 0;
 }
 
+.tooltip-content td,
+.tooltip-total td {
+  padding: 0 6px;
+}
+
 .tooltip-content td:first-child,
 .tooltip-total td:first-child {
   padding-right: 8px;
@@ -103,6 +101,7 @@ table.tooltip-total {
   width: 10px;
   height: 10px;
   margin-right: 5px;
+  border-radius: 20%;
 }
 
 
@@ -113,14 +112,14 @@ table.tooltip-total {
   padding: 10px;
   border-radius: 5px;
   border: 1px solid #ced4da;
-  font-size: 1rem;
+  /* font-size: 1rem; */
   background-color: #fff;
   color: #495057;
   cursor: pointer;
   appearance: none; /* Removes default arrow */
   background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
   background-repeat: no-repeat;
-  background-position: calc(100% - 5px) center; 
+  background-position: calc(100% - 5px) center;
   padding-left: 10px;
   padding-right: 30px; /* Ensure space for the arrow */
 }
@@ -129,6 +128,57 @@ table.tooltip-total {
   background-color: #e9ecef; /* Light grey background on hover */
 }
 
+
+/* pie chart */
+path.slice {
+  stroke-width: 2px;
+}
+
+polyline {
+  opacity: .3;
+  stroke: black;
+  stroke-width: 2px;
+  fill: none;
+}
+
+
+
+/* Styled Table */
+
+.styled-table {
+  border-collapse: collapse;
+  font-size: 1em;
+  font-family: 'Arial', sans-serif;
+  overflow-x: auto;
+  max-width: 100%; /* Ensure it doesn't exceed the container */
+}
+
+.styled-table thead tr {
+  background-color: #1C476D;
+  color: #ffffff;
+  text-align: left;
+}
+
+.styled-table th,
+.styled-table td {
+  padding: 12px 15px;
+}
+
+.styled-table tbody tr {
+  border-bottom: 1px solid #dddddd;
+}
+
+.styled-table tbody tr:nth-of-type(even) {
+  background-color: #f3f3f3;
+}
+
+.styled-table tbody tr:hover {
+  background-color: #FED679;
+}
+
+.table-labels {
+  font-size: 6px;
+}
 
 
 /* tablet */
@@ -152,8 +202,8 @@ table.tooltip-total {
     font-size: 10px;
   }
 
-  .chart-subtitle {
-    font-size: 12px;
+  .table-labels {
+    font-size: 8px;
   }
 
   .diagram-labels {
@@ -186,8 +236,8 @@ table.tooltip-total {
     font-size: 12px;
   }
 
-  .chart-subtitle {
-    font-size: 14px;
+  .table-labels {
+    font-size: 10px;
   }
 
   .diagram-labels {
