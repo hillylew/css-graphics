@@ -10,7 +10,7 @@
     const tooltip = d3.select(container).select("#tooltip");
 
     /* ----------------------- Dynamic dimensions ----------------------- */
-    const aspectRatio = 0.8;
+    const aspectRatio = 0.7;
 
     // Get the container and its dimensions
     const containerWidth = container.offsetWidth; // Use offsetWidth for full element width
@@ -18,9 +18,9 @@
 
     // Calculate the dynamic margins
     const dynamicMargin = {
-        top: containerHeight * 0.05,
-        right: containerWidth * 0.1,
-        bottom: containerHeight * 0.2,
+        top: containerHeight * 0.1,
+        right: containerWidth * 0.05,
+        bottom: containerHeight * 0.15,
         left: containerWidth * 0.1,
     };
 
@@ -42,34 +42,15 @@
     const y = d3.scaleLinear().range([height, 0]);
 
     const xAxis = d3.axisBottom(x);
-    const yAxis = d3.axisLeft(y).ticks(width / 80).tickFormat(d => `${d}¢`);
+    const yAxis = d3.axisLeft(y).ticks(width / 80).tickFormat(d => `${d}`);
 
     const colorScale = d3.scaleOrdinal().range(["#7fc97f", "#beaed4", "#fdc086", "#ffff99", "#386cb0"]);
-
-    /* ----------------------- Create Gradient ----------------------- */
-    const defs = svg.append("defs");
-    const gradient = defs
-        .append("linearGradient")
-        .attr("id", "bar-gradient")
-        .attr("gradientTransform", "rotate(90)");
-
-    gradient
-        .append("stop")
-        .attr("offset", "0%")
-        .attr("stop-color", "#CE5845")
-        .attr("stop-opacity", 1);
-
-    gradient
-        .append("stop")
-        .attr("offset", "100%")
-        .attr("stop-color", "#FED679")
-        .attr("stop-opacity", 1);
 
     /* ----------------------- Create Tooltip ----------------------- */
     function onMouseMove(event, d) {
 
-        const tooltipX = event.clientX + window.scrollX;
-        const tooltipY = event.clientY + window.scrollY;
+        const tooltipX = event.clientX;
+        const tooltipY = event.clientY;
         
         // Position tooltip
         tooltip
@@ -81,11 +62,11 @@
                 <table class="tooltip-content">
                     <tr>
                         <td>Maximum:</td>
-                        <td class="value"><strong>${d.val2}</strong>¢</td>
+                        <td class="value"><strong>${d.val2}</strong></td>
                     </tr>
                     <tr>
                         <td>Minimum:</td>
-                        <td class="value"><strong>${d.val1}</strong>¢</td>
+                        <td class="value"><strong>${d.val1}</strong></td>
                     </tr>
                 </table>
             `);
@@ -96,13 +77,7 @@
     }
 
     // Load and process the CSV data
-
-    // Define csv file path if it's not already defined
-    if (typeof csvFile === "undefined") {
-        var csvFile = "../../data/energy/grid-energy/grid-energy5.csv";
-    }
-
-    d3.csv(csvFile).then((data) => {
+    d3.csv(gridEnergy5).then((data) => {
         // Parse the data
         data.forEach((d) => {
             d.val1 = +d.val1;
@@ -119,26 +94,87 @@
             .append("g")
             .attr("transform", `translate(0,${height})`)
             .call(xAxis)
-            .attr("class", "chart-labels")
+            .attr("class", "chart-labels-x")
             .selectAll("text")
-            .style("text-anchor", "end")
-            // .style("font-weight", "bold")
-            .attr("transform", "rotate(-45)");
+            .style("text-anchor", "middle"); // Centering the text
+
+        svg.selectAll(".tick line").remove();
 
         // Draw the Y-axis
         svg
             .append("g")
             .call(yAxis)
-            .attr("class", "chart-labels");
+            .attr("class", "chart-labels-y");
 
         // Add Y-axis label
         svg.append("text")
-            .attr("text-anchor", "middle")
-            .attr("transform", "rotate(-90)")
-            .attr("x", -height / 2)
-            .attr("y", -dynamicMargin.left * 0.7)
             .attr("class", "chart-labels")
-            .text("LCOS (cents/kWh)");
+            .attr("text-anchor", "middle")
+            .attr("transform", `translate(0, -${dynamicMargin.top * 0.7})`) // Position above axis
+            .attr("x", 0) // Center horizontally
+            .style("fill", "#000")
+            .text("LCOS (cents/kWh)")
+            .each(function() { wrapTextY(d3.select(this), dynamicMargin.left * 2);});
+
+        // Wrap x-axis tick labels
+        svg.selectAll(".chart-labels-x .tick text")
+            .each(function() { wrapTextX(d3.select(this), x.bandwidth()); });
+
+        // Function to wrap text for x-axis
+        function wrapTextX(text, width) {
+            text.each(function() {
+                const elem = d3.select(this);
+                const words = elem.text().split(/\s+/).reverse();
+                let word;
+                let line = [];
+                let lineNumber = 0;
+                const lineHeight = 1.1; // ems
+
+                const y = elem.attr("y");
+                const dy = parseFloat(elem.attr("dy")) || 0;
+
+                let tspan = elem.text(null).append("tspan").attr("x", 0).attr("y", y).attr("dy", dy + "em");
+
+                while (word = words.pop()) {
+                    line.push(word);
+                    tspan.text(line.join(" "));
+                    if (tspan.node().getComputedTextLength() > width) {
+                        line.pop();
+                        tspan.text(line.join(" "));
+                        line = [word];
+                        tspan = elem.append("tspan").attr("x", 0).attr("y", y).attr("dy", `${++lineNumber * lineHeight + dy}em`).text(word);
+                    }
+                }
+            });
+        }
+
+        // Function to wrap text for y-axis (retain original function)
+        function wrapTextY(text, width) {
+            text.each(function() {
+                const elem = d3.select(this);
+                const words = elem.text().split(/\s+/).reverse();
+                let word;
+                let line = [];
+                let lineNumber = 0;
+                const lineHeight = 1.1; // ems
+
+                const y = elem.attr("y");
+                const dy = parseFloat(elem.attr("dy")) || 0;
+
+                let tspan = elem.text(null).append("tspan").attr("x", 0).attr("y", y).attr("dy", dy + "em");
+
+                while (word = words.pop()) {
+                    line.push(word);
+                    tspan.text(line.join(" "));
+                    if (tspan.node().getComputedTextLength() > width) {
+                        line.pop();
+                        tspan.text(line.join(" "));
+                        line = [word];
+                        tspan = elem.append("tspan").attr("x", 0).attr("y", y).attr("dy", `${++lineNumber * lineHeight + dy}em`).text(word);
+                    }
+                }
+            });
+        }
 
         /* ----------------------- Draw the ranges ----------------------- */
         svg
@@ -151,7 +187,7 @@
             .attr("y", d => y(d.val2))
             .attr("width", x.bandwidth())
             .attr("height", d => y(d.val1) - y(d.val2))
-            .style("fill", "url(#bar-gradient)")
+            .style("fill", "#CE5845") // Solid color
             .style("opacity", 0.7)
             .on("mousemove", onMouseMove)
             .on("mouseout", onMouseOut);

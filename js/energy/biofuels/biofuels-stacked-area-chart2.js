@@ -20,8 +20,8 @@
     const dynamicMargin = {
       top: containerHeight * 0.1,
       right: containerWidth * 0.17,
-      bottom: containerHeight * 0.07,
-      left: containerWidth * 0.07,
+      bottom: containerHeight * 0.1,
+      left: containerWidth * 0.1,
     };
   
     // Calculate the width and height for the inner drawing area
@@ -47,17 +47,11 @@
   
     const colorScale = d3
       .scaleOrdinal()
-      .domain(["U.S.","European Union","Brazil","Indonesia","India"])
-      .range(["#1d476d", "#4084bc", "#8cc9f2", "#ffcb03", "#ffe07d"]);
+      .domain(["U.S.","Brazil", "European Union", "Indonesia","Rest of the World"])
+      .range(["#1d476d", "#4084bc", "#8cc9f2", "#ffcb03", "#BFBFBF"]);
   
     /* ----------------------- Load and process the CSV data ----------------------- */
-
-    // Define csv file path if it's not already defined
-    if (typeof csvFile === "undefined") {
-      var csvFile = "../../data/energy/biofuels/biofuels2.csv";
-    }
-
-    d3.csv(csvFile).then((data) => {
+    d3.csv(biofuels2).then((data) => {
       // Parse years and convert string values to numbers
       data.forEach((d) => {
         d.Year = new Date(+d.Year, 0, 1);
@@ -69,16 +63,8 @@
       // Stack the data
       const stack = d3
         .stack()
-        .keys(["U.S.","Brazil","European Union","Indonesia","India"]);
+        .keys(["U.S.","Brazil","European Union","Indonesia","Rest of the World"]);
       const stackedData = stack(data);
-
-      // svg.append("text")
-      //   .attr("x", width / 2)
-      //   .attr("y", -dynamicMargin.top/2) // Place below the chart
-      //   .attr("class", "chart-subtitle")
-      //   .attr("text-anchor", "middle") // Center the text
-      //   .attr("fill", "#000") // Text color
-      //   .text("Biodiesel"); 
   
       /* ----------------------- Update the scale domains with the processed data ----------------------- */
       x.domain(d3.extent(data, (d) => d.Year));
@@ -122,7 +108,7 @@
         .attr("text-anchor", "middle")
         .attr("transform", `translate(0, -${dynamicMargin.top / 2})`)
         .style("fill", "#000")
-        .text("Tb/d");
+        .text("Million barrels per day");
   
       /* ----------------------- Draw the chart ----------------------- */
       // Define the area generator
@@ -179,7 +165,9 @@
         .attr("y", 0)
         .style("text-anchor", "start")
         .style("alignment-baseline", "middle")
-        .style("fill", (d) => colorScale(d.key))
+        .style("fill", "black")
+        // .attr("stroke", "black")
+        // .attr("stroke-width", 0.4)
         .text((d) => d.key)
         .on("mouseover", (event, d) => {
           highlightAreaLayer(d.key);
@@ -214,8 +202,8 @@
           (d) => d.Year.getFullYear() === date.getFullYear()
         );
 
-        const tooltipX = event.clientX + window.scrollX;
-        const tooltipY = event.clientY + window.scrollY;
+        const tooltipX = event.clientX;
+        const tooltipY = event.clientY;
   
         // Position tooltip
         tooltip
@@ -248,7 +236,7 @@
             hoverData["U.S."] +
             hoverData.Brazil +
             hoverData["European Union"] +
-            hoverData.India +
+            hoverData["Rest of the World"] +
             hoverData.Indonesia;
 
             tooltip.html(`
@@ -257,12 +245,12 @@
           
                     <tr>
                     <td><span class="color-legend" style="background-color: ${colorScale(
-                      "India"
-                    )};"></span>India</td>
+                      "Rest of the World"
+                    )};"></span>Rest of the World</td>
                     <td class="value">${formatNumber(
-                      hoverData.India
+                      hoverData["Rest of the World"]
                     )} (${formatNumber2(
-        (hoverData.India / total) * 100
+        (hoverData["Rest of the World"] / total) * 100
       )}%)</td>
                     </tr>
                     <tr>
@@ -319,7 +307,7 @@
           let accumulatingStack = 0;
   
           // Calculate the top edge of each stack element
-          ["U.S.","European Union","Brazil","Indonesia","India"].forEach(
+          ["U.S.","European Union","Brazil","Indonesia","Rest of the World"].forEach(
             (cat) => {
               accumulatingStack += hoverData[cat];
               totalStack.push(accumulatingStack);

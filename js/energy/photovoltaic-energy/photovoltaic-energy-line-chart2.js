@@ -18,7 +18,7 @@
   const dynamicMargin = {
     top: containerHeight * 0.1, // 5% of the container height
     right: containerWidth * 0.3, // 10% of the container width
-    bottom: containerHeight * 0.05, // 10% of the container height
+    bottom: containerHeight * 0.1, // 10% of the container height
     left: containerWidth * 0.05, // 7% of the container width
   };
 
@@ -37,7 +37,7 @@
   const y = d3.scaleLinear().range([height, 0]);
 
   const xAxis = d3.axisBottom(x).tickFormat(d3.timeFormat("%Y"));
-  const yAxis = d3.axisLeft(y).tickFormat(d3.format("$")); // Format as dollars with two decimal places
+  const yAxis = d3.axisLeft(y); // Format as dollars with two decimal places
 
   const colorScale = d3
     .scaleOrdinal()
@@ -50,12 +50,7 @@
     .range(["#1d476d", "#4084bc", "#ED974A", "#CE5845"]);
 
   
-  // Define csv file path if it's not already defined
-  if (typeof csvFile === "undefined") {
-    var csvFile = "../../data/energy/photovoltaic-energy/photovoltaic-energy3.csv";
-  }
-
-  d3.csv(csvFile).then((data) => {
+  d3.csv(photovoltaic3).then((data) => {
     // Parse years and convert string values to numbers
     data.forEach((d) => {
       d.Year = new Date(+d.Year, 0, 1);
@@ -207,10 +202,11 @@
           .attr("transform", function (d) {
             return `translate(${width},${y(d.value) + i * 12})`; // Adjust these values as needed for correct positioning
           })
-          .attr("class", "chart-labels")
+          .attr("class", "table-labels")
           .attr("x", 5) // This sets the distance of the text from the end of the line
           .attr("dy", ".35em") // This aligns the text vertically
-          .style("fill", colorScale(series.key))
+          // .style("fill", colorScale(series.key))
+          .style("fill", "black")
           .text(line);
       });
     });
@@ -222,8 +218,8 @@
         (d) => d.Year.getFullYear() === date.getFullYear()
       );
 
-      const tooltipX = event.clientX + window.scrollX;
-      const tooltipY = event.clientY + window.scrollY;
+      const tooltipX = event.clientX;
+      const tooltipY = event.clientY;
 
       // Position tooltip
       tooltip

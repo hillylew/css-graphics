@@ -43,7 +43,7 @@
 
   // Define the axes
   const xAxis = d3.axisBottom(x).tickFormat(d3.timeFormat("%Y"));
-  const yAxis = d3.axisLeft(y).tickFormat(d3.format("$")).ticks(4);
+  const yAxis = d3.axisLeft(y).ticks(4);
 
   const colorScale = d3
     .scaleOrdinal()
@@ -76,13 +76,7 @@
     ]);
 
   // Load and process the CSV data
-
-  // Define csv file path if it's not already defined
-  if (typeof csvFile === "undefined") {
-    var csvFile = "../../data/energy/renewable-energy/renewable-energy2.csv";
-  }
-    
-  d3.csv(csvFile).then((data) => {
+  d3.csv(renewable2).then((data) => {
     // Parse years and convert string values to numbers
     data.forEach((d) => {
       d.Year = new Date(+d.Year, 0, 1);
@@ -143,9 +137,9 @@
     // Notes
     yAxisGroup
       .append("text")
-      .attr("class", "chart-labels")
-      .attr("text-anchor", "left")
-      .attr("transform", `translate(${width / 2}, ${height + dynamicMargin.bottom * 0.8})`)
+      .attr("class", "table-labels")
+      .attr("text-anchor", "start")
+      .attr("transform", `translate(0, ${height + dynamicMargin.bottom * 0.9})`)
       .style("fill", "#000")
       .text("* 2022 data is not available in the Lazard report");
 
@@ -259,7 +253,8 @@
         .attr("class", "chart-labels")
         .attr("x", 5) // This sets the distance of the text from the end of the line
         .attr("dy", ".35em") // This aligns the text vertically
-        .style("fill", colorScale(series.key))
+        // .style("fill", colorScale(series.key))
+        .style("fill", "black")
         .text(fixLegend);
     });
 
@@ -270,8 +265,8 @@
         (d) => d.Year.getFullYear() === date.getFullYear()
       );
 
-      const tooltipX = event.clientX + window.scrollX;
-      const tooltipY = event.clientY + window.scrollY;
+      const tooltipX = event.clientX;
+      const tooltipY = event.clientY;
 
       // Position tooltip
       tooltip

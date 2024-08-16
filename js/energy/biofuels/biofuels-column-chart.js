@@ -55,13 +55,7 @@
          
 
     /* ----------------------- Loading and processing data ----------------------- */
-    
-    // Define csv file path if it's not already defined
-    if (typeof csvFile === "undefined") {
-        var csvFile = "../../data/energy/biofuels/biofuels3.csv";
-    }
-
-    d3.csv(csvFile, function (d) {
+    d3.csv(biofuels3, function (d) {
         // This function parses each row of the CSV
         d["Biofuel yield"] = +d["Biofuel yield"]; // Convert yield to number
         return d;

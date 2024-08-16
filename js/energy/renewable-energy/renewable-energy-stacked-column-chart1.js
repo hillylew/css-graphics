@@ -57,12 +57,7 @@
     // If you stack it wihtout subtracking, you would be "adding" the Annual Additions twice. 
     // For these reasons, you need to add Annual Additions and Cumulative Capacity to get the REAL Cumulative Capacity data. 
 
-    // Define csv file path if it's not already defined
-    if (typeof csvFile === "undefined") {
-        var csvFile = "../../data/energy/renewable-energy/renewable-energy3.csv";
-    }
-
-    d3.csv(csvFile).then((data) => {
+    d3.csv(renewable3).then((data) => {
         // Parse years and convert string values to numbers
         data.forEach((d) => {
             d.Year = new Date(+d.Year, 0, 1);
@@ -171,7 +166,8 @@
             .attr("y", 0)
             .style("text-anchor", "start")
             .style("alignment-baseline", "middle")
-            .style("fill", (d) => colorScale(d.key))
+            // .style("fill", (d) => colorScale(d.key))
+            .style("fill", "black")
             .text((d) => d.key);
 
         // Bind the legend to the same highlight logic
@@ -185,8 +181,8 @@
             const hoveredYear = x.domain().find((year) => x(year) <= xPos && xPos < x(year) + x.bandwidth());
             const hoverData = data.find((d) => d.Year.getFullYear() === hoveredYear.getFullYear());
 
-            const tooltipX = event.clientX + window.scrollX;
-            const tooltipY = event.clientY + window.scrollY;
+            const tooltipX = event.clientX;
+            const tooltipY = event.clientY;
 
             // Position tooltip
             tooltip

@@ -42,16 +42,10 @@
 
   // Define the axes
   const xAxis = d3.axisBottom(x).tickFormat(d3.timeFormat("%Y")).ticks(d3.timeYear.every(2));
-  const yAxis = d3.axisLeft(y).tickFormat(d3.format("$")).ticks(4); 
+  const yAxis = d3.axisLeft(y).ticks(4); 
 
   // Load and process the CSV data
-
-  // Define csv file path if it's not already defined
-  if (typeof csvFile === "undefined") {
-    var csvFile = "../../data/energy/wind-energy/wind-energy1.csv";
-  }
-
-  d3.csv(csvFile).then((data) => {
+  d3.csv(wind1).then((data) => {
     // Parse years and convert string values to numbers
     data.forEach((d) => {
       d.Year = new Date(+d.Year, 0, 1);
@@ -162,8 +156,8 @@
         (d) => d.Year.getFullYear() === date.getFullYear()
       );
 
-      const tooltipX = event.clientX + window.scrollX;
-      const tooltipY = event.clientY + window.scrollY;
+      const tooltipX = event.clientX;
+      const tooltipY = event.clientY;
 
       // Position tooltip
       tooltip

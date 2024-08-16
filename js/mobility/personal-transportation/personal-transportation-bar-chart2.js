@@ -18,7 +18,7 @@
       top: containerHeight * 0.1,
       right: containerWidth * 0.1,
       bottom: containerHeight * 0.15,
-      left: containerWidth * 0.15,
+      left: containerWidth * 0.18,
     };
   
     const width = containerWidth - dynamicMargin.left - dynamicMargin.right;
@@ -35,7 +35,7 @@
     /* ----------------------- Scales, axes, and color ----------------------- */
     const yScale = d3.scaleBand().range([height, 0]).padding(0.05);
     const xScale = d3.scaleLinear().range([0, width]);
-    const colorScale = d3.scaleOrdinal().range(["#3167A4"]);
+    const colorScale = d3.scaleOrdinal().range(["#8FC8E5"]);
     const formatDecimal = d3.format(".0f");
   
     const xAxis = (g) => g
@@ -54,13 +54,7 @@
     const yAxis = (g) => g.call(d3.axisLeft(yScale).tickSizeOuter(0).tickSizeInner(0).tickPadding(10));
   
     /* ----------------------- Loading and processing data ----------------------- */
-
-    // Define csv file path if it's not already defined
-    if (typeof csvFile === "undefined") {
-        var csvFile = "../../data/mobility/personal-transportation/personal-transportation4.csv";
-    }
-
-    d3.csv(csvFile).then((data) => {
+    d3.csv(personalTransportation4).then((data) => {
       data.forEach(d => {
         d.Intensity = +d["Intensity (BTU/passenger-mile)"];
         d.LoadFactor = +d["Load Factor (persons/vehicle)"];
@@ -107,8 +101,8 @@
         .on('mouseover', function (event, d) {
           d3.select(this).attr("opacity", 0.5);
 
-            const tooltipX = event.clientX + window.scrollX;
-            const tooltipY = event.clientY + window.scrollY;
+          const tooltipX = event.clientX;
+          const tooltipY = event.clientY;
   
           tooltip.html(`
             <div class="tooltip-title">${d.Mode}</div>
@@ -128,8 +122,8 @@
             .style("top", `${tooltipY}px`);
         })
         .on("mousemove", function (event) {
-            const tooltipX = event.clientX + window.scrollX;
-            const tooltipY = event.clientY + window.scrollY;
+            const tooltipX = event.clientX;
+            const tooltipY = event.clientY;
             tooltip
                 .style("left", `${tooltipX + dynamicMargin.left / 4}px`)
                 .style("top", `${tooltipY}px`);
@@ -148,15 +142,15 @@
         .attr("dy", "0.35em")
         .attr("text-anchor", "start")
         .text(d => d.LoadFactor)
-        .attr("fill", "red");  // Make the load factor labels red
+        .attr("fill", "#CE5845");  // Make the load factor labels red
   
       // Add a note/label for Load Factor
       svg.append("text")
-        .attr("x", width - dynamicMargin.right)
+        .attr("x", width - dynamicMargin.right / 2)
         .attr("y", -dynamicMargin.top / 2)
         .attr("class", "chart-labels")
         .attr("text-anchor", "end")
-        .attr("fill", "red")
+        .attr("fill", "#CE5845")
         .text("Load Factor (persons/vehicle)");
     });
   })();

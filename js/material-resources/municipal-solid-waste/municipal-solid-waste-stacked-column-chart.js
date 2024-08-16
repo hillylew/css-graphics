@@ -41,13 +41,7 @@
         .range(["#1D476D", "#3167A4", "#8FC8E5", "#386660", "#E2E27A"]);
 
     // Load the CSV file and process it
-
-    // Define csv file path if it's not already defined
-    if (typeof csvFile === "undefined") {
-        var csvFile = "../../data/material-resources/municipal-solid-waste/municipal-solid-waste2.csv";
-    }
-
-    d3.csv(csvFile).then((data) => {
+    d3.csv(msw2).then((data) => {
         data.forEach(d => {
             d.year = +d.Year;
             d.Recycled = +d.Recycled;
@@ -94,23 +88,22 @@
                 // d3.select(this).style("fill", "orange");
                 d3.select(this).style("opacity", 0.5);
 
-                const tooltipX = event.clientX + window.scrollX;
-                const tooltipY = event.clientY + window.scrollY;
+                const tooltipX = event.clientX;
+                const tooltipY = event.clientY;
 
                 const tooltipData = categories.slice().reverse().map(key => {
                     const formatNumber = d3.format(",.1f");
                     const isHovered = key === hoveredCategory;
                     return `<tr style="opacity: ${isHovered ? 1 : 0.5}; font-weight: ${isHovered ? 'bold' : 'normal'};">
-                        <td><div style="width:10px; height:10px; background-color:${color(key)};};"></div></td>
-                        <td>${key}</td>
-                        <td style="text-align: right">${formatNumber(d.data[key])}%</td>
+                        <td><span class="color-legend"; style="background-color: ${color(key)};};"></span>${key}</td>
+                        <td class="value">${formatNumber(d.data[key])}%</td>
                     </tr>`;
                 }).join("");
 
                 tooltip.style("opacity", 1);
                 tooltip.html(
-                    `<div style="font-weight: bold; border-radius: 5px 5px 0 0; background-color: #f1eded;padding: 5px;">${d.data.year}</div>
-                    <table>
+                    `<div class="tooltip-title">${d.data.year}</div>
+                    <table class="tooltip-content">
                         ${tooltipData}
                     </table>`
                 )
@@ -154,7 +147,8 @@
             .attr("y", 0)
             .style("text-anchor", "start")
             .style("alignment-baseline", "middle")
-            .style("fill", d => color(d.key))
+            // .style("fill", d => color(d.key))
+            .style("fill", "black")
             .text(d => d.key);
 
         // Bind the legend to the highlight logic

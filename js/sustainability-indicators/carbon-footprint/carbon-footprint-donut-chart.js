@@ -1,174 +1,183 @@
-(function () {
-    /* ----------------------- Create Tooltip ------------------------ */
-    const container = document.getElementById("carbon-footprint-donut-chart");
+(function() {
+    const container = document.getElementById("carbon-footprint-chart");
 
-   const tooltipDiv = document.createElement("div");
-   tooltipDiv.id = "tooltip";
-   tooltipDiv.className = "tooltip";
-   container.appendChild(tooltipDiv);
-   
-   const tooltip = d3.select(container).select("#tooltip");
+    const tooltipDiv = document.createElement("div");
+    tooltipDiv.id = "tooltip";
+    tooltipDiv.className = "tooltip";
+    container.appendChild(tooltipDiv);
 
-    // Dynamic dimensions
-    const aspectRatio = 1; // Donut chart is usually square
-
-    // Get the container and its dimensions
+    const tooltip = d3.select(container).select("#tooltip");
+    const aspectRatio = 0.8;
     const containerWidth = container.offsetWidth;
     const containerHeight = containerWidth * aspectRatio;
 
-    // Calculate the dynamic margins
     const dynamicMargin = {
-        top: containerHeight * 0.05,
-        right: containerWidth * 0.15,
-        bottom: containerHeight * 0.05,
-        left: containerWidth * 0.1,
+        top: containerHeight * 0.02,
+        right: containerWidth * 0.2,
+        bottom: containerHeight * 0.02,
+        left: containerWidth * 0.2,
     };
 
-    // Calculate the width and height for the inner drawing area
     const width = containerWidth - dynamicMargin.left - dynamicMargin.right;
     const height = containerHeight - dynamicMargin.top - dynamicMargin.bottom;
-    const radius = Math.min(width, height) / 2;
+    const radius = Math.min(width, height) / 2.5; // Smaller radius for the pie chart
 
-    // Append SVG object
-    const svg = d3
-        .select("#carbon-footprint-donut-chart")
+    const svg = d3.select("#carbon-footprint-chart")
         .append("svg")
         .attr("width", containerWidth)
         .attr("height", containerHeight)
         .append("g")
-        .attr("transform", "translate(" + containerWidth / 2 + "," + containerHeight / 2 + ")");
+        .attr("transform", `translate(${containerWidth / 2},${containerHeight / 2})`);
 
-    // Placeholder for displaying images
-    const percentageImg = svg.append('image')
-        .attr('class', 'percentage-image')
-        .attr('x', -35) // Adjust based on the new image size
-        .attr('y', -60) // Adjust this value to position the larger image
-        .attr('width', 70) // Set the new width
-        .attr('height', 70) // Set the new height
-        .style('display', 'none');
+    const color = d3.scaleOrdinal()
+        .domain(["Meats", "Dairy", "Beverages", "Seafood", "Eggs", "Vegetables", "Grain", "Fruits", "Other"])
+        .range(["#1C476D", "#4084BC", "#AEDBED", "#386660", "#E2E27A", "#CE5845", "#ED974A", "#FFCB05", "#D8D8D8"]);
 
-    // Placeholder for displaying percentages
-    const percentageText = svg.append("text")
-        .attr("class", "percentage-text")
-        .attr("text-anchor", "middle")
-        .attr("dy", "1.5em") // Adjust this value to move the text closer to the image
-        .style("font-size", "1.5em");
+    const pie = d3.pie()
+        .sort(null)
+        .value(d => d.Percentage);
 
-    // Load data from CSV
+    const arc = d3.arc()
+        .outerRadius(radius * 0.8)
+        .innerRadius(0)
+        .padAngle(0.03)
+        .cornerRadius(5);
 
-    // Define csv file path if it's not already defined
-    if (typeof csvFile === "undefined") {
-        var csvFile = "../../data/sustainability-indicators/carbon-footprint/carbon-footprint1.csv";
-    }
+    const outerArc = d3.arc()
+        .outerRadius(radius * 0.95)
+        .innerRadius(radius * 0.95);
+    
+    const outerArcForSmallSlice = d3.arc()
+        .outerRadius(radius * 1.4)
+        .innerRadius(radius * 1.4);
+    
+    d3.csv(carbonFootprint1).then(function(data) {
+        data.forEach(d => {
+            d.Percentage = +d.Percentage;
+        });
 
-    d3.csv(csvFile).then((data) => {
-        // Convert the Percentage values to numerical format
-        data.forEach(d => d.Percentage = +d.Percentage);
+        // Draw the "plate" as a circular background
+        svg.append("circle")
+            .attr("r", radius * 1.1)
+            .attr("fill", "#f7f7f7")
+            .attr("stroke", "#e0e0e0")
+            .attr("stroke-width", "5px");
 
-        // Set the color scale
-        const color = d3.scaleOrdinal()
-            .domain(data.map(d => d.Food))
-            .range([
-                "#CECECE",
-                "#FED679",
-                "#ED974A",
-                "#CE5845",
-                "#E2E27A",
-                "#386660",
-                "#8FC8E5",
-                "#3167A4",
-                "#1C476D",
-            ]);
+        svg.append("circle")
+            .attr("r", radius * 0.87)
+            .attr("fill", "white")
+            .attr("stroke", "#e0e0e0")
+            .attr("stroke-width", "5px");
 
-        // Compute the position of each group on the pie:
-        const pie = d3.pie()
-            .value(d => d.Percentage)
-            .sort(null); // Keep the order of the input data
+        // Draw the pie chart on top of the plate
+        const arcs = svg.selectAll(".arc")
+            .data(pie(data))
+            .enter().append("g")
+            .attr("class", "arc");
 
-        const pieData = pie(data);
+        arcs.append("path")
+            .attr("d", arc)
+            .attr("fill", d => color(d.data.Food))
+            .style("opacity", 1) // Default opacity
+            .on("mouseover", function(event, d) {
+                // Reduce opacity of all other segments
+                d3.selectAll(".arc path")
+                    .style("opacity", function(p) {
+                        return p.data.Food === d.data.Food ? 1 : 0.3; // Full opacity for hovered segment, reduced for others
+                    });
 
-        // Build the pie chart - arc generator
-        const arc = d3.arc()
-            .innerRadius(radius * 0.5) // This is the size of the donut hole
-            .outerRadius(radius * 0.8);
-
-        const outerArc = d3.arc()
-            .innerRadius(radius)
-            .outerRadius(radius);
-
-        // Build the donut chart
-        svg
-            .selectAll('allSlices')
-            .data(pieData)
-            .enter()
-            .append('path')
-            .attr('d', arc)
-            .attr('fill', d => color(d.data.Food))
-            .attr("stroke", "white")
-            .style("stroke-width", "2px")
-            .on("mouseover", function (event, d) {
-                // Highlight the current section
-                d3.selectAll('path').style('opacity', 0.3);
-                d3.select(this).style('opacity', 1);
-
-                // Create the dynamic image path
-                const imagePath = `../../images/${d.data.Food.toLowerCase()}.png`;
-
-                // Show the corresponding image
-                percentageImg.attr('href', imagePath)
-                    .style('display', 'block');
-
-                // Show the percentage
-                percentageText.text(d.data.Percentage + "%");
+                tooltip.style("display", "block");
+                tooltip.html(`
+                    <div class="tooltip-title">${d.data.Food}</div>
+                    <table class="tooltip-content">
+                        <tr>
+                            <td>Percent: </td>
+                            <td class="value"><strong>${d.data.Percentage}</strong> %</td>
+                        </tr>
+                    </table>
+                `);
             })
-            .on("mouseout", function (event, d) {
-                // Reset the opacity
-                d3.selectAll('path').style('opacity', 1);
-                // Clear the percentage text
-                percentageText.text("");
-                // Hide the image
-                percentageImg.style('display', 'none');
+            .on("mousemove", function(event) {
+                const tooltipX = event.clientX;
+                const tooltipY = event.clientY;
+                tooltip.style("left", `${tooltipX + dynamicMargin.left / 4}px`)
+                    .style("top", `${tooltipY}px`);
+            })
+            .on("mouseout", function() {
+                // Reset opacity of all segments
+                d3.selectAll(".arc path")
+                    .style("opacity", 1);
+
+                tooltip.style("display", "none");
             });
 
-        // Add the polylines between chart and labels:
-        svg
-            .selectAll('allPolylines')
-            .data(pieData)
-            .enter()
-            .append('polyline')
-            .attr("stroke", "black")
+        // Add lines connecting slices to the text labels
+        svg.selectAll("polyline")
+            .data(pie(data))
+            .enter().append("polyline")
+            .attr("points", function(d) {
+                const arcToUse = d.data.Percentage < 4.5 ? outerArcForSmallSlice : outerArc;
+                const pos = arcToUse.centroid(d);
+                pos[0] = radius * 1.15 * (midAngle(d) < Math.PI ? 1 : -1);
+                return [arc.centroid(d), arcToUse.centroid(d), pos];
+            })
+            .style("opacity", 0.3)
+            .style("stroke", "black")
+            .style("stroke-width", 2)
             .style("fill", "none")
-            .attr("stroke-width", 1)
-            .attr('points', d => {
-                const posA = arc.centroid(d); // line insertion in the slice
-                const posB = outerArc.centroid(d); // line break position
-                const posC = outerArc.centroid(d); // Label position
-                const midangle = d.startAngle + (d.endAngle - d.startAngle) / 2;
-                posC[0] = radius * 1.05 * (midangle < Math.PI ? 1 : -1); // Increased separation
-                return [posA, posB, posC];
-            });
+            .attr("pointer-events", "none");
 
-        // Add the labels with percentages
-        svg
-            .selectAll('allLabels')
-            .data(pieData)
-            .enter()
-            .append('text')
-            .attr("class", "chart-labels")
-            .text(d => `${d.data.Food}`) 
-            .attr('transform', d => {
-                const pos = outerArc.centroid(d);
-                const midangle = d.startAngle + (d.endAngle - d.startAngle) / 2;
-                pos[0] = radius * 1.09 * (midangle < Math.PI ? 1 : -1); // Increased separation
+        // Add text labels at the end of the lines
+        svg.selectAll(".label")
+            .data(pie(data))
+            .enter().append("text")
+            .attr("transform", function(d) {
+                const arcToUse = d.data.Percentage < 4.5 ? outerArcForSmallSlice : outerArc;
+                const pos = arcToUse.centroid(d);
+                pos[0] = radius * 1.2 * (midAngle(d) < Math.PI ? 1 : -1);
                 return `translate(${pos})`;
             })
-            .style('text-anchor', d => {
-                const midangle = d.startAngle + (d.endAngle - d.startAngle) / 2;
-                return (midangle < Math.PI ? 'start' : 'end');
+            .attr("dy", "0.35em")
+            .style("text-anchor", function(d) {
+                return midAngle(d) < Math.PI ? "start" : "end";
             })
-            .attr("dy", "0.35em"); // Adjust this value to vertically center the text
+            .attr("class", "table-labels")
+            .text(d => d.data.Food);
 
-    }).catch(function (error) {
-        console.log(error);
+        // Define sizes for fork and spoon dynamically
+        const forkSize = {
+            width: width * 0.5,
+            height: height * 0.5
+        };
+
+        const spoonSize = {
+            width: width * 0.5,
+            height: height * 0.5
+        };
+
+        // Add images to the left and right of the pie chart with dynamic sizes
+        svg.append("image")
+            // .attr("xlink:href", "../../images/fork.png") // Path to the fork image
+            .attr("xlink:href", "/sites/default/files/css-graphics/images/fork.png") 
+            .attr("width", forkSize.width) // Set dynamic width
+            .attr("height", forkSize.height) // Set dynamic height
+            .attr("x", -width * 0.7 - forkSize.width / 2) // Position to the left of the pie chart
+            .attr("y", -forkSize.height / 2); // Center vertically relative to the pie chart
+
+        svg.append("image")
+            // .attr("xlink:href", "../../images/spoon.png") // Path to the spoon image
+            .attr("xlink:href", "/sites/default/files/css-graphics/images/spoon.png") 
+            .attr("width", spoonSize.width) // Set dynamic width
+            .attr("height", spoonSize.height) // Set dynamic height
+            .attr("x", width * 0.7 - spoonSize.width / 2) // Position to the right of the pie chart
+            .attr("y", -spoonSize.height / 2); // Center vertically relative to the pie chart
+
+    }).catch(function(error) {
+        console.error('Error loading the CSV file:', error);
     });
+
+    function midAngle(d) {
+        return d.startAngle + (d.endAngle - d.startAngle) / 2;
+    }
+
 })();

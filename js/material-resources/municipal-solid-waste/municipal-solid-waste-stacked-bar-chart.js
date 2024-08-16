@@ -17,8 +17,8 @@
     const dynamicMargin = {
         top: containerHeight * 0.05,
         right: containerWidth * 0.2,
-        bottom: containerHeight * 0.05,
-        left: containerWidth * 0.12,
+        bottom: containerHeight * 0.1,
+        left: containerWidth * 0.18,
     };
 
     const width = containerWidth - dynamicMargin.left - dynamicMargin.right;
@@ -34,12 +34,7 @@
         .attr("transform", `translate(${dynamicMargin.left},${dynamicMargin.top})`);
 
 
-    // Define csv file path if it's not already defined
-    if (typeof csvFile === "undefined") {
-        var csvFile = "../../data/material-resources/municipal-solid-waste/municipal-solid-waste3.csv";
-    }
-    
-    d3.csv(csvFile).then((data) => {
+    d3.csv(msw3).then((data) => {
         // Parse the data
         data.forEach(d => {
             d.epaRegion = +d.epaRegion;
@@ -62,7 +57,8 @@
             .range([0, width]);
         svg.append('g')
             .attr("transform", `translate(0, ${height})`)
-            .call(d3.axisBottom(xScale).ticks(5).tickFormat(d => `${d}%`));
+            .call(d3.axisBottom(xScale).ticks(5).tickFormat(d => `${d}%`))
+            .attr("class", "chart-labels");
 
         // Y scale and Axis
         const yScale = d3.scaleBand()
@@ -70,7 +66,8 @@
             .range([0, height])
             .padding(0.1);
         svg.append('g')
-            .call(d3.axisLeft(yScale));
+            .call(d3.axisLeft(yScale))
+            .attr("class", "chart-labels");
 
         // Color palette
         const color = d3.scaleOrdinal()
@@ -96,14 +93,14 @@
                 const hoveredCategory = d3.select(this.parentNode).datum().key;
                 d3.select(this).style("opacity", 0.5);
 
-                const tooltipX = event.clientX + window.scrollX;
-                const tooltipY = event.clientY + window.scrollY;
+                const tooltipX = event.clientX;
+                const tooltipY = event.clientY;
 
                 const tooltipData = categories.map(key => {
                     const isHovered = key === hoveredCategory;
                     return `<tr style="opacity: ${isHovered ? 1 : 0.5}; font-weight: ${isHovered ? 'bold' : 'normal'};">
                         <td><span class="color-legend" style="background-color: ${color(key)};"></span>${key.replace(/([A-Z])/g, ' $1').toLowerCase()}</td>
-                        <td style="text-align: right">${d.data[key]}%</td>
+                        <td class="value">${d.data[key]}%</td>
                     </tr>`;
                 }).join("");
 

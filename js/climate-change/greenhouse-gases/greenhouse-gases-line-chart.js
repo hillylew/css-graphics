@@ -17,10 +17,10 @@
 
   // Calculate the dynamic margins
   const dynamicMargin = {
-    top: containerHeight * 0.1, // 20% of the container height
-    right: containerWidth * 0.2, // 20% of the container width
+    top: containerHeight * 0.08, // 20% of the container height
+    right: containerWidth * 0.22, // 20% of the container width
     bottom: containerHeight * 0.1, // 10% of the container height
-    left: containerWidth * 0.07, // 7% of the container width
+    left: containerWidth * 0.08, // 7% of the container width
   };
 
   // Calculate the width and height for the inner drawing area
@@ -64,13 +64,7 @@
     ]);
 
   // Load and process the CSV data
-
-  // Define csv file path if it's not already defined
-  if (typeof csvFile === "undefined") {
-    var csvFile = "../../data/climate-change/greenhouse-gases/greenhouse-gases3.csv";
-  }
-  
-  d3.csv(csvFile).then((data) => {
+  d3.csv(greenhouseGases3).then((data) => {
     // Parse years and convert string values to numbers
     data.forEach((d) => {
       d.Year = new Date(+d.Year, 0, 1);
@@ -121,29 +115,29 @@
 
    xAxisGroup
      .selectAll(".tick text")
-     .attr("class", "chart-labels")
+     .attr("class", "table-labels")
      .style("text-anchor", (d) => {
        return d.getFullYear()
      });
 
     xAxisGroup
       .selectAll(".tick text")
-      .attr("class", "chart-labels");
+      .attr("class", "table-labels");
 
     // Draw the Y-axis
     const yAxisGroup = svg
       .append("g")
       .call(yAxis)
-      .attr("class", "chart-labels");
+      .attr("class", "table-labels");
 
     // Define the y-axis label with the desired text and formatting
     const yAxisLabel = yAxisGroup.append("text")
-      .attr("class", "chart-labels")
+      .attr("class", "table-labels")
       .attr("text-anchor", "middle")
       .attr("transform", `translate(0, -${dynamicMargin.top / 2})`)
       .style("fill", "#000");
 
-    yAxisLabel.append("tspan").text("MMT CO");
+    yAxisLabel.append("tspan").text("Mt CO");
     yAxisLabel.append("tspan")
       .attr("baseline-shift", "sub")
       .attr("font-size", "60%") // Adjust the font size to make the subscript smaller
@@ -224,14 +218,15 @@
         .attr("transform", function (d) {
           return `translate(${width},${y(d.value)})`; // Adjust these values as needed for correct positioning
         })
-        .attr("class", "chart-labels")
+        .attr("class", "table-labels")
         .attr("x", 5) // This sets the distance of the text from the end of the line
         .attr("dy", ".35em") // This aligns the text vertically
-        .style("fill", colorScale(series.key))
+        // .style("fill", colorScale(series.key))
+        .style("fill", "black")
         .text(series.key);
     });
 
-    const formatNumber = d3.format(".1f"); // Format with one decimal place
+    const formatNumber = d3.format(",.1f"); // Format with one decimal place
 
     function onMouseMove(event) {
       const [xPos, yPos] = d3.pointer(event, this);
@@ -240,8 +235,8 @@
         (d) => d.Year.getFullYear() === date.getFullYear()
       );
 
-      const tooltipX = event.clientX + window.scrollX;
-      const tooltipY = event.clientY + window.scrollY;
+      const tooltipX = event.clientX;
+      const tooltipY = event.clientY;
 
       // Position tooltip
       tooltip

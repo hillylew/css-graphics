@@ -58,13 +58,7 @@
 
 
   /* ----------------------- Load and process the CSV data ----------------------- */
-
-  // Define csv file path if it's not already defined
-  if (typeof csvFile === "undefined") {
-    var csvFile = "../../data/energy/renewable-energy/renewable-energy1.csv";
-  }
-
-  d3.csv(csvFile).then((data) => {
+  d3.csv(renewable1).then((data) => {
     // Parse years and convert string values to numbers
     data.forEach((d) => {
       d.Year = new Date(+d.Year, 0, 1);
@@ -180,7 +174,8 @@
       .attr("y", 0)
       .style("text-anchor", "start")
       .style("alignment-baseline", "middle")
-      .style("fill", (d) => colorScale(d.key))
+      // .style("fill", (d) => colorScale(d.key))
+      .style("fill", "black")
       .text((d) => d.key)
       .on("mouseover", (event, d) => {
         highlightAreaLayer(d.key);
@@ -215,8 +210,8 @@
         (d) => d.Year.getFullYear() === date.getFullYear()
       );
 
-      const tooltipX = event.clientX + window.scrollX;
-      const tooltipY = event.clientY + window.scrollY;
+      const tooltipX = event.clientX;
+      const tooltipY = event.clientY;
 
       // Position tooltip
       tooltip

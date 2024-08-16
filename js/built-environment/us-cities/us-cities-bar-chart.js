@@ -15,7 +15,7 @@
     const containerHeight = containerWidth * aspectRatio;
   
     const dynamicMargin = {
-      top: containerHeight * 0.08,
+      top: containerHeight * 0.05,
       right: containerWidth * 0.1,
       bottom: containerHeight * 0.1,
       left: containerWidth * 0.37,
@@ -43,13 +43,7 @@
     const yAxis = (g) => g.call(d3.axisLeft(yScale).tickSizeOuter(0).tickSizeInner(0).tickPadding(10));
   
     /* ----------------------- Loading and processing data ----------------------- */
-    
-    // Define csv file path if it's not already defined
-    if (typeof csvFile === "undefined") {
-        var csvFile = "../../data/built-environment/us-cities/us-cities3.csv";
-    }
-
-    d3.csv(csvFile, (d) => ({
+    d3.csv(uscities3, (d) => ({
       category: d.Category,
       subcategory: d.Subcategory,
       underway: +d["Underway"],
@@ -93,9 +87,9 @@
         .attr("width", (d) => xScale(d.underway))
         .attr("fill", colorScale(0))
         .on("mouseover", function (event, d) {
-          const hoveredKey = "underway";
-          const tooltipX = event.clientX + window.scrollX;
-          const tooltipY = event.clientY + window.scrollY;
+            const hoveredKey = "underway";
+            const tooltipX = event.clientX;
+            const tooltipY = event.clientY;
   
           tooltip
             .html(
@@ -122,8 +116,8 @@
           d3.select(this).attr("opacity", 0.5);
         })
         .on("mousemove", function (event) {
-          const tooltipX = event.clientX + window.scrollX;
-          const tooltipY = event.clientY + window.scrollY;
+            const tooltipX = event.clientX;
+            const tooltipY = event.clientY;
   
           tooltip
             .style("left", `${tooltipX + dynamicMargin.right / 4}px`)
@@ -143,9 +137,9 @@
         .attr("width", (d) => xScale(d.considering))
         .attr("fill", colorScale(1))
         .on("mouseover", function (event, d) {
-          const hoveredKey = "considering";
-          const tooltipX = event.clientX + window.scrollX;
-          const tooltipY = event.clientY + window.scrollY;
+            const hoveredKey = "considering";
+            const tooltipX = event.clientX;
+            const tooltipY = event.clientY;
   
           tooltip
             .html(
@@ -172,8 +166,8 @@
           d3.select(this).attr("opacity", 0.5);
         })
         .on("mousemove", function (event) {
-          const tooltipX = event.clientX + window.scrollX;
-          const tooltipY = event.clientY + window.scrollY;
+            const tooltipX = event.clientX;
+            const tooltipY = event.clientY;
   
           tooltip
             .style("left", `${tooltipX + dynamicMargin.right / 4}px`)
@@ -255,9 +249,10 @@
       ];
   
       // Calculate the dimensions for legend items
-      const legendItemSize = containerWidth * 0.03; // Set the width and height to be 5% of the container width
-      const gap = containerWidth * 0.03; // Gap between legend items
-      const textSpacing = legendItemSize + gap * 0.3; // Space between the legend rectangle and text
+      const legendWidth = width; // Full width for the legends
+      const totalGap = legendWidth / (legendData.length + 1); // Gaps between legend items, including space at start and end
+      const legendItemSize = legendWidth * 0.04; // Set the width and height to be 3% of the width for the legend items
+      const textSpacing = legendItemSize + (totalGap * 0.07); // Space between the legend rectangle and text
   
       const legendGroups = legend
         .selectAll(".legend-group")
@@ -265,7 +260,7 @@
         .enter()
         .append("g")
         .attr("class", "legend-group")
-        .attr("transform", (d, i) => `translate(${i * (legendItemSize * 4 + gap)}, 0)`); // Arrange items horizontally
+        .attr("transform", (d, i) => `translate(${(i + 1) * totalGap}, 0)`); // Spread items horizontally
   
       legendGroups
         .append("rect")
