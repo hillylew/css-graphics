@@ -255,8 +255,8 @@
                 const row = spacing * (index + 1) - height * 0.5;
                 parent.append("image")
                     .attr("class", "grid-item")
-                    .attr("xlink:href", `../../images/icon-${type.toLowerCase()}.png`)
-                    // .attr("xlink:href", `/sites/default/files/css-graphics/images/icon-${type.toLowerCase()}.png`)
+                    // .attr("xlink:href", `../../images/icon-${type.toLowerCase()}.png`)
+                    .attr("xlink:href", `/sites/default/files/css-graphics/images/icon-${type.toLowerCase()}.png`)
                     .attr("x", offsetX - boxWidth / 2)
                     .attr("y", row)
                     .attr("width", boxWidth)
@@ -283,17 +283,17 @@
 
         function addEVOptions(parent, offsetX, boxWidth, boxHeight, spacing, carId) {
             const carEvs = ["ICEV", "HEV", "BEV"];
-            const imagePaths = {
-                "ICEV": "../../images/icon-icev.png",
-                "HEV": "../../images/icon-hev.png",
-                "BEV": "../../images/icon-bev.png"
-            };
-
             // const imagePaths = {
-            //     "ICEV": `/sites/default/files/css-graphics/images/icon-icev.png`,
-            //     "HEV": `/sites/default/files/css-graphics/images/icon-hev.png`,
-            //     "BEV": `/sites/default/files/css-graphics/images/icon-bev.png`
+            //     "ICEV": "../../images/icon-icev.png",
+            //     "HEV": "../../images/icon-hev.png",
+            //     "BEV": "../../images/icon-bev.png"
             // };
+
+            const imagePaths = {
+                "ICEV": `/sites/default/files/css-graphics/images/icon-icev.png`,
+                "HEV": `/sites/default/files/css-graphics/images/icon-hev.png`,
+                "BEV": `/sites/default/files/css-graphics/images/icon-bev.png`
+            };
 
             carEvs.forEach((ev, index) => {
                 const row = spacing * (index + 1) - height * 0.5;

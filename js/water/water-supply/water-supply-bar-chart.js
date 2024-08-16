@@ -238,9 +238,6 @@
 
         // Add additional CSS styles for hover and muted states
         d3.select('head').append('style').html(`
-            .water-bar {
-                transition: opacity 0.3s;
-            }
 
             .water-bar.muted {
                 opacity: 0.1;

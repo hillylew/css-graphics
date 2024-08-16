@@ -19,7 +19,7 @@
   // Calculate the dynamic margins
   const dynamicMargin = {
     top: containerHeight * 0.05,
-    right: containerWidth * 0.15,
+    right: containerWidth * 0.2,
     bottom: containerHeight * 0.1,
     left: containerWidth * 0.1,
   };
@@ -47,7 +47,7 @@
   const colorScale = d3
     .scaleOrdinal()
     .domain(["Cars and Wagons", "SUVs", "Vans", "Pickups"])
-    .range(["#1C476D","#8FC8E5", "#3167A4",  "#FFCB05"]);
+    .range(["#1C476D","#3167A4","#8FC8E5", "#FFCB05"]);
 
   /* ----------------------- Load and process the CSV data ----------------------- */
   d3.csv(personalTransportation2).then((data) => {
